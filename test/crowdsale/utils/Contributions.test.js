@@ -7,7 +7,6 @@ const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRe
 const BigNumber = web3.BigNumber;
 
 require('chai')
-  .use(require('chai-as-promised'))
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -142,12 +141,12 @@ contract('Contributions', function (
   context('test RBAC functions', function () {
     describe('in normal conditions', function () {
       it('allows owner to add a operator', async function () {
-        await this.contributions.addOperator(futureOperator, { from: owner }).should.be.fulfilled;
+        await this.contributions.addOperator(futureOperator, { from: owner });
       });
 
       it('allows owner to remove a operator', async function () {
-        await this.contributions.addOperator(futureOperator, { from: owner }).should.be.fulfilled;
-        await this.contributions.removeOperator(futureOperator, { from: owner }).should.be.fulfilled;
+        await this.contributions.addOperator(futureOperator, { from: owner });
+        await this.contributions.removeOperator(futureOperator, { from: owner });
       });
 
       it('announces a RoleAdded event on addRole', async function () {
@@ -176,13 +175,9 @@ contract('Contributions', function (
       });
 
       it('does not allow "thirdParty" except owner to remove a operator', async function () {
-        await this.contributions.addOperator(futureOperator, { from: owner }).should.be.fulfilled;
-        await assertRevert(
-          this.contributions.removeOperator(futureOperator, { from: operator })
-        );
-        await assertRevert(
-          this.contributions.removeOperator(futureOperator, { from: thirdParty })
-        );
+        await this.contributions.addOperator(futureOperator, { from: owner });
+        await assertRevert(this.contributions.removeOperator(futureOperator, { from: operator }));
+        await assertRevert(this.contributions.removeOperator(futureOperator, { from: thirdParty }));
       });
     });
   });

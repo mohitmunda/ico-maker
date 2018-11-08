@@ -1,7 +1,6 @@
 const BigNumber = web3.BigNumber;
 
 const should = require('chai')
-  .use(require('chai-as-promised'))
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -10,8 +9,8 @@ function shouldBehaveLikeMintedCrowdsale ([owner, investor, wallet, purchaser], 
 
   describe('accepting payments', function () {
     it('should accept payments', async function () {
-      await this.crowdsale.sendTransaction({ value: value, from: investor }).should.be.fulfilled;
-      await this.crowdsale.buyTokens(investor, { value: value, from: purchaser }).should.be.fulfilled;
+      await this.crowdsale.sendTransaction({ value: value, from: investor });
+      await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
     });
   });
 

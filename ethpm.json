@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Smart Contracts to build your ICO solution and issue your ERC20 Token",
   "authors": [
-    "Vittorio Minacori (@vittominacori)"
+    "Vittorio Minacori (https://github.com/vittominacori)"
   ],
   "keywords": [
     "solidity",
@@ -11,7 +11,9 @@
     "smart",
     "contracts",
     "token",
-    "erc20"
+    "erc20",
+    "ico",
+    "crowdsale"
   ],
   "license": "MIT"
 }

@@ -1,5 +1,6 @@
 # ICO Maker
 
+[![NPM Package](https://img.shields.io/npm/v/ico-maker.svg?style=flat-square)](https://www.npmjs.org/package/ico-maker)
 [![Build Status](https://travis-ci.org/vittominacori/ico-maker.svg?branch=master)](https://travis-ci.org/vittominacori/ico-maker) 
 [![Coverage Status](https://coveralls.io/repos/github/vittominacori/ico-maker/badge.svg?branch=master)](https://coveralls.io/github/vittominacori/ico-maker?branch=master)
 
@@ -46,8 +47,8 @@ contract MyToken is BaseToken {
     uint8 _decimals,
     uint256 _cap
   )
-  BaseToken(_name, _symbol, _decimals, _cap)
-  public
+    BaseToken(_name, _symbol, _decimals, _cap)
+    public
   {}
 }
 ```
@@ -86,17 +87,17 @@ contract MyCrowdsale is BaseCrowdsale {
     address _token,
     address _contributions
   )
-  BaseCrowdsale(
-    _openingTime,
-    _closingTime,
-    _rate,
-    _wallet,
-    _cap,
-    _minimumContribution,
-    _token,
-    _contributions
-  )
-  public
+    BaseCrowdsale(
+      _openingTime,
+      _closingTime,
+      _rate,
+      _wallet,
+      _cap,
+      _minimumContribution,
+      _token,
+      _contributions
+    )
+    public
   {}
 }
 ```
@@ -113,8 +114,8 @@ import "ico-maker/contracts/distribution/Bounty.sol";
 
 contract MyBounty is Bounty {
   constructor(address _token, uint256 _cap)
-  Bounty(_token, _cap)
-  public
+    Bounty(_token, _cap)
+    public
   {}
 }
 ```
@@ -131,8 +132,8 @@ import "ico-maker/contracts/distribution/Airdrop.sol";
 
 contract MyAirdrop is Airdrop {
   constructor(address _token, address _wallet)
-  Airdrop(_token, _wallet)
-  public
+    Airdrop(_token, _wallet)
+    public
   {}
 }
 ```
@@ -205,6 +206,6 @@ Usage
 truffle-flattener contracts/token/BaseToken.sol >> dist/BaseToken.dist.sol
 ```
 
-## License
+### License
 
 Code released under the [MIT License](https://github.com/vittominacori/ico-maker/blob/master/LICENSE).

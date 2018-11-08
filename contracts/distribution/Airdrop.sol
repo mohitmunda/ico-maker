@@ -2,11 +2,10 @@ pragma solidity ^0.4.24;
 
 import "../token/BaseToken.sol";
 
-
 /**
  * @title Airdrop
  * @author Vittorio Minacori (https://github.com/vittominacori)
- * @dev Contract to distribute airdrop tokens
+ * @dev Contract to distribute tokens by transferFrom function
  */
 contract Airdrop is TokenRecover {
 
@@ -15,49 +14,33 @@ contract Airdrop is TokenRecover {
   BaseToken public token;
 
   address public wallet;
-  uint256 public totalGivenAirdropTokens;
-  mapping (address => uint256) public givenAirdropTokens;
+  uint256 public distributedTokens;
+  mapping (address => uint256) public receivedTokens;
 
   /**
    * @param _token Address of the token being distributed
    * @param _wallet Address where are tokens stored
    */
   constructor(address _token, address _wallet) public {
-    require(
-      _token != address(0),
-      "Token shouldn't be the zero address."
-    );
-
-    require(
-      _wallet != address(0),
-      "Wallet shouldn't be the zero address."
-    );
+    require(_token != address(0));
+    require(_wallet != address(0));
 
     token = BaseToken(_token);
     wallet = _wallet;
   }
 
   function multiSend(address[] addresses, uint256[] amounts) public onlyOwner {
-    require(
-      addresses.length > 0,
-      "Addresses array shouldn't be empty."
-    );
-    require(
-      amounts.length > 0,
-      "Amounts array shouldn't be empty."
-    );
-    require(
-      addresses.length == amounts.length,
-      "Addresses and amounts arrays should have the same length."
-    );
+    require(addresses.length > 0);
+    require(amounts.length > 0);
+    require(addresses.length == amounts.length);
 
     for (uint i = 0; i < addresses.length; i++) {
       address to = addresses[i];
       uint256 value = amounts[i];
 
-      if (givenAirdropTokens[to] == 0) {
-        givenAirdropTokens[to] = givenAirdropTokens[to].add(value);
-        totalGivenAirdropTokens = totalGivenAirdropTokens.add(value);
+      if (receivedTokens[to] == 0) {
+        receivedTokens[to] = receivedTokens[to].add(value);
+        distributedTokens = distributedTokens.add(value);
 
         token.transferFrom(wallet, to, value);
       }

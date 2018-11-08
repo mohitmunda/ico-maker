@@ -3,9 +3,7 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol"; // solium-disable-line max-len
 import "openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol"; // solium-disable-line max-len
 import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol"; // solium-disable-line max-len
-import "eth-token-recover/contracts/TokenRecover.sol";
 import "./utils/Contributions.sol";
-
 
 /**
  * @title BaseCrowdsale
@@ -39,15 +37,12 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
     address _token,
     address _contributions
   )
-  Crowdsale(_rate, _wallet, ERC20(_token))
-  TimedCrowdsale(_openingTime, _closingTime)
-  CappedCrowdsale(_cap)
-  public
+    Crowdsale(_rate, _wallet, ERC20(_token))
+    TimedCrowdsale(_openingTime, _closingTime)
+    CappedCrowdsale(_cap)
+    public
   {
-    require(
-      _contributions != address(0),
-      "Contributions address can't be the zero address."
-    );
+    require(_contributions != address(0));
     contributions = Contributions(_contributions);
     minimumContribution = _minimumContribution;
   }
@@ -76,12 +71,9 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
     address _beneficiary,
     uint256 _weiAmount
   )
-  internal
+    internal
   {
-    require(
-      _weiAmount >= minimumContribution,
-      "Can't send less than the minimum contribution"
-    );
+    require(_weiAmount >= minimumContribution);
     super._preValidatePurchase(_beneficiary, _weiAmount);
   }
 
@@ -94,7 +86,7 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
     address _beneficiary,
     uint256 _weiAmount
   )
-  internal
+    internal
   {
     super._updatePurchasingState(_beneficiary, _weiAmount);
     contributions.addBalance(

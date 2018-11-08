@@ -15,7 +15,6 @@ const { shouldBehaveLikeStandardToken } = require('./behaviours/StandardToken.be
 const BigNumber = web3.BigNumber;
 
 require('chai')
-  .use(require('chai-as-promised'))
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -197,14 +196,12 @@ function shouldBehaveLikeBaseToken (
         });
 
         it('should transfer', async function () {
-          await this.token.transfer(operator, _initialBalance, { from: operator }).should.be.fulfilled;
+          await this.token.transfer(operator, _initialBalance, { from: operator });
         });
 
         it('should transferFrom', async function () {
           await this.token.approve(anotherAccount, _initialBalance, { from: operator });
-          await this.token.transferFrom(
-            operator, recipient, _initialBalance, { from: anotherAccount }
-          ).should.be.fulfilled;
+          await this.token.transferFrom(operator, recipient, _initialBalance, { from: anotherAccount });
         });
 
         it('should transferAndCall', async function () {
@@ -230,13 +227,9 @@ function shouldBehaveLikeBaseToken (
             );
           };
 
-          await transferAndCallWithData.call(
-            this, this.receiver.address, _initialBalance / 2, { from: operator }
-          ).should.be.fulfilled;
+          await transferAndCallWithData.call(this, this.receiver.address, _initialBalance / 2, { from: operator });
 
-          await transferAndCallWithoutData.call(
-            this, this.receiver.address, _initialBalance / 2, { from: operator }
-          ).should.be.fulfilled;
+          await transferAndCallWithoutData.call(this, this.receiver.address, _initialBalance / 2, { from: operator });
         });
 
         it('should transferFromAndCall', async function () {
@@ -265,11 +258,11 @@ function shouldBehaveLikeBaseToken (
 
           await transferFromAndCallWithData.call(
             this, operator, this.receiver.address, _initialBalance / 2, { from: anotherAccount }
-          ).should.be.fulfilled;
+          );
 
           await transferFromAndCallWithoutData.call(
             this, operator, this.receiver.address, _initialBalance / 2, { from: anotherAccount }
-          ).should.be.fulfilled;
+          );
         });
       });
     });

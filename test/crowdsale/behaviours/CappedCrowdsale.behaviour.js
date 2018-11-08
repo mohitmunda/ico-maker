@@ -3,7 +3,6 @@ const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRever
 const BigNumber = web3.BigNumber;
 
 require('chai')
-  .use(require('chai-as-promised'))
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -19,8 +18,8 @@ function shouldBehaveLikeCappedCrowdsale ([investor, purchaser]) {
   describe('accepting payments', function () {
     describe('high-level purchase', function () {
       it('should accept payments within cap', async function () {
-        await this.crowdsale.sendTransaction({ value: cap.minus(lessThanCap), from: investor }).should.be.fulfilled;
-        await this.crowdsale.sendTransaction({ value: lessThanCap, from: investor }).should.be.fulfilled;
+        await this.crowdsale.sendTransaction({ value: cap.minus(lessThanCap), from: investor });
+        await this.crowdsale.sendTransaction({ value: lessThanCap, from: investor });
       });
 
       it('should reject payments outside cap', async function () {
@@ -35,11 +34,8 @@ function shouldBehaveLikeCappedCrowdsale ([investor, purchaser]) {
 
     describe('low-level purchase', function () {
       it('should accept payments within cap', async function () {
-        await this.crowdsale.buyTokens(investor, {
-          value: cap.minus(lessThanCap),
-          from: purchaser,
-        }).should.be.fulfilled;
-        await this.crowdsale.buyTokens(investor, { value: lessThanCap, from: purchaser }).should.be.fulfilled;
+        await this.crowdsale.buyTokens(investor, { value: cap.minus(lessThanCap), from: purchaser });
+        await this.crowdsale.buyTokens(investor, { value: lessThanCap, from: purchaser });
       });
 
       it('should reject payments outside cap', async function () {

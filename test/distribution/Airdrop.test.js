@@ -5,7 +5,6 @@ const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRe
 const BigNumber = web3.BigNumber;
 
 require('chai')
-  .use(require('chai-as-promised'))
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -93,7 +92,7 @@ contract('Airdrop', function (
             }
           });
 
-          it('should increase givenAirdropTokens', async function () {
+          it('should increase receivedTokens', async function () {
             for (const arrayIndex in addresses) {
               const receiverBalance = await this.token.balanceOf(addresses[arrayIndex]);
               receiverBalance.should.be.bignumber.equal(0);
@@ -102,14 +101,14 @@ contract('Airdrop', function (
             await this.airdrop.multiSend(addresses, amounts, { from: airdropOwner });
 
             for (const arrayIndex in addresses) {
-              const givenAirdropTokens = await this.airdrop.givenAirdropTokens(addresses[arrayIndex]);
+              const receivedTokens = await this.airdrop.receivedTokens(addresses[arrayIndex]);
 
               const expectedTokens = amounts[arrayIndex];
-              givenAirdropTokens.should.be.bignumber.equal(expectedTokens);
+              receivedTokens.should.be.bignumber.equal(expectedTokens);
             }
           });
 
-          it('should increase totalGivenAirdropTokens', async function () {
+          it('should increase distributedTokens', async function () {
             let totalGivenTokens = new BigNumber(0);
 
             await this.airdrop.multiSend(addresses, amounts, { from: airdropOwner });
@@ -117,8 +116,8 @@ contract('Airdrop', function (
             for (const arrayIndex in amounts) {
               totalGivenTokens = totalGivenTokens.plus(amounts[arrayIndex]);
             }
-            const totalGivenAirdropTokens = await this.airdrop.totalGivenAirdropTokens();
-            totalGivenAirdropTokens.should.be.bignumber.equal(totalGivenTokens);
+            const distributedTokens = await this.airdrop.distributedTokens();
+            distributedTokens.should.be.bignumber.equal(totalGivenTokens);
           });
 
           it('should decrease approval', async function () {
@@ -149,7 +148,7 @@ contract('Airdrop', function (
               }
             });
 
-            it('should not increase givenAirdropTokens', async function () {
+            it('should not increase receivedTokens', async function () {
               for (const arrayIndex in addresses) {
                 const receiverBalance = await this.token.balanceOf(addresses[arrayIndex]);
                 receiverBalance.should.be.bignumber.equal(0);
@@ -159,14 +158,14 @@ contract('Airdrop', function (
               await this.airdrop.multiSend(addresses, amounts, { from: airdropOwner });
 
               for (const arrayIndex in addresses) {
-                const givenAirdropTokens = await this.airdrop.givenAirdropTokens(addresses[arrayIndex]);
+                const receivedTokens = await this.airdrop.receivedTokens(addresses[arrayIndex]);
 
                 const expectedTokens = amounts[arrayIndex];
-                givenAirdropTokens.should.be.bignumber.equal(expectedTokens);
+                receivedTokens.should.be.bignumber.equal(expectedTokens);
               }
             });
 
-            it('should not increase totalGivenAirdropTokens', async function () {
+            it('should not increase distributedTokens', async function () {
               let totalGivenTokens = new BigNumber(0);
 
               await this.airdrop.multiSend(addresses, amounts, { from: airdropOwner });
@@ -175,8 +174,8 @@ contract('Airdrop', function (
               for (const arrayIndex in amounts) {
                 totalGivenTokens = totalGivenTokens.plus(amounts[arrayIndex]);
               }
-              const totalGivenAirdropTokens = await this.airdrop.totalGivenAirdropTokens();
-              totalGivenAirdropTokens.should.be.bignumber.equal(totalGivenTokens);
+              const distributedTokens = await this.airdrop.distributedTokens();
+              distributedTokens.should.be.bignumber.equal(totalGivenTokens);
             });
           });
 

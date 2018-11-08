@@ -2,9 +2,7 @@ pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/access/rbac/RBAC.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "eth-token-recover/contracts/TokenRecover.sol";
-
 
 /**
  * @title Contributions
@@ -41,8 +39,8 @@ contract Contributions is RBAC, TokenRecover {
     uint256 _weiAmount,
     uint256 _tokenAmount
   )
-  public
-  onlyOperator
+    public
+    onlyOperator
   {
     if (weiContributions[_address] == 0) {
       addresses.push(_address);

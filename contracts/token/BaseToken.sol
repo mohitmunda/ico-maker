@@ -7,7 +7,6 @@ import "openzeppelin-solidity/contracts/token/ERC20/BurnableToken.sol";
 import "erc-payable-token/contracts/token/ERC1363/ERC1363BasicToken.sol";
 import "eth-token-recover/contracts/TokenRecover.sol";
 
-
 /**
  * @title BaseToken
  * @author Vittorio Minacori (https://github.com/vittominacori)
@@ -25,10 +24,7 @@ contract BaseToken is DetailedERC20, CappedToken, RBACMintableToken, BurnableTok
    * @dev Tokens can be moved only after minting finished or if you are an approved operator
    */
   modifier canTransfer(address _from, uint256 _value) {
-    require(
-      mintingFinished || hasRole(_from, ROLE_OPERATOR),
-      "Can't transfer"
-    );
+    require(mintingFinished || hasRole(_from, ROLE_OPERATOR));
     _;
   }
 
@@ -44,18 +40,18 @@ contract BaseToken is DetailedERC20, CappedToken, RBACMintableToken, BurnableTok
     uint8 _decimals,
     uint256 _cap
   )
-  DetailedERC20(_name, _symbol, _decimals)
-  CappedToken(_cap)
-  public
+    DetailedERC20(_name, _symbol, _decimals)
+    CappedToken(_cap)
+    public
   {}
 
   function transfer(
     address _to,
     uint256 _value
   )
-  public
-  canTransfer(msg.sender, _value)
-  returns (bool)
+    public
+    canTransfer(msg.sender, _value)
+    returns (bool)
   {
     return super.transfer(_to, _value);
   }
@@ -65,9 +61,9 @@ contract BaseToken is DetailedERC20, CappedToken, RBACMintableToken, BurnableTok
     address _to,
     uint256 _value
   )
-  public
-  canTransfer(_from, _value)
-  returns (bool)
+    public
+    canTransfer(_from, _value)
+    returns (bool)
   {
     return super.transferFrom(_from, _to, _value);
   }

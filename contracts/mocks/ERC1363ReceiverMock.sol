@@ -2,7 +2,6 @@ pragma solidity ^0.4.24;
 
 import "erc-payable-token/contracts/token/ERC1363/ERC1363Receiver.sol";
 
-
 // mock class using ERC1363Receiver
 contract ERC1363ReceiverMock is ERC1363Receiver {
   bytes4 retval;
@@ -30,7 +29,6 @@ contract ERC1363ReceiverMock is ERC1363Receiver {
     external
     returns (bytes4)
   {
-    // solium-disable-next-line error-reason
     require(!reverts);
     emit Received(
       _operator,

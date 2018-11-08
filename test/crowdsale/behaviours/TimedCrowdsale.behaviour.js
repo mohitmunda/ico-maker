@@ -4,7 +4,6 @@ const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRever
 const BigNumber = web3.BigNumber;
 
 require('chai')
-  .use(require('chai-as-promised'))
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -25,8 +24,8 @@ function shouldBehaveLikeTimedCrowdsale ([owner, investor, wallet, purchaser], r
 
     it('should accept payments after start', async function () {
       await increaseTimeTo(this.openingTime);
-      await this.crowdsale.sendTransaction({ value: value, from: investor }).should.be.fulfilled;
-      await this.crowdsale.buyTokens(investor, { value: value, from: purchaser }).should.be.fulfilled;
+      await this.crowdsale.sendTransaction({ value: value, from: investor });
+      await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
     });
 
     it('should reject payments after end', async function () {

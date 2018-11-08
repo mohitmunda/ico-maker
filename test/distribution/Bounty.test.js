@@ -5,7 +5,6 @@ const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRe
 const BigNumber = web3.BigNumber;
 
 require('chai')
-  .use(require('chai-as-promised'))
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -84,7 +83,7 @@ contract('Bounty', function (
         }
       });
 
-      it('should increase givenBountyTokens', async function () {
+      it('should increase receivedTokens', async function () {
         for (const arrayIndex in addresses) {
           const receiverBalance = await this.token.balanceOf(addresses[arrayIndex]);
           receiverBalance.should.be.bignumber.equal(0);
@@ -93,14 +92,14 @@ contract('Bounty', function (
         await this.bounty.multiSend(addresses, amounts, { from: bountyOwner });
 
         for (const arrayIndex in addresses) {
-          const givenBountyTokens = await this.bounty.givenBountyTokens(addresses[arrayIndex]);
+          const receivedTokens = await this.bounty.receivedTokens(addresses[arrayIndex]);
 
           const expectedTokens = amounts[arrayIndex];
-          givenBountyTokens.should.be.bignumber.equal(expectedTokens);
+          receivedTokens.should.be.bignumber.equal(expectedTokens);
         }
       });
 
-      it('should increase totalGivenBountyTokens', async function () {
+      it('should increase distributedTokens', async function () {
         let totalGivenTokens = new BigNumber(0);
 
         await this.bounty.multiSend(addresses, amounts, { from: bountyOwner });
@@ -108,8 +107,8 @@ contract('Bounty', function (
         for (const arrayIndex in amounts) {
           totalGivenTokens = totalGivenTokens.plus(amounts[arrayIndex]);
         }
-        const totalGivenBountyTokens = await this.bounty.totalGivenBountyTokens();
-        totalGivenBountyTokens.should.be.bignumber.equal(totalGivenTokens);
+        const distributedTokens = await this.bounty.distributedTokens();
+        distributedTokens.should.be.bignumber.equal(totalGivenTokens);
       });
 
       it('should decrease remainingTokens', async function () {
@@ -144,7 +143,7 @@ contract('Bounty', function (
           }
         });
 
-        it('should increase givenBountyTokens', async function () {
+        it('should increase receivedTokens', async function () {
           for (const arrayIndex in addresses) {
             const receiverBalance = await this.token.balanceOf(addresses[arrayIndex]);
             receiverBalance.should.be.bignumber.equal(0);
@@ -154,14 +153,14 @@ contract('Bounty', function (
           await this.bounty.multiSend(addresses, amounts, { from: bountyOwner });
 
           for (const arrayIndex in addresses) {
-            const givenBountyTokens = await this.bounty.givenBountyTokens(addresses[arrayIndex]);
+            const receivedTokens = await this.bounty.receivedTokens(addresses[arrayIndex]);
 
             const expectedTokens = amounts[arrayIndex];
-            givenBountyTokens.should.be.bignumber.equal(expectedTokens.mul(2));
+            receivedTokens.should.be.bignumber.equal(expectedTokens.mul(2));
           }
         });
 
-        it('should increase totalGivenBountyTokens', async function () {
+        it('should increase distributedTokens', async function () {
           let totalGivenTokens = new BigNumber(0);
 
           await this.bounty.multiSend(addresses, amounts, { from: bountyOwner });
@@ -170,8 +169,8 @@ contract('Bounty', function (
           for (const arrayIndex in amounts) {
             totalGivenTokens = totalGivenTokens.plus(amounts[arrayIndex]);
           }
-          const totalGivenBountyTokens = await this.bounty.totalGivenBountyTokens();
-          totalGivenBountyTokens.should.be.bignumber.equal(totalGivenTokens.mul(2));
+          const distributedTokens = await this.bounty.distributedTokens();
+          distributedTokens.should.be.bignumber.equal(totalGivenTokens.mul(2));
         });
       });
 
