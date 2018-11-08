@@ -102,37 +102,55 @@ contract MyCrowdsale is BaseCrowdsale {
 }
 ```
 
-### Bounty.sol
+### CappedDelivery.sol
 
-[Bounty](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/Bounty.sol) is a Capped Smart Contract to mint and distribute tokens for bounty programs.
+[CappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/CappedDelivery.sol) is a Capped Smart Contract to transfer tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
 pragma solidity ^0.4.24;
 
-import "ico-maker/contracts/distribution/Bounty.sol";
+import "ico-maker/contracts/distribution/CappedDelivery.sol";
 
 
-contract MyBounty is Bounty {
-  constructor(address _token, uint256 _cap)
-    Bounty(_token, _cap)
+contract MyAirdrop is CappedDelivery {
+  constructor(address _token, uint256 _cap, bool _allowMultipleSend)
+    CappedDelivery(_token, _cap, _allowMultipleSend)
     public
   {}
 }
 ```
 
-### Airdrop.sol
+### MintedCappedDelivery.sol
 
-[Airdrop](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/Airdrop.sol) is a Smart Contract to distribute tokens for airdrop.
+[MintedCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/MintedCappedDelivery.sol) is a Capped Smart Contract to mint tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
 pragma solidity ^0.4.24;
 
-import "ico-maker/contracts/distribution/Airdrop.sol";
+import "ico-maker/contracts/distribution/MintedCappedDelivery.sol";
 
 
-contract MyAirdrop is Airdrop {
-  constructor(address _token, address _wallet)
-    Airdrop(_token, _wallet)
+contract MyAirdrop is MintedCappedDelivery {
+  constructor(address _token, uint256 _cap, bool _allowMultipleSend)
+    MintedCappedDelivery(_token, _cap, _allowMultipleSend)
+    public
+  {}
+}
+```
+
+### SpenderCappedDelivery.sol
+
+[SpenderCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/SpenderCappedDelivery.sol) is a Capped Smart Contract to transferFrom tokens (i.e. for Airdrop or Bounty Program).
+
+```solidity
+pragma solidity ^0.4.24;
+
+import "ico-maker/contracts/distribution/SpenderCappedDelivery.sol";
+
+
+contract MyAirdrop is SpenderCappedDelivery {
+  constructor(address _token, uint256 _cap, bool _allowMultipleSend, address _wallet)
+    SpenderCappedDelivery(_token, _cap, _allowMultipleSend, _wallet)
     public
   {}
 }

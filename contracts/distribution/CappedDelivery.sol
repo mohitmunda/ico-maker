@@ -3,30 +3,34 @@ pragma solidity ^0.4.24;
 import "../token/BaseToken.sol";
 
 /**
- * @title Bounty
+ * @title CappedDelivery
  * @author Vittorio Minacori (https://github.com/vittominacori)
- * @dev Contract to distribute tokens by mint function
+ * @dev Contract to distribute tokens by transfer function
  */
-contract Bounty is TokenRecover {
+contract CappedDelivery is TokenRecover {
 
   using SafeMath for uint256;
 
   BaseToken public token;
 
   uint256 public cap;
+  bool public allowMultipleSend;
+
   uint256 public distributedTokens;
   mapping (address => uint256) public receivedTokens;
 
   /**
    * @param _token Address of the token being distributed
    * @param _cap Max amount of token to be distributed
+   * @param _allowMultipleSend Allow multiple send to same address
    */
-  constructor(address _token, uint256 _cap) public {
+  constructor(address _token, uint256 _cap, bool _allowMultipleSend) public {
     require(_token != address(0));
     require(_cap > 0);
 
     token = BaseToken(_token);
     cap = _cap;
+    allowMultipleSend = _allowMultipleSend;
   }
 
   function multiSend(address[] addresses, uint256[] amounts) public onlyOwner {
@@ -36,18 +40,24 @@ contract Bounty is TokenRecover {
 
     for (uint i = 0; i < addresses.length; i++) {
       address to = addresses[i];
-      uint256 value = amounts[i];
+      uint256 amount = amounts[i];
 
-      receivedTokens[to] = receivedTokens[to].add(value);
-      distributedTokens = distributedTokens.add(value);
+      if (allowMultipleSend || receivedTokens[to] == 0) {
+        receivedTokens[to] = receivedTokens[to].add(amount);
+        distributedTokens = distributedTokens.add(amount);
 
-      require(distributedTokens <= cap);
+        require(distributedTokens <= cap);
 
-      token.mint(to, value);
+        _distributeTokens(to, amount);
+      }
     }
   }
 
   function remainingTokens() public view returns(uint256) {
     return cap.sub(distributedTokens);
+  }
+
+  function _distributeTokens(address _to, uint256 _amount) internal {
+    token.transfer(_to, _amount);
   }
 }
