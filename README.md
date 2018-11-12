@@ -39,7 +39,6 @@ pragma solidity ^0.4.24;
 
 import "ico-maker/contracts/token/BaseToken.sol";
 
-
 contract MyToken is BaseToken {
   constructor(
     string _name,
@@ -62,7 +61,6 @@ pragma solidity ^0.4.24;
 
 import "ico-maker/contracts/crowdsale/utils/Contributions.sol";
 
-
 contract MyContributions is Contributions {}
 ```
 
@@ -74,7 +72,6 @@ contract MyContributions is Contributions {}
 pragma solidity ^0.4.24;
 
 import "ico-maker/contracts/crowdsale/BaseCrowdsale.sol";
-
 
 contract MyCrowdsale is BaseCrowdsale {
   constructor(
@@ -111,7 +108,6 @@ pragma solidity ^0.4.24;
 
 import "ico-maker/contracts/distribution/CappedDelivery.sol";
 
-
 contract MyAirdrop is CappedDelivery {
   constructor(address _token, uint256 _cap, bool _allowMultipleSend)
     CappedDelivery(_token, _cap, _allowMultipleSend)
@@ -129,7 +125,6 @@ pragma solidity ^0.4.24;
 
 import "ico-maker/contracts/distribution/MintedCappedDelivery.sol";
 
-
 contract MyAirdrop is MintedCappedDelivery {
   constructor(address _token, uint256 _cap, bool _allowMultipleSend)
     MintedCappedDelivery(_token, _cap, _allowMultipleSend)
@@ -146,7 +141,6 @@ contract MyAirdrop is MintedCappedDelivery {
 pragma solidity ^0.4.24;
 
 import "ico-maker/contracts/distribution/SpenderCappedDelivery.sol";
-
 
 contract MyAirdrop is SpenderCappedDelivery {
   constructor(address _token, uint256 _cap, bool _allowMultipleSend, address _wallet)
