@@ -43,26 +43,26 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
         let contributorsLength = await this.contributions.getContributorsLength();
         assert.equal(contributorsLength, 0);
 
-        const preTokenBalance = await this.contributions.tokenBalances(investor);
+        const preTokenBalance = await this.contributions.tokenBalance(investor);
         preTokenBalance.should.be.bignumber.equal(0);
-        const preEthBalance = await this.contributions.weiContributions(investor);
-        preEthBalance.should.be.bignumber.equal(0);
+        const preWeiContribution = await this.contributions.weiContribution(investor);
+        preWeiContribution.should.be.bignumber.equal(0);
 
         await this.crowdsale.sendTransaction({ value: value, from: investor });
 
-        const postOneTokenBalance = await this.contributions.tokenBalances(investor);
+        const postOneTokenBalance = await this.contributions.tokenBalance(investor);
         postOneTokenBalance.should.be.bignumber.equal(value.mul(rate));
-        const postOneEthBalance = await this.contributions.weiContributions(investor);
-        postOneEthBalance.should.be.bignumber.equal(value);
+        const postOneWeiContribution = await this.contributions.weiContribution(investor);
+        postOneWeiContribution.should.be.bignumber.equal(value);
 
         await this.crowdsale.sendTransaction({ value: value, from: investor });
 
-        const postTwoTokenBalance = await this.contributions.tokenBalances(investor);
+        const postTwoTokenBalance = await this.contributions.tokenBalance(investor);
         (postTwoTokenBalance.sub(postOneTokenBalance)).should.be.bignumber.equal(value.mul(rate));
         postTwoTokenBalance.should.be.bignumber.equal(value.mul(2).mul(rate));
-        const postTwoEthBalance = await this.contributions.weiContributions(investor);
-        (postTwoEthBalance.sub(postOneEthBalance)).should.be.bignumber.equal(value);
-        postTwoEthBalance.should.be.bignumber.equal(value.mul(2));
+        const postTwoWeiContribution = await this.contributions.weiContribution(investor);
+        (postTwoWeiContribution.sub(postOneWeiContribution)).should.be.bignumber.equal(value);
+        postTwoWeiContribution.should.be.bignumber.equal(value.mul(2));
 
         contributorsLength = await this.contributions.getContributorsLength();
         assert.equal(contributorsLength, 1);
@@ -84,26 +84,26 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
         let contributorsLength = await this.contributions.getContributorsLength();
         assert.equal(contributorsLength, 0);
 
-        const preTokenBalance = await this.contributions.tokenBalances(investor);
+        const preTokenBalance = await this.contributions.tokenBalance(investor);
         preTokenBalance.should.be.bignumber.equal(0);
-        const preEthBalance = await this.contributions.weiContributions(investor);
-        preEthBalance.should.be.bignumber.equal(0);
+        const preWeiContribution = await this.contributions.weiContribution(investor);
+        preWeiContribution.should.be.bignumber.equal(0);
 
         await this.crowdsale.buyTokens(investor, { value, from: purchaser });
 
-        const postOneTokenBalance = await this.contributions.tokenBalances(investor);
+        const postOneTokenBalance = await this.contributions.tokenBalance(investor);
         postOneTokenBalance.should.be.bignumber.equal(value.mul(rate));
-        const postOneEthBalance = await this.contributions.weiContributions(investor);
-        postOneEthBalance.should.be.bignumber.equal(value);
+        const postOneWeiContribution = await this.contributions.weiContribution(investor);
+        postOneWeiContribution.should.be.bignumber.equal(value);
 
         await this.crowdsale.buyTokens(investor, { value, from: purchaser });
 
-        const postTwoTokenBalance = await this.contributions.tokenBalances(investor);
+        const postTwoTokenBalance = await this.contributions.tokenBalance(investor);
         (postTwoTokenBalance.sub(postOneTokenBalance)).should.be.bignumber.equal(value.mul(rate));
         postTwoTokenBalance.should.be.bignumber.equal(value.mul(2).mul(rate));
-        const postTwoEthBalance = await this.contributions.weiContributions(investor);
-        (postTwoEthBalance.sub(postOneEthBalance)).should.be.bignumber.equal(value);
-        postTwoEthBalance.should.be.bignumber.equal(value.mul(2));
+        const postTwoWeiContribution = await this.contributions.weiContribution(investor);
+        (postTwoWeiContribution.sub(postOneWeiContribution)).should.be.bignumber.equal(value);
+        postTwoWeiContribution.should.be.bignumber.equal(value.mul(2));
 
         contributorsLength = await this.contributions.getContributorsLength();
         assert.equal(contributorsLength, 1);

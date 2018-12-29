@@ -20,10 +20,14 @@ contract Contributions is RBAC, TokenRecover {
     _;
   }
 
+  struct Contributor {
+    uint256 weiAmount;
+    uint256 tokenAmount;
+  }
+
   uint256 public totalSoldTokens;
   uint256 public totalWeiRaised;
-  mapping(address => uint256) public tokenBalances;
-  mapping(address => uint256) public weiContributions;
+  mapping(address => Contributor) public contributors;
   address[] public addresses;
 
   constructor() public {}
@@ -42,14 +46,46 @@ contract Contributions is RBAC, TokenRecover {
     public
     onlyOperator
   {
-    if (weiContributions[_address] == 0) {
+    if (contributors[_address].weiAmount == 0) {
       addresses.push(_address);
     }
-    weiContributions[_address] = weiContributions[_address].add(_weiAmount);
+    // solium-disable-next-line max-len
+    contributors[_address].weiAmount = contributors[_address].weiAmount.add(_weiAmount);
     totalWeiRaised = totalWeiRaised.add(_weiAmount);
 
-    tokenBalances[_address] = tokenBalances[_address].add(_tokenAmount);
+    // solium-disable-next-line max-len
+    contributors[_address].tokenAmount = contributors[_address].tokenAmount.add(_tokenAmount);
     totalSoldTokens = totalSoldTokens.add(_tokenAmount);
+  }
+
+  /**
+   * @dev get wei contribution for the given address
+   * @param _address Address has contributed
+   * @return uint256
+   */
+  function weiContribution(
+    address _address
+  )
+    public
+    view
+    returns (uint256)
+  {
+    return contributors[_address].weiAmount;
+  }
+
+  /**
+   * @dev get token balance for the given address
+   * @param _address Address has contributed
+   * @return uint256
+   */
+  function tokenBalance(
+    address _address
+  )
+    public
+    view
+    returns (uint256)
+  {
+    return contributors[_address].tokenAmount;
   }
 
   /**
@@ -70,7 +106,7 @@ contract Contributions is RBAC, TokenRecover {
 
   /**
    * @dev return the contributions length
-   * @return uint256
+   * @return uint
    */
   function getContributorsLength() public view returns (uint) {
     return addresses.length;

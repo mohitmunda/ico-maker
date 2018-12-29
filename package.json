@@ -1,6 +1,6 @@
 {
   "name": "ico-maker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Smart Contracts to build your ICO solution and issue your ERC20 Token",
   "main": "truffle-config.js",
   "files": [
