@@ -1,8 +1,7 @@
+const time = require('openzeppelin-solidity/test/helpers/time');
 const { advanceBlock } = require('openzeppelin-solidity/test/helpers/advanceToBlock');
-const { duration } = require('openzeppelin-solidity/test/helpers/increaseTime');
-const { latestTime } = require('openzeppelin-solidity/test/helpers/latestTime');
 const { ether } = require('openzeppelin-solidity/test/helpers/ether');
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeBaseCrowdsale } = require('./BaseCrowdsale.behaviour');
 
@@ -16,8 +15,7 @@ const BaseCrowdsale = artifacts.require('BaseCrowdsale');
 const BaseToken = artifacts.require('BaseToken');
 const Contributions = artifacts.require('Contributions');
 
-const ROLE_MINTER = 'minter';
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const { ZERO_ADDRESS } = require('openzeppelin-solidity/test/helpers/constants');
 
 contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdParty]) {
   const _name = 'BaseToken';
@@ -30,14 +28,14 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
   const minimumContribution = ether(0.2);
 
   before(async function () {
-    // Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
+    // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
     await advanceBlock();
   });
 
   beforeEach(async function () {
-    this.openingTime = (await latestTime()) + duration.weeks(1);
-    this.closingTime = this.openingTime + duration.weeks(1);
-    this.afterClosingTime = this.closingTime + duration.seconds(1);
+    this.openingTime = (await time.latest()) + time.duration.weeks(1);
+    this.closingTime = this.openingTime + time.duration.weeks(1);
+    this.afterClosingTime = this.closingTime + time.duration.seconds(1);
 
     this.token = await BaseToken.new(_name, _symbol, _decimals, _cap);
     this.contributions = await Contributions.new();
@@ -59,7 +57,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
   context('like a BaseCrowdsale', function () {
     describe('creating a valid crowdsale', function () {
       it('should be token minter', async function () {
-        const isMinter = await this.token.hasRole(this.crowdsale.address, ROLE_MINTER);
+        const isMinter = await this.token.isMinter(this.crowdsale.address);
         isMinter.should.equal(true);
       });
 
@@ -69,7 +67,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail with zero rate', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -84,7 +82,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if wallet is the zero address', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -99,7 +97,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if token is the zero address', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -114,9 +112,9 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if opening time is in the past', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           BaseCrowdsale.new(
-            (await latestTime()) - duration.seconds(1),
+            (await time.latest()) - time.duration.seconds(1),
             this.closingTime,
             rate,
             wallet,
@@ -129,7 +127,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if opening time is after closing time in the past', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           BaseCrowdsale.new(
             this.closingTime,
             this.openingTime,
@@ -144,7 +142,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if contributions is the zero address', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -159,7 +157,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail with zero cap', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,

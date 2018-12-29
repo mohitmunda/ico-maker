@@ -13,38 +13,52 @@ import "./utils/Contributions.sol";
  */
 contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, TokenRecover { // solium-disable-line max-len
 
-  Contributions public contributions;
+  Contributions private _contributions;
 
-  uint256 public minimumContribution;
+  uint256 private _minimumContribution;
 
   /**
-   * @param _openingTime Crowdsale opening time
-   * @param _closingTime Crowdsale closing time
-   * @param _rate Number of token units a buyer gets per wei
-   * @param _wallet Address where collected funds will be forwarded to
-   * @param _cap Max amount of wei to be contributed
-   * @param _minimumContribution Min amount of wei to be contributed
-   * @param _token Address of the token being sold
-   * @param _contributions Address of the contributions contract
+   * @param openingTime Crowdsale opening time
+   * @param closingTime Crowdsale closing time
+   * @param rate Number of token units a buyer gets per wei
+   * @param wallet Address where collected funds will be forwarded to
+   * @param cap Max amount of wei to be contributed
+   * @param minimumContribution Min amount of wei to be contributed
+   * @param token Address of the token being sold
+   * @param contributions Address of the contributions contract
    */
   constructor(
-    uint256 _openingTime,
-    uint256 _closingTime,
-    uint256 _rate,
-    address _wallet,
-    uint256 _cap,
-    uint256 _minimumContribution,
-    address _token,
-    address _contributions
+    uint256 openingTime,
+    uint256 closingTime,
+    uint256 rate,
+    address wallet,
+    uint256 cap,
+    uint256 minimumContribution,
+    address token,
+    address contributions
   )
-    Crowdsale(_rate, _wallet, ERC20(_token))
-    TimedCrowdsale(_openingTime, _closingTime)
-    CappedCrowdsale(_cap)
+    Crowdsale(rate, wallet, ERC20(token))
+    TimedCrowdsale(openingTime, closingTime)
+    CappedCrowdsale(cap)
     public
   {
-    require(_contributions != address(0));
-    contributions = Contributions(_contributions);
-    minimumContribution = _minimumContribution;
+    require(contributions != address(0));
+    _contributions = Contributions(contributions);
+    _minimumContribution = minimumContribution;
+  }
+
+  /**
+   * @return the crowdsale contributions
+   */
+  function contributions() public view returns(Contributions) {
+    return _contributions;
+  }
+
+  /**
+   * @return the crowdsale minimum contribution
+   */
+  function minimumContribution() public view returns(uint256) {
+    return _minimumContribution;
   }
 
   /**
@@ -52,7 +66,7 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
    */
   function started() public view returns(bool) {
     // solium-disable-next-line security/no-block-members
-    return block.timestamp >= openingTime;
+    return block.timestamp >= openingTime();
   }
 
   /**
@@ -64,35 +78,36 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
 
   /**
    * @dev Extend parent behavior requiring purchase to respect the minimumContribution.
-   * @param _beneficiary Token purchaser
-   * @param _weiAmount Amount of wei contributed
+   * @param beneficiary Token purchaser
+   * @param weiAmount Amount of wei contributed
    */
   function _preValidatePurchase(
-    address _beneficiary,
-    uint256 _weiAmount
+    address beneficiary,
+    uint256 weiAmount
   )
     internal
+    view
   {
-    require(_weiAmount >= minimumContribution);
-    super._preValidatePurchase(_beneficiary, _weiAmount);
+    require(weiAmount >= _minimumContribution);
+    super._preValidatePurchase(beneficiary, weiAmount);
   }
 
   /**
    * @dev Update the contributions contract states
-   * @param _beneficiary Address receiving the tokens
-   * @param _weiAmount Value in wei involved in the purchase
+   * @param beneficiary Address receiving the tokens
+   * @param weiAmount Value in wei involved in the purchase
    */
   function _updatePurchasingState(
-    address _beneficiary,
-    uint256 _weiAmount
+    address beneficiary,
+    uint256 weiAmount
   )
     internal
   {
-    super._updatePurchasingState(_beneficiary, _weiAmount);
-    contributions.addBalance(
-      _beneficiary,
-      _weiAmount,
-      _getTokenAmount(_weiAmount)
+    super._updatePurchasingState(beneficiary, weiAmount);
+    _contributions.addBalance(
+      beneficiary,
+      weiAmount,
+      _getTokenAmount(weiAmount)
     );
   }
 }

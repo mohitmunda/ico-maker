@@ -1,4 +1,4 @@
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const BigNumber = web3.BigNumber;
 
@@ -6,7 +6,7 @@ require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
-function shouldBehaveLikeCappedCrowdsale ([investor, purchaser]) {
+function shouldBehaveLikeCappedCrowdsale ([investor]) {
   let cap;
   let lessThanCap;
 
@@ -16,58 +16,35 @@ function shouldBehaveLikeCappedCrowdsale ([investor, purchaser]) {
   });
 
   describe('accepting payments', function () {
-    describe('high-level purchase', function () {
-      it('should accept payments within cap', async function () {
-        await this.crowdsale.sendTransaction({ value: cap.minus(lessThanCap), from: investor });
-        await this.crowdsale.sendTransaction({ value: lessThanCap, from: investor });
-      });
-
-      it('should reject payments outside cap', async function () {
-        await this.crowdsale.sendTransaction({ value: cap, from: investor });
-        await assertRevert(this.crowdsale.sendTransaction({ value: 1, from: investor }));
-      });
-
-      it('should reject payments that exceed cap', async function () {
-        await assertRevert(this.crowdsale.sendTransaction({ value: cap.plus(1), from: investor }));
-      });
+    it('should accept payments within cap', async function () {
+      await this.crowdsale.send(cap.minus(lessThanCap), { from: investor });
+      await this.crowdsale.send(lessThanCap, { from: investor });
     });
 
-    describe('low-level purchase', function () {
-      it('should accept payments within cap', async function () {
-        await this.crowdsale.buyTokens(investor, { value: cap.minus(lessThanCap), from: purchaser });
-        await this.crowdsale.buyTokens(investor, { value: lessThanCap, from: purchaser });
-      });
+    it('should reject payments outside cap', async function () {
+      await this.crowdsale.send(cap, { from: investor });
+      await shouldFail.reverting(this.crowdsale.send(1, { from: investor }));
+    });
 
-      it('should reject payments outside cap', async function () {
-        await this.crowdsale.buyTokens(investor, { value: cap, from: purchaser });
-        await assertRevert(this.crowdsale.buyTokens(investor, { value: 1, from: purchaser }));
-      });
-
-      it('should reject payments that exceed cap', async function () {
-        await assertRevert(this.crowdsale.buyTokens(investor, { value: cap.plus(1), from: purchaser }));
-      });
+    it('should reject payments that exceed cap', async function () {
+      await shouldFail.reverting(this.crowdsale.send(cap.plus(1), { from: investor }));
     });
   });
 
   describe('ending', function () {
     it('should not reach cap if sent under cap', async function () {
-      let capReached = await this.crowdsale.capReached();
-      capReached.should.equal(false);
-      await this.crowdsale.sendTransaction({ value: lessThanCap, from: investor });
-      capReached = await this.crowdsale.capReached();
-      capReached.should.equal(false);
+      await this.crowdsale.send(lessThanCap, { from: investor });
+      (await this.crowdsale.capReached()).should.equal(false);
     });
 
     it('should not reach cap if sent just under cap', async function () {
-      await this.crowdsale.sendTransaction({ value: cap.minus(1), from: investor });
-      const capReached = await this.crowdsale.capReached();
-      capReached.should.equal(false);
+      await this.crowdsale.send(cap.minus(1), { from: investor });
+      (await this.crowdsale.capReached()).should.equal(false);
     });
 
     it('should reach cap if cap sent', async function () {
-      await this.crowdsale.sendTransaction({ value: cap, from: investor });
-      const capReached = await this.crowdsale.capReached();
-      capReached.should.equal(true);
+      await this.crowdsale.send(cap, { from: investor });
+      (await this.crowdsale.capReached()).should.equal(true);
     });
   });
 }

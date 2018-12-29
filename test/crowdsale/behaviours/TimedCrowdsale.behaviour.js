@@ -1,5 +1,5 @@
-const { increaseTimeTo } = require('openzeppelin-solidity/test/helpers/increaseTime');
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
+const time = require('openzeppelin-solidity/test/helpers/time');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const BigNumber = web3.BigNumber;
 
@@ -9,29 +9,30 @@ require('chai')
 
 function shouldBehaveLikeTimedCrowdsale ([owner, investor, wallet, purchaser], rate, value) {
   it('should be ended only after end', async function () {
-    let ended = await this.crowdsale.hasClosed();
-    ended.should.equal(false);
-    await increaseTimeTo(this.afterClosingTime);
-    ended = await this.crowdsale.hasClosed();
-    ended.should.equal(true);
+    (await this.crowdsale.hasClosed()).should.equal(false);
+    await time.increaseTo(this.afterClosingTime);
+    (await this.crowdsale.isOpen()).should.equal(false);
+    (await this.crowdsale.hasClosed()).should.equal(true);
   });
 
   describe('accepting payments', function () {
     it('should reject payments before start', async function () {
-      await assertRevert(this.crowdsale.sendTransaction({ value: value, from: investor }));
-      await assertRevert(this.crowdsale.buyTokens(investor, { from: purchaser, value: value }));
+      (await this.crowdsale.isOpen()).should.equal(false);
+      await shouldFail.reverting(this.crowdsale.send(value));
+      await shouldFail.reverting(this.crowdsale.buyTokens(investor, { from: purchaser, value: value }));
     });
 
     it('should accept payments after start', async function () {
-      await increaseTimeTo(this.openingTime);
-      await this.crowdsale.sendTransaction({ value: value, from: investor });
+      await time.increaseTo(this.openingTime);
+      (await this.crowdsale.isOpen()).should.equal(true);
+      await this.crowdsale.send(value);
       await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
     });
 
     it('should reject payments after end', async function () {
-      await increaseTimeTo(this.afterClosingTime);
-      await assertRevert(this.crowdsale.sendTransaction({ value: value, from: investor }));
-      await assertRevert(this.crowdsale.buyTokens(investor, { value: value, from: purchaser }));
+      await time.increaseTo(this.afterClosingTime);
+      await shouldFail.reverting(this.crowdsale.send(value));
+      await shouldFail.reverting(this.crowdsale.buyTokens(investor, { value: value, from: purchaser }));
     });
   });
 }

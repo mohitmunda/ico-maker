@@ -1,4 +1,4 @@
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeBaseToken } = require('./BaseToken.behaviour');
 
@@ -10,31 +10,39 @@ contract('BaseToken', function ([owner, anotherAccount, minter, operator, recipi
   const _name = 'BaseToken';
   const _symbol = 'ERC20';
   const _decimals = 18;
-  const _cap = new BigNumber(10000);
+  const _cap = new BigNumber(1000000);
   const _initialBalance = 1000;
 
-  beforeEach(async function () {
-    this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, { from: owner });
-  });
-
-  describe('creating a valid token', function () {
-    it('should fail with zero cap', async function () {
-      await assertRevert(
-        BaseToken.new(
-          _name,
-          _symbol,
-          _decimals,
-          0,
-          { from: owner }
-        )
-      );
+  context('creating valid token', function () {
+    describe('as a ERC20Capped', function () {
+      it('requires a non-zero cap', async function () {
+        await shouldFail.reverting(
+          BaseToken.new(_name, _symbol, _decimals, 0, { from: owner })
+        );
+      });
     });
   });
 
-  context('like a BaseToken token', function () {
+  context('testing behaviours', function () {
+    beforeEach(async function () {
+      this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, { from: owner });
+    });
+
     shouldBehaveLikeBaseToken(
       [owner, anotherAccount, minter, operator, recipient, thirdParty],
       [_name, _symbol, _decimals, _cap, _initialBalance]
     );
+  });
+
+  context('like a BaseToken', function () {
+    beforeEach(async function () {
+      this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, { from: owner });
+    });
+
+    describe('once deployed', function () {
+      it('total supply should be zero', async function () {
+        (await this.token.totalSupply()).should.be.bignumber.equal(0);
+      });
+    });
   });
 });

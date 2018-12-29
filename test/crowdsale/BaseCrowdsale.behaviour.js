@@ -1,5 +1,5 @@
-const { increaseTimeTo } = require('openzeppelin-solidity/test/helpers/increaseTime');
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
+const time = require('openzeppelin-solidity/test/helpers/time');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 const { shouldBehaveLikeMintedCrowdsale } = require('./behaviours/MintedCrowdsale.behaviour');
@@ -21,14 +21,14 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
   context('like a CappedCrowdsale', function () {
     beforeEach(async function () {
-      await increaseTimeTo(this.openingTime);
+      await time.increaseTo(this.openingTime);
     });
     shouldBehaveLikeCappedCrowdsale([investor, purchaser]);
   });
 
   context('like a MintedCrowdsale', function () {
     beforeEach(async function () {
-      await increaseTimeTo(this.openingTime);
+      await time.increaseTo(this.openingTime);
     });
     shouldBehaveLikeMintedCrowdsale([owner, investor, wallet, purchaser], rate, value);
   });
@@ -36,7 +36,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
   context('like a BaseCrowdsale', function () {
     describe('high-level purchase', function () {
       beforeEach(async function () {
-        await increaseTimeTo(this.openingTime);
+        await time.increaseTo(this.openingTime);
       });
 
       it('should add beneficiary to contributions list', async function () {
@@ -69,7 +69,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
       });
 
       it('should fail if less than minimum contribution', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           this.crowdsale.sendTransaction({ value: minimumContribution.sub(1), from: investor })
         );
       });
@@ -77,7 +77,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
     describe('low-level purchase', function () {
       beforeEach(async function () {
-        await increaseTimeTo(this.openingTime);
+        await time.increaseTo(this.openingTime);
       });
 
       it('should add beneficiary to contributions list', async function () {
@@ -110,7 +110,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
       });
 
       it('should fail if less than minimum contribution', async function () {
-        await assertRevert(
+        await shouldFail.reverting(
           this.crowdsale.buyTokens(investor, { value: minimumContribution.sub(1), from: purchaser })
         );
       });
@@ -136,7 +136,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       describe('after start and before end', function () {
         beforeEach(async function () {
-          await increaseTimeTo(this.openingTime);
+          await time.increaseTo(this.openingTime);
         });
 
         it('started should be true', async function () {
@@ -176,7 +176,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       describe('after end', function () {
         beforeEach(async function () {
-          await increaseTimeTo(this.afterClosingTime);
+          await time.increaseTo(this.afterClosingTime);
         });
 
         it('started should be true', async function () {

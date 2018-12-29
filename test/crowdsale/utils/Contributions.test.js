@@ -1,6 +1,5 @@
 const { ether } = require('openzeppelin-solidity/test/helpers/ether');
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
-const expectEvent = require('openzeppelin-solidity/test/helpers/expectEvent');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
@@ -126,7 +125,7 @@ contract('Contributions', function (
       assert.equal(tokenBalance, 0);
       assert.equal(weiContribution, 0);
 
-      await assertRevert(
+      await shouldFail.reverting(
         this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: thirdParty })
       );
 
@@ -135,50 +134,6 @@ contract('Contributions', function (
 
       assert.equal(tokenBalance, 0);
       assert.equal(weiContribution, 0);
-    });
-  });
-
-  context('test RBAC functions', function () {
-    describe('in normal conditions', function () {
-      it('allows owner to add a operator', async function () {
-        await this.contributions.addOperator(futureOperator, { from: owner });
-      });
-
-      it('allows owner to remove a operator', async function () {
-        await this.contributions.addOperator(futureOperator, { from: owner });
-        await this.contributions.removeOperator(futureOperator, { from: owner });
-      });
-
-      it('announces a RoleAdded event on addRole', async function () {
-        await expectEvent.inTransaction(
-          this.contributions.addOperator(futureOperator, { from: owner }),
-          'RoleAdded'
-        );
-      });
-
-      it('announces a RoleRemoved event on removeRole', async function () {
-        await expectEvent.inTransaction(
-          this.contributions.removeOperator(operator, { from: owner }),
-          'RoleRemoved'
-        );
-      });
-    });
-
-    describe('in adversarial conditions', function () {
-      it('does not allow "thirdParty" except owner to add a operator', async function () {
-        await assertRevert(
-          this.contributions.addOperator(futureOperator, { from: operator })
-        );
-        await assertRevert(
-          this.contributions.addOperator(futureOperator, { from: thirdParty })
-        );
-      });
-
-      it('does not allow "thirdParty" except owner to remove a operator', async function () {
-        await this.contributions.addOperator(futureOperator, { from: owner });
-        await assertRevert(this.contributions.removeOperator(futureOperator, { from: operator }));
-        await assertRevert(this.contributions.removeOperator(futureOperator, { from: thirdParty }));
-      });
     });
   });
 

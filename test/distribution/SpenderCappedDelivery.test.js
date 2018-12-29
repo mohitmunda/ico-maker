@@ -1,4 +1,4 @@
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');
 
@@ -11,7 +11,7 @@ require('chai')
 const CappedDelivery = artifacts.require('SpenderCappedDelivery');
 const BaseToken = artifacts.require('BaseToken');
 
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const { ZERO_ADDRESS } = require('openzeppelin-solidity/test/helpers/constants');
 
 contract('SpenderCappedDelivery', function (accounts) {
   const [
@@ -35,7 +35,7 @@ contract('SpenderCappedDelivery', function (accounts) {
     context('creating a valid delivery', function () {
       describe('if token address is the zero address', function () {
         it('reverts', async function () {
-          await assertRevert(
+          await shouldFail.reverting(
             CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner })
           );
         });
@@ -43,7 +43,7 @@ contract('SpenderCappedDelivery', function (accounts) {
 
       describe('if cap is zero', function () {
         it('reverts', async function () {
-          await assertRevert(
+          await shouldFail.reverting(
             CappedDelivery.new(this.token.address, 0, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner })
           );
         });
@@ -51,7 +51,7 @@ contract('SpenderCappedDelivery', function (accounts) {
 
       describe('if wallet address is the zero address', function () {
         it('reverts', async function () {
-          await assertRevert(
+          await shouldFail.reverting(
             CappedDelivery.new(this.token.address, cap, allowMultipleSend, ZERO_ADDRESS, { from: cappedDeliveryOwner })
           );
         });
@@ -67,13 +67,12 @@ contract('SpenderCappedDelivery', function (accounts) {
             { from: cappedDeliveryOwner }
           );
 
-          await this.token.addMinter(tokenOwner, { from: tokenOwner });
           await this.token.mint(tokenOwner, tokenCap, { from: tokenOwner });
         });
 
         describe('sending tokens if minting is not finished', function () {
           it('reverts', async function () {
-            await assertRevert(
+            await shouldFail.reverting(
               this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
             );
           });
@@ -82,7 +81,7 @@ contract('SpenderCappedDelivery', function (accounts) {
         describe('sending tokens if spender has not allowance', function () {
           it('reverts', async function () {
             await this.token.finishMinting({ from: tokenOwner });
-            await assertRevert(
+            await shouldFail.reverting(
               this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
             );
           });

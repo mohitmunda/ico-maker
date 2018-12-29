@@ -1,24 +1,17 @@
 pragma solidity ^0.4.25;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "openzeppelin-solidity/contracts/access/rbac/RBAC.sol";
 import "eth-token-recover/contracts/TokenRecover.sol";
+import "../../access/roles/OperatorRole.sol";
 
 /**
  * @title Contributions
  * @author Vittorio Minacori (https://github.com/vittominacori)
  * @dev Utility contract where to save any information about Crowdsale contributions
  */
-contract Contributions is RBAC, TokenRecover {
+contract Contributions is OperatorRole, TokenRecover {
 
   using SafeMath for uint256;
-
-  string public constant ROLE_OPERATOR = "operator";
-
-  modifier onlyOperator () {
-    checkRole(msg.sender, ROLE_OPERATOR);
-    _;
-  }
 
   struct Contributor {
     uint256 weiAmount;
@@ -89,26 +82,14 @@ contract Contributions is RBAC, TokenRecover {
   }
 
   /**
-   * @dev add a operator role to an address
-   * @param _operator address
-   */
-  function addOperator(address _operator) public onlyOwner {
-    addRole(_operator, ROLE_OPERATOR);
-  }
-
-  /**
-   * @dev remove a operator role from an address
-   * @param _operator address
-   */
-  function removeOperator(address _operator) public onlyOwner {
-    removeRole(_operator, ROLE_OPERATOR);
-  }
-
-  /**
    * @dev return the contributions length
    * @return uint
    */
   function getContributorsLength() public view returns (uint) {
     return addresses.length;
+  }
+
+  function removeOperator(address account) public onlyOwner {
+    _removeOperator(account);
   }
 }

@@ -1,6 +1,9 @@
+const expectEvent = require('openzeppelin-solidity/test/helpers/expectEvent');
+const { ethGetBalance } = require('openzeppelin-solidity/test/helpers/web3');
+
 const BigNumber = web3.BigNumber;
 
-const should = require('chai')
+require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
@@ -9,7 +12,7 @@ function shouldBehaveLikeMintedCrowdsale ([owner, investor, wallet, purchaser], 
 
   describe('accepting payments', function () {
     it('should accept payments', async function () {
-      await this.crowdsale.sendTransaction({ value: value, from: investor });
+      await this.crowdsale.send(value);
       await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
     });
   });
@@ -17,49 +20,23 @@ function shouldBehaveLikeMintedCrowdsale ([owner, investor, wallet, purchaser], 
   describe('high-level purchase', function () {
     it('should log purchase', async function () {
       const { logs } = await this.crowdsale.sendTransaction({ value: value, from: investor });
-      const event = logs.find(e => e.event === 'TokenPurchase');
-      should.exist(event);
-      event.args.purchaser.should.equal(investor);
-      event.args.beneficiary.should.equal(investor);
-      event.args.value.should.be.bignumber.equal(value);
-      event.args.amount.should.be.bignumber.equal(expectedTokenAmount);
+      expectEvent.inLogs(logs, 'TokensPurchased', {
+        purchaser: investor,
+        beneficiary: investor,
+        value: value,
+        amount: expectedTokenAmount,
+      });
     });
 
     it('should assign tokens to sender', async function () {
       await this.crowdsale.sendTransaction({ value: value, from: investor });
-      const balance = await this.token.balanceOf(investor);
-      balance.should.be.bignumber.equal(expectedTokenAmount);
+      (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
     });
 
     it('should forward funds to wallet', async function () {
-      const pre = web3.eth.getBalance(wallet);
+      const pre = await ethGetBalance(wallet);
       await this.crowdsale.sendTransaction({ value, from: investor });
-      const post = web3.eth.getBalance(wallet);
-      post.minus(pre).should.be.bignumber.equal(value);
-    });
-  });
-
-  describe('low-level purchase', function () {
-    it('should log purchase', async function () {
-      const { logs } = await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
-      const event = logs.find(e => e.event === 'TokenPurchase');
-      should.exist(event);
-      event.args.purchaser.should.equal(purchaser);
-      event.args.beneficiary.should.equal(investor);
-      event.args.value.should.be.bignumber.equal(value);
-      event.args.amount.should.be.bignumber.equal(expectedTokenAmount);
-    });
-
-    it('should assign tokens to sender', async function () {
-      await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
-      const balance = await this.token.balanceOf(investor);
-      balance.should.be.bignumber.equal(expectedTokenAmount);
-    });
-
-    it('should forward funds to wallet', async function () {
-      const pre = web3.eth.getBalance(wallet);
-      await this.crowdsale.buyTokens(investor, { value, from: purchaser });
-      const post = web3.eth.getBalance(wallet);
+      const post = await ethGetBalance(wallet);
       post.minus(pre).should.be.bignumber.equal(value);
     });
   });

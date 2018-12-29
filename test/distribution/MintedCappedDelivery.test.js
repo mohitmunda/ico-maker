@@ -1,4 +1,4 @@
-const { assertRevert } = require('openzeppelin-solidity/test/helpers/assertRevert');
+const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');
 
@@ -11,7 +11,7 @@ require('chai')
 const CappedDelivery = artifacts.require('MintedCappedDelivery');
 const BaseToken = artifacts.require('BaseToken');
 
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const { ZERO_ADDRESS } = require('openzeppelin-solidity/test/helpers/constants');
 
 contract('MintedCappedDelivery', function (accounts) {
   const [
@@ -35,7 +35,7 @@ contract('MintedCappedDelivery', function (accounts) {
     context('creating a valid delivery', function () {
       describe('if token address is the zero address', function () {
         it('reverts', async function () {
-          await assertRevert(
+          await shouldFail.reverting(
             CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, { from: cappedDeliveryOwner })
           );
         });
@@ -43,7 +43,7 @@ contract('MintedCappedDelivery', function (accounts) {
 
       describe('if cap is zero', function () {
         it('reverts', async function () {
-          await assertRevert(
+          await shouldFail.reverting(
             CappedDelivery.new(this.token.address, 0, allowMultipleSend, { from: cappedDeliveryOwner })
           );
         });
@@ -64,7 +64,7 @@ contract('MintedCappedDelivery', function (accounts) {
         describe('sending tokens if minting is finished', function () {
           it('reverts', async function () {
             await this.token.finishMinting({ from: tokenOwner });
-            await assertRevert(
+            await shouldFail.reverting(
               this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
             );
           });
