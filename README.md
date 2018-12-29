@@ -11,7 +11,7 @@ Smart Contracts to build your ICO solution and issue your ERC20 Token.
 Install truffle.
 
 ```bash
-npm install -g truffle      // Version 4.1.14+ required.
+npm install -g truffle      // Version 4.1.15+ required.
 ```
 
 Create your Smart Contracts folder and init truffle
