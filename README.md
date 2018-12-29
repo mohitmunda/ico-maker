@@ -35,7 +35,7 @@ npm install ico-maker
 [BaseToken](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/BaseToken.sol) is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable and ERC1363 Payable Token behaviours.
 
 ```solidity
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
 import "ico-maker/contracts/token/BaseToken.sol";
 
@@ -57,7 +57,7 @@ contract MyToken is BaseToken {
 [Contributions](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/utils/Contributions.sol) is an utility Smart Contract where to store additional data about crowdsale like the wei contributed or the token balance of each address.
 
 ```solidity
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
 import "ico-maker/contracts/crowdsale/utils/Contributions.sol";
 
@@ -69,7 +69,7 @@ contract MyContributions is Contributions {}
 [BaseCrowdsale](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/BaseCrowdsale.sol) is an extensible Crowdsale contract with Timed and Capped behaviours.
 
 ```solidity
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
 import "ico-maker/contracts/crowdsale/BaseCrowdsale.sol";
 
@@ -104,7 +104,7 @@ contract MyCrowdsale is BaseCrowdsale {
 [CappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/CappedDelivery.sol) is a Capped Smart Contract to transfer tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
 import "ico-maker/contracts/distribution/CappedDelivery.sol";
 
@@ -121,7 +121,7 @@ contract MyAirdrop is CappedDelivery {
 [MintedCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/MintedCappedDelivery.sol) is a Capped Smart Contract to mint tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
 import "ico-maker/contracts/distribution/MintedCappedDelivery.sol";
 
@@ -138,7 +138,7 @@ contract MyAirdrop is MintedCappedDelivery {
 [SpenderCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/SpenderCappedDelivery.sol) is a Capped Smart Contract to transferFrom tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.25;
 
 import "ico-maker/contracts/distribution/SpenderCappedDelivery.sol";
 
@@ -155,7 +155,7 @@ contract MyAirdrop is SpenderCappedDelivery {
 Install truffle.
 
 ```bash
-npm install -g truffle      // Version 4.1.14+ required.
+npm install -g truffle      // Version 4.1.15+ required.
 ```
 
 ### Install dependencies
@@ -166,7 +166,7 @@ npm install
 
 ### Linter
 
-Use Solium
+Use Ethlint
 
 ```bash
 npm run lint:sol
