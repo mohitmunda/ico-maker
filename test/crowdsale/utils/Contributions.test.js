@@ -3,6 +3,8 @@ const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
+const { shouldBehaveLikeRemoveRole } = require('../../access/roles/RemoveRole.behavior');
+
 const BigNumber = web3.BigNumber;
 
 require('chai')
@@ -134,6 +136,16 @@ contract('Contributions', function (
 
       assert.equal(tokenBalance, 0);
       assert.equal(weiContribution, 0);
+    });
+  });
+
+  context('testing remove roles', function () {
+    beforeEach(async function () {
+      this.contract = this.contributions;
+    });
+
+    describe('operator', function () {
+      shouldBehaveLikeRemoveRole(owner, operator, [thirdParty], 'operator');
     });
   });
 

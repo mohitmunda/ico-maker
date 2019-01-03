@@ -61,9 +61,19 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
         isMinter.should.equal(true);
       });
 
+      it('contributions should be right set', async function () {
+        const contributions = await this.crowdsale.contributions();
+        contributions.should.be.bignumber.equal(this.contributions.address);
+      });
+
       it('cap should be right set', async function () {
         const expectedCap = await this.crowdsale.cap();
         cap.should.be.bignumber.equal(expectedCap);
+      });
+
+      it('minimum contribution should be right set', async function () {
+        const expectedMinimumContribution = await this.crowdsale.minimumContribution();
+        expectedMinimumContribution.should.be.bignumber.equal(minimumContribution);
       });
 
       it('should fail with zero rate', async function () {

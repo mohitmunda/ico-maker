@@ -8,6 +8,7 @@ const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRe
 
 const { shouldBehaveLikeERC20Detailed } = require('./behaviours/ERC20Detailed.behaviour');
 const { shouldBehaveLikeERC20 } = require('./behaviours/ERC20.behaviour');
+const { shouldBehaveLikeRemoveRole } = require('../access/roles/RemoveRole.behavior');
 
 const BigNumber = web3.BigNumber;
 
@@ -97,6 +98,23 @@ function shouldBehaveLikeBaseToken (
           await this.token.transferFrom(thirdParty, recipient, _initialBalance, { from: anotherAccount });
         });
       });
+    });
+  });
+
+  context('testing remove roles', function () {
+    beforeEach(async function () {
+      await this.token.addOperator(operator, { from: owner });
+      await this.token.addMinter(minter, { from: owner });
+
+      this.contract = this.token;
+    });
+
+    describe('operator', function () {
+      shouldBehaveLikeRemoveRole(owner, operator, [thirdParty], 'operator');
+    });
+
+    describe('minter', function () {
+      shouldBehaveLikeRemoveRole(owner, minter, [thirdParty], 'minter');
     });
   });
 
