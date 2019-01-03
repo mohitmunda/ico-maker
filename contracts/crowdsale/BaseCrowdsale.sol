@@ -18,6 +18,14 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
   uint256 private _minimumContribution;
 
   /**
+   * @dev Reverts if less than minimum contribution
+   */
+  modifier onlyGreaterThanMinimum(uint256 weiAmount) {
+    require(weiAmount >= _minimumContribution);
+    _;
+  }
+
+  /**
    * @param openingTime Crowdsale opening time
    * @param closingTime Crowdsale closing time
    * @param rate Number of token units a buyer gets per wei
@@ -86,9 +94,9 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
     uint256 weiAmount
   )
     internal
+    onlyGreaterThanMinimum(weiAmount)
     view
   {
-    require(weiAmount >= _minimumContribution);
     super._preValidatePurchase(beneficiary, weiAmount);
   }
 
