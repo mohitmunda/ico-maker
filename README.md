@@ -4,14 +4,14 @@
 [![Build Status](https://travis-ci.org/vittominacori/ico-maker.svg?branch=master)](https://travis-ci.org/vittominacori/ico-maker) 
 [![Coverage Status](https://coveralls.io/repos/github/vittominacori/ico-maker/badge.svg?branch=master)](https://coveralls.io/github/vittominacori/ico-maker?branch=master)
 
-Smart Contracts to build your ICO solution and issue your ERC20 Token.
+Smart Contracts to build your ICO solution and issue your ERC20 Token
 
 ## Prerequisites
 
-Install truffle.
+Install truffle
 
 ```bash
-npm install -g truffle      // Version 4.1.15+ required.
+npm install -g truffle      // Version 4.1.15+ required
 ```
 
 Create your Smart Contracts folder and init truffle
@@ -153,10 +153,10 @@ contract MyAirdrop is SpenderCappedDelivery {
 
 ## Development
 
-Install truffle.
+Install truffle
 
 ```bash
-npm install -g truffle      // Version 4.1.15+ required.
+npm install -g truffle      // Version 4.1.15+ required
 ```
 
 ### Install dependencies
@@ -185,7 +185,7 @@ Use both and fix
 npm run lint:fix
 ```
 
-### Compile and test the contracts.
+### Compile and test the contracts
  
 Open the Truffle console
 
@@ -205,7 +205,7 @@ Test
 test
 ```
 
-### Optional
+## Optional
 
 Install the [truffle-flattener](https://github.com/alcuadrado/truffle-flattener)
 
@@ -219,6 +219,6 @@ Usage
 truffle-flattener contracts/token/BaseToken.sol > .dist/BaseToken.dist.sol
 ```
 
-### License
+## License
 
 Code released under the [MIT License](https://github.com/vittominacori/ico-maker/blob/master/LICENSE).
