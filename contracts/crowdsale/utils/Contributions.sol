@@ -48,16 +48,9 @@ contract Contributions is OperatorRole, TokenRecover {
   }
 
   /**
-   * @return the list of addresses who contributed in crowdsales
-   */
-  function getContributorsAddresses() public view returns(address[]) {
-    return _addresses;
-  }
-
-  /**
    * @return address of a contributor by list index
    */
-  function getContributorAddressByIndex(uint256 index) public view returns(address) { // solium-disable-line max-len
+  function getContributorAddress(uint256 index) public view returns(address) {
     return _addresses[index];
   }
 

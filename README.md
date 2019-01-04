@@ -216,7 +216,7 @@ npm install -g truffle-flattener
 Usage 
 
 ```bash
-truffle-flattener contracts/token/BaseToken.sol > dist/BaseToken.dist.sol
+truffle-flattener contracts/token/BaseToken.sol > .dist/BaseToken.dist.sol
 ```
 
 ### License
