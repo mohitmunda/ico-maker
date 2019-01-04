@@ -11,26 +11,46 @@ contract CappedDelivery is TokenRecover {
 
   using SafeMath for uint256;
 
-  BaseToken public token;
+  BaseToken internal _token;
 
-  uint256 public cap;
-  bool public allowMultipleSend;
+  uint256 private _cap;
+  bool private _allowMultipleSend;
 
-  uint256 public distributedTokens;
-  mapping (address => uint256) public receivedTokens;
+  uint256 private _distributedTokens;
+  mapping (address => uint256) private _receivedTokens;
 
   /**
-   * @param _token Address of the token being distributed
-   * @param _cap Max amount of token to be distributed
-   * @param _allowMultipleSend Allow multiple send to same address
+   * @param token Address of the token being distributed
+   * @param cap Max amount of token to be distributed
+   * @param allowMultipleSend Allow multiple send to same address
    */
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend) public {
-    require(_token != address(0));
-    require(_cap > 0);
+  constructor(address token, uint256 cap, bool allowMultipleSend) public {
+    require(token != address(0));
+    require(cap > 0);
 
-    token = BaseToken(_token);
-    cap = _cap;
-    allowMultipleSend = _allowMultipleSend;
+    _token = BaseToken(token);
+    _cap = cap;
+    _allowMultipleSend = allowMultipleSend;
+  }
+
+  function token() public view returns(BaseToken) {
+    return _token;
+  }
+
+  function cap() public view returns(uint256) {
+    return _cap;
+  }
+
+  function allowMultipleSend() public view returns(bool) {
+    return _allowMultipleSend;
+  }
+
+  function distributedTokens() public view returns(uint256) {
+    return _distributedTokens;
+  }
+
+  function receivedTokens(address to) public view returns(uint256) {
+    return _receivedTokens[to];
   }
 
   function multiSend(address[] addresses, uint256[] amounts) public onlyOwner {
@@ -42,11 +62,11 @@ contract CappedDelivery is TokenRecover {
       address to = addresses[i];
       uint256 amount = amounts[i];
 
-      if (allowMultipleSend || receivedTokens[to] == 0) {
-        receivedTokens[to] = receivedTokens[to].add(amount);
-        distributedTokens = distributedTokens.add(amount);
+      if (_allowMultipleSend || _receivedTokens[to] == 0) {
+        _receivedTokens[to] = _receivedTokens[to].add(amount);
+        _distributedTokens = _distributedTokens.add(amount);
 
-        require(distributedTokens <= cap);
+        require(_distributedTokens <= _cap);
 
         _distributeTokens(to, amount);
       }
@@ -54,10 +74,10 @@ contract CappedDelivery is TokenRecover {
   }
 
   function remainingTokens() public view returns(uint256) {
-    return cap.sub(distributedTokens);
+    return _cap.sub(_distributedTokens);
   }
 
-  function _distributeTokens(address _to, uint256 _amount) internal {
-    token.transfer(_to, _amount);
+  function _distributeTokens(address to, uint256 amount) internal {
+    _token.transfer(to, amount);
   }
 }

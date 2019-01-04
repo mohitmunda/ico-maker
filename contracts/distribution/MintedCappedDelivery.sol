@@ -10,16 +10,16 @@ import "./CappedDelivery.sol";
 contract MintedCappedDelivery is CappedDelivery {
 
   /**
-   * @param _token Address of the token being distributed
-   * @param _cap Max amount of token to be distributed
-   * @param _allowMultipleSend Allow multiple send to same address
+   * @param token Address of the token being distributed
+   * @param cap Max amount of token to be distributed
+   * @param allowMultipleSend Allow multiple send to same address
    */
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend)
-    CappedDelivery(_token, _cap, _allowMultipleSend)
+  constructor(address token, uint256 cap, bool allowMultipleSend)
+    CappedDelivery(token, cap, allowMultipleSend)
     public
   {}
 
-  function _distributeTokens(address _to, uint256 _amount) internal {
-    token.mint(_to, _amount);
+  function _distributeTokens(address to, uint256 amount) internal {
+    _token.mint(to, amount);
   }
 }

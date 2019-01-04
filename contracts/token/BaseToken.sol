@@ -16,13 +16,13 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
 
   event MintFinished();
 
-  bool public mintingFinished = false;
+  bool public _mintingFinished = false;
 
   /**
    * @dev Tokens can be minted only before minting finished
    */
   modifier canMint() {
-    require(!mintingFinished);
+    require(!_mintingFinished);
     _;
   }
 
@@ -30,7 +30,7 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
    * @dev Tokens can be moved only after minting finished or if you are an approved operator
    */
   modifier canTransfer(address from) {
-    require(mintingFinished || isOperator(from));
+    require(_mintingFinished || isOperator(from));
     _;
   }
 
@@ -50,6 +50,10 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
     ERC20Capped(cap)
     public
   {}
+
+  function mintingFinished() public view returns(bool) {
+    return _mintingFinished;
+  }
 
   function mint(
     address to,
@@ -90,7 +94,7 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
    * @return True if the operation was successful.
    */
   function finishMinting() public onlyOwner canMint returns (bool) {
-    mintingFinished = true;
+    _mintingFinished = true;
     emit MintFinished();
     return true;
   }

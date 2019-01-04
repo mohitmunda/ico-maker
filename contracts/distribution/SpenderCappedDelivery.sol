@@ -9,29 +9,32 @@ import "./CappedDelivery.sol";
  */
 contract SpenderCappedDelivery is CappedDelivery {
 
-  address public wallet;
+  address private _wallet;
 
   /**
-   * @param _token Address of the token being distributed
-   * @param _cap Max amount of token to be distributed
-   * @param _allowMultipleSend Allow multiple send to same address
-   * @param _wallet Address where are tokens stored
+   * @param token Address of the token being distributed
+   * @param cap Max amount of token to be distributed
+   * @param allowMultipleSend Allow multiple send to same address
+   * @param wallet Address where are tokens stored
    */
   constructor(
-    address _token,
-    uint256 _cap,
-    bool _allowMultipleSend,
-    address _wallet
+    address token,
+    uint256 cap,
+    bool allowMultipleSend,
+    address wallet
   )
-    CappedDelivery(_token, _cap, _allowMultipleSend)
+    CappedDelivery(token, cap, allowMultipleSend)
     public
   {
-    require(_wallet != address(0));
-
-    wallet = _wallet;
+    require(wallet != address(0));
+    _wallet = wallet;
   }
 
-  function _distributeTokens(address _to, uint256 _amount) internal {
-    token.transferFrom(wallet, _to, _amount);
+  function wallet() public view returns(address) {
+    return _wallet;
+  }
+
+  function _distributeTokens(address to, uint256 amount) internal {
+    _token.transferFrom(_wallet, to, amount);
   }
 }

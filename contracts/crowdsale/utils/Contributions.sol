@@ -18,67 +18,80 @@ contract Contributions is OperatorRole, TokenRecover {
     uint256 tokenAmount;
   }
 
-  uint256 public totalSoldTokens;
-  uint256 public totalWeiRaised;
-  mapping(address => Contributor) public contributors;
-  address[] public addresses;
+  uint256 private _totalSoldTokens;
+  uint256 private _totalWeiRaised;
+  address[] private _addresses;
+
+  mapping(address => Contributor) private _contributors;
 
   constructor() public {}
 
+  function totalSoldTokens() public view returns(uint256) {
+    return _totalSoldTokens;
+  }
+
+  function totalWeiRaised() public view returns(uint256) {
+    return _totalWeiRaised;
+  }
+
+  function addresses(uint256 index) public view returns(address) {
+    return _addresses[index];
+  }
+
   /**
    * @dev add contribution into the contributions array
-   * @param _address Address being contributing
-   * @param _weiAmount Amount of wei contributed
-   * @param _tokenAmount Amount of token received
+   * @param account Address being contributing
+   * @param weiAmount Amount of wei contributed
+   * @param tokenAmount Amount of token received
    */
   function addBalance(
-    address _address,
-    uint256 _weiAmount,
-    uint256 _tokenAmount
+    address account,
+    uint256 weiAmount,
+    uint256 tokenAmount
   )
     public
     onlyOperator
   {
-    if (contributors[_address].weiAmount == 0) {
-      addresses.push(_address);
+    if (_contributors[account].weiAmount == 0) {
+      _addresses.push(account);
     }
     // solium-disable-next-line max-len
-    contributors[_address].weiAmount = contributors[_address].weiAmount.add(_weiAmount);
-    totalWeiRaised = totalWeiRaised.add(_weiAmount);
+    _contributors[account].weiAmount = _contributors[account].weiAmount.add(weiAmount);
+    _totalWeiRaised = _totalWeiRaised.add(weiAmount);
 
     // solium-disable-next-line max-len
-    contributors[_address].tokenAmount = contributors[_address].tokenAmount.add(_tokenAmount);
-    totalSoldTokens = totalSoldTokens.add(_tokenAmount);
+    _contributors[account].tokenAmount = _contributors[account].tokenAmount.add(tokenAmount);
+    _totalSoldTokens = _totalSoldTokens.add(tokenAmount);
   }
 
   /**
    * @dev get wei contribution for the given address
-   * @param _address Address has contributed
+   * @param account Address has contributed
    * @return uint256
    */
   function weiContribution(
-    address _address
+    address account
   )
     public
     view
     returns (uint256)
   {
-    return contributors[_address].weiAmount;
+    return _contributors[account].weiAmount;
   }
 
   /**
    * @dev get token balance for the given address
-   * @param _address Address has contributed
+   * @param account Address has contributed
    * @return uint256
    */
   function tokenBalance(
-    address _address
+    address account
   )
     public
     view
     returns (uint256)
   {
-    return contributors[_address].tokenAmount;
+    return _contributors[account].tokenAmount;
   }
 
   /**
@@ -86,7 +99,7 @@ contract Contributions is OperatorRole, TokenRecover {
    * @return uint
    */
   function getContributorsLength() public view returns (uint) {
-    return addresses.length;
+    return _addresses.length;
   }
 
   function removeOperator(address account) public onlyOwner {

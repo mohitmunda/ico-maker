@@ -41,12 +41,12 @@ import "ico-maker/contracts/token/BaseToken.sol";
 
 contract MyToken is BaseToken {
   constructor(
-    string _name,
-    string _symbol,
-    uint8 _decimals,
-    uint256 _cap
+    string name,
+    string symbol,
+    uint8 decimals,
+    uint256 cap
   )
-    BaseToken(_name, _symbol, _decimals, _cap)
+    BaseToken(name, symbol, decimals, cap)
     public
   {}
 }
@@ -75,24 +75,24 @@ import "ico-maker/contracts/crowdsale/BaseCrowdsale.sol";
 
 contract MyCrowdsale is BaseCrowdsale {
   constructor(
-    uint256 _openingTime,
-    uint256 _closingTime,
-    uint256 _rate,
-    address _wallet,
-    uint256 _cap,
-    uint256 _minimumContribution,
-    address _token,
-    address _contributions
+    uint256 openingTime,
+    uint256 closingTime,
+    uint256 rate,
+    address wallet,
+    uint256 cap,
+    uint256 minimumContribution,
+    address token,
+    address contributions
   )
     BaseCrowdsale(
-      _openingTime,
-      _closingTime,
-      _rate,
-      _wallet,
-      _cap,
-      _minimumContribution,
-      _token,
-      _contributions
+      openingTime,
+      closingTime,
+      rate,
+      wallet,
+      cap,
+      minimumContribution,
+      token,
+      contributions
     )
     public
   {}
@@ -109,8 +109,8 @@ pragma solidity ^0.4.25;
 import "ico-maker/contracts/distribution/CappedDelivery.sol";
 
 contract MyAirdrop is CappedDelivery {
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend)
-    CappedDelivery(_token, _cap, _allowMultipleSend)
+  constructor(address token, uint256 cap, bool allowMultipleSend)
+    CappedDelivery(token, cap, allowMultipleSend)
     public
   {}
 }
@@ -126,8 +126,8 @@ pragma solidity ^0.4.25;
 import "ico-maker/contracts/distribution/MintedCappedDelivery.sol";
 
 contract MyAirdrop is MintedCappedDelivery {
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend)
-    MintedCappedDelivery(_token, _cap, _allowMultipleSend)
+  constructor(address token, uint256 cap, bool allowMultipleSend)
+    MintedCappedDelivery(token, cap, allowMultipleSend)
     public
   {}
 }
@@ -143,8 +143,8 @@ pragma solidity ^0.4.25;
 import "ico-maker/contracts/distribution/SpenderCappedDelivery.sol";
 
 contract MyAirdrop is SpenderCappedDelivery {
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend, address _wallet)
-    SpenderCappedDelivery(_token, _cap, _allowMultipleSend, _wallet)
+  constructor(address token, uint256 cap, bool allowMultipleSend, address wallet)
+    SpenderCappedDelivery(token, cap, allowMultipleSend, wallet)
     public
   {}
 }
