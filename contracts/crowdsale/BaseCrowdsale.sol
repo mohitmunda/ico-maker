@@ -13,8 +13,10 @@ import "./utils/Contributions.sol";
  */
 contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, TokenRecover { // solium-disable-line max-len
 
+  // reference to Contributions contract
   Contributions private _contributions;
 
+  // the minimum value of contribution in wei
   uint256 private _minimumContribution;
 
   /**
@@ -56,14 +58,14 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
   }
 
   /**
-   * @return the crowdsale contributions
+   * @return the crowdsale contributions contract
    */
   function contributions() public view returns(Contributions) {
     return _contributions;
   }
 
   /**
-   * @return the crowdsale minimum contribution
+   * @return the minimum value of contribution in wei
    */
   function minimumContribution() public view returns(uint256) {
     return _minimumContribution;
@@ -71,6 +73,7 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
 
   /**
    * @dev false if the ico is not started, true if the ico is started and running, true if the ico is completed
+   * @return bool
    */
   function started() public view returns(bool) {
     // solium-disable-next-line security/no-block-members
@@ -79,6 +82,7 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, Toke
 
   /**
    * @dev false if the ico is not started, false if the ico is started and running, true if the ico is completed
+   * @return bool
    */
   function ended() public view returns(bool) {
     return hasClosed() || capReached();

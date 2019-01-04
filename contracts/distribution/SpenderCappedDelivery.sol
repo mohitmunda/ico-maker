@@ -9,6 +9,7 @@ import "./CappedDelivery.sol";
  */
 contract SpenderCappedDelivery is CappedDelivery {
 
+  // wallet where to transfer the tokens from
   address private _wallet;
 
   /**
@@ -30,11 +31,19 @@ contract SpenderCappedDelivery is CappedDelivery {
     _wallet = wallet;
   }
 
+  /**
+   * @return wallet where to transfer the tokens from
+   */
   function wallet() public view returns(address) {
     return _wallet;
   }
 
-  function _distributeTokens(address to, uint256 amount) internal {
-    _token.transferFrom(_wallet, to, amount);
+  /**
+   * @dev distribute token
+   * @param account Address being distributing
+   * @param amount Amount of token distributed
+   */
+  function _distributeTokens(address account, uint256 amount) internal {
+    _token.transferFrom(_wallet, account, amount);
   }
 }

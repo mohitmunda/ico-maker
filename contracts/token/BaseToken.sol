@@ -16,6 +16,7 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
 
   event MintFinished();
 
+  // indicates if minting is finished
   bool public _mintingFinished = false;
 
   /**
@@ -51,6 +52,9 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
     public
   {}
 
+  /**
+   * @return if minting is finished or not
+   */
   function mintingFinished() public view returns(bool) {
     return _mintingFinished;
   }
@@ -91,18 +95,24 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
 
   /**
    * @dev Function to stop minting new tokens.
-   * @return True if the operation was successful.
    */
-  function finishMinting() public onlyOwner canMint returns (bool) {
+  function finishMinting() public onlyOwner canMint {
     _mintingFinished = true;
     emit MintFinished();
-    return true;
   }
 
+  /**
+   * @dev remove the `operator` role from address
+   * @param account Address you want to remove role
+   */
   function removeOperator(address account) public onlyOwner {
     _removeOperator(account);
   }
 
+  /**
+   * @dev remove the `minter` role from address
+   * @param account Address you want to remove role
+   */
   function removeMinter(address account) public onlyOwner {
     _removeMinter(account);
   }

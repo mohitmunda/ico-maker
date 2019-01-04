@@ -11,12 +11,19 @@ contract CappedDelivery is TokenRecover {
 
   using SafeMath for uint256;
 
+  // the token to distribute
   BaseToken internal _token;
 
+  // the max token cap to distribute
   uint256 private _cap;
+
+  // if multiple sends to the same address are allowed
   bool private _allowMultipleSend;
 
+  // the sum of distributed tokens
   uint256 private _distributedTokens;
+
+  // map of address and received token amount
   mapping (address => uint256) private _receivedTokens;
 
   /**
@@ -33,51 +40,81 @@ contract CappedDelivery is TokenRecover {
     _allowMultipleSend = allowMultipleSend;
   }
 
+  /**
+   * @return the token to distribute
+   */
   function token() public view returns(BaseToken) {
     return _token;
   }
 
+  /**
+   * @return the max token cap to distribute
+   */
   function cap() public view returns(uint256) {
     return _cap;
   }
 
+  /**
+   * @return if multiple sends to the same address are allowed
+   */
   function allowMultipleSend() public view returns(bool) {
     return _allowMultipleSend;
   }
 
+  /**
+   * @return the sum of distributed tokens
+   */
   function distributedTokens() public view returns(uint256) {
     return _distributedTokens;
   }
 
-  function receivedTokens(address to) public view returns(uint256) {
-    return _receivedTokens[to];
+  /**
+   * @param account The address to check
+   * @return received token amount for the given address
+   */
+  function receivedTokens(address account) public view returns(uint256) {
+    return _receivedTokens[account];
   }
 
-  function multiSend(address[] addresses, uint256[] amounts) public onlyOwner {
-    require(addresses.length > 0);
-    require(amounts.length > 0);
-    require(addresses.length == amounts.length);
-
-    for (uint i = 0; i < addresses.length; i++) {
-      address to = addresses[i];
-      uint256 amount = amounts[i];
-
-      if (_allowMultipleSend || _receivedTokens[to] == 0) {
-        _receivedTokens[to] = _receivedTokens[to].add(amount);
-        _distributedTokens = _distributedTokens.add(amount);
-
-        require(_distributedTokens <= _cap);
-
-        _distributeTokens(to, amount);
-      }
-    }
-  }
-
+  /**
+   * @dev return the number of remaining tokens to distribute
+   * @return uint256
+   */
   function remainingTokens() public view returns(uint256) {
     return _cap.sub(_distributedTokens);
   }
 
-  function _distributeTokens(address to, uint256 amount) internal {
-    _token.transfer(to, amount);
+  /**
+   * @dev send tokens
+   * @param accounts Array of addresses being distributing
+   * @param amounts Array of amounts of token distributed
+   */
+  function multiSend(address[] accounts, uint256[] amounts) public onlyOwner {
+    require(accounts.length > 0);
+    require(amounts.length > 0);
+    require(accounts.length == amounts.length);
+
+    for (uint i = 0; i < accounts.length; i++) {
+      address account = accounts[i];
+      uint256 amount = amounts[i];
+
+      if (_allowMultipleSend || _receivedTokens[account] == 0) {
+        _receivedTokens[account] = _receivedTokens[account].add(amount);
+        _distributedTokens = _distributedTokens.add(amount);
+
+        require(_distributedTokens <= _cap);
+
+        _distributeTokens(account, amount);
+      }
+    }
+  }
+
+  /**
+   * @dev distribute tokens
+   * @param account Address being distributing
+   * @param amount Amount of token distributed
+   */
+  function _distributeTokens(address account, uint256 amount) internal {
+    _token.transfer(account, amount);
   }
 }

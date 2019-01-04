@@ -92,10 +92,21 @@ contract('Contributions', function (
     });
 
     it('should cycle addresses and have the right value set', async function () {
+      let contributors = await this.contributions.getContributorsAddresses();
+      (contributors.length).should.be.equal(0);
+
+      (await this.contributions.contributorExists(owner)).should.be.equal(false);
+      (await this.contributions.contributorExists(thirdParty)).should.be.equal(false);
+      (await this.contributions.contributorExists(anotherThirdParty)).should.be.equal(false);
+
       await this.contributions.addBalance(owner, ethToAdd.mul(3), tokenToAdd.mul(3), { from: operator });
       await this.contributions.addBalance(thirdParty, ethToAdd.mul(4), tokenToAdd.mul(4), { from: operator });
       await this.contributions.addBalance(anotherThirdParty, ethToAdd, tokenToAdd, { from: operator });
       await this.contributions.addBalance(anotherThirdParty, ethToAdd, tokenToAdd, { from: operator });
+
+      (await this.contributions.contributorExists(owner)).should.be.equal(true);
+      (await this.contributions.contributorExists(thirdParty)).should.be.equal(true);
+      (await this.contributions.contributorExists(anotherThirdParty)).should.be.equal(true);
 
       const tokenBalances = [];
       tokenBalances[owner] = await this.contributions.tokenBalance(owner);
@@ -108,9 +119,18 @@ contract('Contributions', function (
       weiContributions[anotherThirdParty] = await this.contributions.weiContribution(anotherThirdParty);
 
       const contributorsLength = (await this.contributions.getContributorsLength()).valueOf();
-
       for (let i = 0; i < contributorsLength; i++) {
-        const address = await this.contributions.addresses(i);
+        const address = await this.contributions.getContributorAddressByIndex(i);
+        const tokenBalance = await this.contributions.tokenBalance(address);
+        const weiContribution = await this.contributions.weiContribution(address);
+
+        tokenBalance.should.be.bignumber.equal(tokenBalances[address]);
+        weiContribution.should.be.bignumber.equal(weiContributions[address]);
+      }
+
+      contributors = await this.contributions.getContributorsAddresses();
+      for (let i = 0; i < contributors.length; i++) {
+        const address = contributors[i];
         const tokenBalance = await this.contributions.tokenBalance(address);
         const weiContribution = await this.contributions.weiContribution(address);
 
@@ -130,6 +150,8 @@ contract('Contributions', function (
       await shouldFail.reverting(
         this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: thirdParty })
       );
+
+      (await this.contributions.contributorExists(thirdParty)).should.be.equal(false);
 
       tokenBalance = await this.contributions.tokenBalance(thirdParty);
       weiContribution = await this.contributions.weiContribution(thirdParty);

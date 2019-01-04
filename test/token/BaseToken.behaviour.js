@@ -50,7 +50,6 @@ function shouldBehaveLikeBaseToken (
     beforeEach(async function () {
       await this.token.addMinter(minter, { from: owner });
       await this.token.mint(owner, _initialBalance, { from: minter });
-      // await this.token.finishMinting({ from: owner });
     });
     shouldBehaveLikeERC20([owner, anotherAccount, recipient], _initialBalance);
   });
@@ -59,7 +58,6 @@ function shouldBehaveLikeBaseToken (
     beforeEach(async function () {
       await this.token.addMinter(minter, { from: owner });
       await this.token.mint(owner, _initialBalance, { from: minter });
-      // await this.token.finishMinting({ from: owner });
     });
     shouldBehaveLikeERC1363([owner, anotherAccount, recipient], _initialBalance);
   });
@@ -71,6 +69,10 @@ function shouldBehaveLikeBaseToken (
     });
 
     context('before finish minting', function () {
+      it('mintingFinished should be false', async function () {
+        (await this.token.mintingFinished()).should.be.equal(false);
+      });
+
       describe('if it is not an operator', function () {
         it('should fail transfer', async function () {
           await shouldFail.reverting(this.token.transfer(recipient, _initialBalance, { from: thirdParty }));
@@ -97,6 +99,16 @@ function shouldBehaveLikeBaseToken (
           await this.token.approve(anotherAccount, _initialBalance, { from: thirdParty });
           await this.token.transferFrom(thirdParty, recipient, _initialBalance, { from: anotherAccount });
         });
+      });
+    });
+
+    context('after finish minting', function () {
+      beforeEach(async function () {
+        await this.token.finishMinting({ from: owner });
+      });
+
+      it('mintingFinished should be true', async function () {
+        (await this.token.mintingFinished()).should.be.equal(true);
       });
     });
   });

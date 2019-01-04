@@ -20,6 +20,7 @@ Create your Smart Contracts folder and init truffle
 mkdir MyICO
 cd MyICO 
 truffle init
+npm init -y
 ```
 
 ## Install

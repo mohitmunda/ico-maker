@@ -70,6 +70,11 @@ contract('SpenderCappedDelivery', function (accounts) {
           await this.token.mint(tokenOwner, tokenCap, { from: tokenOwner });
         });
 
+        it('wallet should be right set', async function () {
+          const wallet = await this.cappedDelivery.wallet();
+          wallet.should.be.bignumber.equal(tokenOwner);
+        });
+
         describe('sending tokens if minting is not finished', function () {
           it('reverts', async function () {
             await shouldFail.reverting(

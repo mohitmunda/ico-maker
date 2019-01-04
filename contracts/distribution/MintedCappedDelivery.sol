@@ -19,7 +19,12 @@ contract MintedCappedDelivery is CappedDelivery {
     public
   {}
 
-  function _distributeTokens(address to, uint256 amount) internal {
-    _token.mint(to, amount);
+  /**
+   * @dev distribute token
+   * @param account Address being distributing
+   * @param amount Amount of token distributed
+   */
+  function _distributeTokens(address account, uint256 amount) internal {
+    _token.mint(account, amount);
   }
 }
