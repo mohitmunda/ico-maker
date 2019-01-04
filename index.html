@@ -7,7 +7,7 @@
     <meta name="description" content="Smart Contracts to build your ICO solution and issue your ERC20 Token">
     
     
-    <link rel="preload" href="/ico-maker/assets/css/0.styles.85db008a.css" as="style"><link rel="preload" href="/ico-maker/assets/js/app.2cc7f24c.js" as="script"><link rel="preload" href="/ico-maker/assets/js/3.3f480cd9.js" as="script"><link rel="prefetch" href="/ico-maker/assets/js/2.faeb1fcf.js"><link rel="prefetch" href="/ico-maker/assets/js/4.016c9e02.js">
+    <link rel="preload" href="/ico-maker/assets/css/0.styles.85db008a.css" as="style"><link rel="preload" href="/ico-maker/assets/js/app.656a9fb7.js" as="script"><link rel="preload" href="/ico-maker/assets/js/3.37f0ab02.js" as="script"><link rel="prefetch" href="/ico-maker/assets/js/2.faeb1fcf.js"><link rel="prefetch" href="/ico-maker/assets/js/4.016c9e02.js">
     <link rel="stylesheet" href="/ico-maker/assets/css/0.styles.85db008a.css">
   </head>
   <body>
@@ -19,6 +19,7 @@
 </code></pre></div><p>Create your Smart Contracts folder and init truffle</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token function">mkdir</span> MyICO
 <span class="token function">cd</span> MyICO 
 truffle init
+<span class="token function">npm</span> init -y
 </code></pre></div><h2 id="install"><a href="#install" aria-hidden="true" class="header-anchor">#</a> Install</h2> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token function">npm</span> <span class="token function">install</span> ico-maker
 </code></pre></div><h2 id="usage"><a href="#usage" aria-hidden="true" class="header-anchor">#</a> Usage</h2> <h3 id="basetoken-sol"><a href="#basetoken-sol" aria-hidden="true" class="header-anchor">#</a> BaseToken.sol</h3> <p><a href="https://github.com/vittominacori/ico-maker/blob/master/contracts/token/BaseToken.sol" target="_blank" rel="noopener noreferrer">BaseToken<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable and ERC1363 Payable Token behaviours.</p> <div class="language-solidity extra-class"><pre class="language-text"><code>pragma solidity ^0.4.25;
 
@@ -26,12 +27,12 @@ import &quot;ico-maker/contracts/token/BaseToken.sol&quot;;
 
 contract MyToken is BaseToken {
   constructor(
-    string _name,
-    string _symbol,
-    uint8 _decimals,
-    uint256 _cap
+    string name,
+    string symbol,
+    uint8 decimals,
+    uint256 cap
   )
-    BaseToken(_name, _symbol, _decimals, _cap)
+    BaseToken(name, symbol, decimals, cap)
     public
   {}
 }
@@ -46,24 +47,24 @@ import &quot;ico-maker/contracts/crowdsale/BaseCrowdsale.sol&quot;;
 
 contract MyCrowdsale is BaseCrowdsale {
   constructor(
-    uint256 _openingTime,
-    uint256 _closingTime,
-    uint256 _rate,
-    address _wallet,
-    uint256 _cap,
-    uint256 _minimumContribution,
-    address _token,
-    address _contributions
+    uint256 openingTime,
+    uint256 closingTime,
+    uint256 rate,
+    address wallet,
+    uint256 cap,
+    uint256 minimumContribution,
+    address token,
+    address contributions
   )
     BaseCrowdsale(
-      _openingTime,
-      _closingTime,
-      _rate,
-      _wallet,
-      _cap,
-      _minimumContribution,
-      _token,
-      _contributions
+      openingTime,
+      closingTime,
+      rate,
+      wallet,
+      cap,
+      minimumContribution,
+      token,
+      contributions
     )
     public
   {}
@@ -73,8 +74,8 @@ contract MyCrowdsale is BaseCrowdsale {
 import &quot;ico-maker/contracts/distribution/CappedDelivery.sol&quot;;
 
 contract MyAirdrop is CappedDelivery {
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend)
-    CappedDelivery(_token, _cap, _allowMultipleSend)
+  constructor(address token, uint256 cap, bool allowMultipleSend)
+    CappedDelivery(token, cap, allowMultipleSend)
     public
   {}
 }
@@ -83,8 +84,8 @@ contract MyAirdrop is CappedDelivery {
 import &quot;ico-maker/contracts/distribution/MintedCappedDelivery.sol&quot;;
 
 contract MyAirdrop is MintedCappedDelivery {
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend)
-    MintedCappedDelivery(_token, _cap, _allowMultipleSend)
+  constructor(address token, uint256 cap, bool allowMultipleSend)
+    MintedCappedDelivery(token, cap, allowMultipleSend)
     public
   {}
 }
@@ -93,8 +94,8 @@ contract MyAirdrop is MintedCappedDelivery {
 import &quot;ico-maker/contracts/distribution/SpenderCappedDelivery.sol&quot;;
 
 contract MyAirdrop is SpenderCappedDelivery {
-  constructor(address _token, uint256 _cap, bool _allowMultipleSend, address _wallet)
-    SpenderCappedDelivery(_token, _cap, _allowMultipleSend, _wallet)
+  constructor(address token, uint256 cap, bool allowMultipleSend, address wallet)
+    SpenderCappedDelivery(token, cap, allowMultipleSend, wallet)
     public
   {}
 }
@@ -107,8 +108,8 @@ contract MyAirdrop is SpenderCappedDelivery {
 </code></pre></div><p>Compile</p> <div class="language-bash extra-class"><pre class="language-bash"><code>compile 
 </code></pre></div><p>Test</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token function">test</span>
 </code></pre></div><h3 id="optional"><a href="#optional" aria-hidden="true" class="header-anchor">#</a> Optional</h3> <p>Install the <a href="https://github.com/alcuadrado/truffle-flattener" target="_blank" rel="noopener noreferrer">truffle-flattener<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token function">npm</span> <span class="token function">install</span> -g truffle-flattener
-</code></pre></div><p>Usage</p> <div class="language-bash extra-class"><pre class="language-bash"><code>truffle-flattener contracts/token/BaseToken.sol <span class="token operator">&gt;</span> dist/BaseToken.dist.sol
+</code></pre></div><p>Usage</p> <div class="language-bash extra-class"><pre class="language-bash"><code>truffle-flattener contracts/token/BaseToken.sol <span class="token operator">&gt;</span> .dist/BaseToken.dist.sol
 </code></pre></div><h3 id="license"><a href="#license" aria-hidden="true" class="header-anchor">#</a> License</h3> <p>Code released under the <a href="https://github.com/vittominacori/ico-maker/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>.</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
-    <script src="/ico-maker/assets/js/app.2cc7f24c.js" defer></script><script src="/ico-maker/assets/js/3.3f480cd9.js" defer></script>
+    <script src="/ico-maker/assets/js/app.656a9fb7.js" defer></script><script src="/ico-maker/assets/js/3.37f0ab02.js" defer></script>
   </body>
 </html>
