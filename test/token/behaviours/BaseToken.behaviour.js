@@ -6,9 +6,9 @@ const { shouldBehaveLikeERC20Burnable } = require('openzeppelin-solidity/test/to
 const { shouldBehaveLikeERC1363 } = require('erc-payable-token/test/token/ERC1363/ERC1363.behaviour');
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
-const { shouldBehaveLikeERC20Detailed } = require('./behaviours/ERC20Detailed.behaviour');
-const { shouldBehaveLikeERC20 } = require('./behaviours/ERC20.behaviour');
-const { shouldBehaveLikeRemoveRole } = require('../access/roles/RemoveRole.behavior');
+const { shouldBehaveLikeERC20Detailed } = require('./ERC20Detailed.behaviour');
+const { shouldBehaveLikeERC20 } = require('./ERC20.behaviour');
+const { shouldBehaveLikeRemoveRole } = require('../../access/roles/RemoveRole.behavior');
 
 const BigNumber = web3.BigNumber;
 
@@ -62,6 +62,14 @@ function shouldBehaveLikeBaseToken (
     shouldBehaveLikeERC1363([owner, anotherAccount, recipient], _initialBalance);
   });
 
+  context('like a BaseToken', function () {
+    describe('once deployed', function () {
+      it('total supply should be zero', async function () {
+        (await this.token.totalSupply()).should.be.bignumber.equal(0);
+      });
+    });
+  });
+
   context('BaseToken token behaviours', function () {
     beforeEach(async function () {
       await this.token.addMinter(minter, { from: owner });
@@ -109,6 +117,10 @@ function shouldBehaveLikeBaseToken (
 
       it('mintingFinished should be true', async function () {
         (await this.token.mintingFinished()).should.be.equal(true);
+      });
+
+      it('shouldn\'t mint more tokens', async function () {
+        await shouldFail.reverting(this.token.mint(thirdParty, 1, { from: minter }));
       });
     });
   });

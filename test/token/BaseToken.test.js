@@ -1,6 +1,6 @@
 const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
-const { shouldBehaveLikeBaseToken } = require('./BaseToken.behaviour');
+const { shouldBehaveLikeBaseToken } = require('./behaviours/BaseToken.behaviour');
 
 const BigNumber = web3.BigNumber;
 
@@ -32,17 +32,5 @@ contract('BaseToken', function ([owner, anotherAccount, minter, operator, recipi
       [owner, anotherAccount, minter, operator, recipient, thirdParty],
       [_name, _symbol, _decimals, _cap, _initialBalance]
     );
-  });
-
-  context('like a BaseToken', function () {
-    beforeEach(async function () {
-      this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, { from: owner });
-    });
-
-    describe('once deployed', function () {
-      it('total supply should be zero', async function () {
-        (await this.token.totalSupply()).should.be.bignumber.equal(0);
-      });
-    });
   });
 });

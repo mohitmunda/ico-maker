@@ -67,13 +67,7 @@ contract Contributions is OperatorRole, TokenRecover {
    * @param account Address has contributed
    * @return uint256
    */
-  function weiContribution(
-    address account
-  )
-    public
-    view
-    returns (uint256)
-  {
+  function weiContribution(address account) public view returns (uint256) {
     return _contributors[account].weiAmount;
   }
 
@@ -82,13 +76,7 @@ contract Contributions is OperatorRole, TokenRecover {
    * @param account Address has contributed
    * @return uint256
    */
-  function tokenBalance(
-    address account
-  )
-    public
-    view
-    returns (uint256)
-  {
+  function tokenBalance(address account) public view returns (uint256) {
     return _contributors[account].tokenAmount;
   }
 
@@ -97,13 +85,7 @@ contract Contributions is OperatorRole, TokenRecover {
    * @param account The address to check
    * @return bool
    */
-  function contributorExists(
-    address account
-  )
-    public
-    view
-    returns (bool)
-  {
+  function contributorExists(address account) public view returns (bool) {
     return _contributors[account].exists;
   }
 
@@ -126,8 +108,8 @@ contract Contributions is OperatorRole, TokenRecover {
       _contributors[account].exists = true;
     }
 
-    _contributors[account].weiAmount = _contributors[account].weiAmount.add(weiAmount); // solium-disable-line max-len
-    _contributors[account].tokenAmount = _contributors[account].tokenAmount.add(tokenAmount); // solium-disable-line max-len
+    _contributors[account].weiAmount = _contributors[account].weiAmount.add(weiAmount);
+    _contributors[account].tokenAmount = _contributors[account].tokenAmount.add(tokenAmount);
 
     _totalWeiRaised = _totalWeiRaised.add(weiAmount);
     _totalSoldTokens = _totalSoldTokens.add(tokenAmount);

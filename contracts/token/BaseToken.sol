@@ -10,9 +10,9 @@ import "../access/roles/OperatorRole.sol";
 /**
  * @title BaseToken
  * @author Vittorio Minacori (https://github.com/vittominacori)
- * @dev Implementation of a BaseToken
+ * @dev Implementation of the BaseToken
  */
-contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, OperatorRole, TokenRecover { // solium-disable-line max-len
+contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, OperatorRole, TokenRecover {
 
   event MintFinished();
 
@@ -59,37 +59,15 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
     return _mintingFinished;
   }
 
-  function mint(
-    address to,
-    uint256 value
-  )
-    public
-    canMint
-    returns (bool)
-  {
+  function mint(address to, uint256 value) public canMint returns (bool) {
     return super.mint(to, value);
   }
 
-  function transfer(
-    address to,
-    uint256 value
-  )
-    public
-    canTransfer(msg.sender)
-    returns (bool)
-  {
+  function transfer(address to, uint256 value) public canTransfer(msg.sender) returns (bool) {
     return super.transfer(to, value);
   }
 
-  function transferFrom(
-    address from,
-    address to,
-    uint256 value
-  )
-    public
-    canTransfer(from)
-    returns (bool)
-  {
+  function transferFrom(address from, address to, uint256 value) public canTransfer(from) returns (bool) {
     return super.transferFrom(from, to, value);
   }
 

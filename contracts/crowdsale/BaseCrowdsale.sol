@@ -1,17 +1,17 @@
 pragma solidity ^0.4.25;
 
-import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol"; // solium-disable-line max-len
-import "openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol"; // solium-disable-line max-len
-import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol"; // solium-disable-line max-len
+import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
+import "openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol";
+import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 import "./utils/Contributions.sol";
 
 /**
  * @title BaseCrowdsale
  * @author Vittorio Minacori (https://github.com/vittominacori)
- * @dev Extends from Crowdsale with more stuffs like TimedCrowdsale, MintedCrowdsale, TokenCappedCrowdsale.
+ * @dev Extends from Crowdsale with more stuffs like TimedCrowdsale, CappedCrowdsale, MintedCrowdsale.
  *  Base for any other Crowdsale contract
  */
-contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, TokenRecover { // solium-disable-line max-len
+contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, TokenRecover {
 
   // reference to Contributions contract
   Contributions private _contributions;
