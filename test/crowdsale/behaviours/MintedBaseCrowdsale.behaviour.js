@@ -2,9 +2,9 @@ const time = require('openzeppelin-solidity/test/helpers/time');
 const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
-const { shouldBehaveLikeMintedCrowdsale } = require('./behaviours/MintedCrowdsale.behaviour');
-const { shouldBehaveLikeTimedCrowdsale } = require('./behaviours/TimedCrowdsale.behaviour');
-const { shouldBehaveLikeCappedCrowdsale } = require('./behaviours/CappedCrowdsale.behaviour');
+const { shouldBehaveLikeMintedCrowdsale } = require('./MintedCrowdsale.behaviour');
+const { shouldBehaveLikeTimedCrowdsale } = require('./TimedCrowdsale.behaviour');
+const { shouldBehaveLikeCappedCrowdsale } = require('./CappedCrowdsale.behaviour');
 
 const BigNumber = web3.BigNumber;
 
@@ -12,7 +12,11 @@ require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
-function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thirdParty], rate, minimumContribution) {
+function shouldBehaveLikeMintedBaseCrowdsale (
+  [owner, investor, wallet, purchaser, thirdParty],
+  rate,
+  minimumContribution
+) {
   const value = minimumContribution;
 
   context('like a TimedCrowdsale', function () {
@@ -202,5 +206,5 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 }
 
 module.exports = {
-  shouldBehaveLikeBaseCrowdsale,
+  shouldBehaveLikeMintedBaseCrowdsale,
 };

@@ -101,6 +101,41 @@ contract MyCrowdsale is BaseCrowdsale {
 }
 ```
 
+### MintedBaseCrowdsale.sol
+
+[MintedBaseCrowdsale](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/MintedBaseCrowdsale.sol) is an extensible BaseCrowdsale contract with Minted behaviours.
+
+```solidity
+pragma solidity ^0.4.25;
+
+import "ico-maker/contracts/crowdsale/MintedBaseCrowdsale.sol";
+
+contract MyCrowdsale is MintedBaseCrowdsale {
+  constructor(
+    uint256 openingTime,
+    uint256 closingTime,
+    uint256 rate,
+    address wallet,
+    uint256 cap,
+    uint256 minimumContribution,
+    address token,
+    address contributions
+  )
+    MintedBaseCrowdsale(
+      openingTime,
+      closingTime,
+      rate,
+      wallet,
+      cap,
+      minimumContribution,
+      token,
+      contributions
+    )
+    public
+  {}
+}
+```
+
 ### CappedDelivery.sol
 
 [CappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/CappedDelivery.sol) is a Capped Smart Contract to transfer tokens (i.e. for Airdrop or Bounty Program).

@@ -3,7 +3,7 @@ const { advanceBlock } = require('openzeppelin-solidity/test/helpers/advanceToBl
 const { ether } = require('openzeppelin-solidity/test/helpers/ether');
 const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
 
-const { shouldBehaveLikeBaseCrowdsale } = require('./behaviours/BaseCrowdsale.behaviour');
+const { shouldBehaveLikeMintedBaseCrowdsale } = require('./behaviours/MintedBaseCrowdsale.behaviour');
 
 const BigNumber = web3.BigNumber;
 
@@ -11,13 +11,13 @@ require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
-const BaseCrowdsale = artifacts.require('BaseCrowdsale');
+const MintedBaseCrowdsale = artifacts.require('MintedBaseCrowdsale');
 const BaseToken = artifacts.require('BaseToken');
 const Contributions = artifacts.require('Contributions');
 
 const { ZERO_ADDRESS } = require('openzeppelin-solidity/test/helpers/constants');
 
-contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdParty]) {
+contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdParty]) {
   const _name = 'BaseToken';
   const _symbol = 'ERC20';
   const _decimals = 18;
@@ -27,8 +27,6 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
   const rate = new BigNumber(1000);
   const cap = ether(1);
   const minimumContribution = ether(0.2);
-
-  const totalSupply = cap.mul(rate);
 
   before(async function () {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
@@ -42,7 +40,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
     this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, _initialSupply);
     this.contributions = await Contributions.new();
-    this.crowdsale = await BaseCrowdsale.new(
+    this.crowdsale = await MintedBaseCrowdsale.new(
       this.openingTime,
       this.closingTime,
       rate,
@@ -53,14 +51,17 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       this.contributions.address
     );
 
-    await this.token.mint(this.crowdsale.address, totalSupply);
-    await this.token.enableTransfer();
-
+    await this.token.addMinter(this.crowdsale.address);
     await this.contributions.addOperator(this.crowdsale.address);
   });
 
-  context('like a BaseCrowdsale', function () {
+  context('like a MintedBaseCrowdsale', function () {
     describe('creating a valid crowdsale', function () {
+      it('should be token minter', async function () {
+        const isMinter = await this.token.isMinter(this.crowdsale.address);
+        isMinter.should.equal(true);
+      });
+
       it('contributions should be right set', async function () {
         const contributions = await this.crowdsale.contributions();
         contributions.should.be.bignumber.equal(this.contributions.address);
@@ -78,7 +79,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
       it('should fail with zero rate', async function () {
         await shouldFail.reverting(
-          BaseCrowdsale.new(
+          MintedBaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
             0,
@@ -93,7 +94,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
       it('should fail if wallet is the zero address', async function () {
         await shouldFail.reverting(
-          BaseCrowdsale.new(
+          MintedBaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
             rate,
@@ -108,7 +109,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
       it('should fail if token is the zero address', async function () {
         await shouldFail.reverting(
-          BaseCrowdsale.new(
+          MintedBaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
             rate,
@@ -123,7 +124,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
       it('should fail if opening time is in the past', async function () {
         await shouldFail.reverting(
-          BaseCrowdsale.new(
+          MintedBaseCrowdsale.new(
             (await time.latest()) - time.duration.seconds(1),
             this.closingTime,
             rate,
@@ -138,7 +139,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
       it('should fail if opening time is after closing time in the past', async function () {
         await shouldFail.reverting(
-          BaseCrowdsale.new(
+          MintedBaseCrowdsale.new(
             this.closingTime,
             this.openingTime,
             rate,
@@ -153,7 +154,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
       it('should fail if contributions is the zero address', async function () {
         await shouldFail.reverting(
-          BaseCrowdsale.new(
+          MintedBaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
             rate,
@@ -168,7 +169,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
 
       it('should fail with zero cap', async function () {
         await shouldFail.reverting(
-          BaseCrowdsale.new(
+          MintedBaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
             rate,
@@ -182,6 +183,6 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
     });
 
-    shouldBehaveLikeBaseCrowdsale([owner, investor, wallet, purchaser, thirdParty], rate, minimumContribution);
+    shouldBehaveLikeMintedBaseCrowdsale([owner, investor, wallet, purchaser, thirdParty], rate, minimumContribution);
   });
 });

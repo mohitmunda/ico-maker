@@ -1,17 +1,17 @@
 pragma solidity ^0.4.25;
 
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol";
-import "openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 import "./utils/Contributions.sol";
 
 /**
  * @title BaseCrowdsale
  * @author Vittorio Minacori (https://github.com/vittominacori)
- * @dev Extends from Crowdsale with more stuffs like TimedCrowdsale, CappedCrowdsale, MintedCrowdsale.
+ * @dev Extends from Crowdsale with more stuffs like TimedCrowdsale, CappedCrowdsale.
  *  Base for any other Crowdsale contract
  */
-contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, MintedCrowdsale, TokenRecover {
+contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
 
   // reference to Contributions contract
   Contributions private _contributions;
