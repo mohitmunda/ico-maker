@@ -45,9 +45,10 @@ contract MyToken is BaseToken {
     string name,
     string symbol,
     uint8 decimals,
-    uint256 cap
+    uint256 cap,
+    uint256 initialSupply,
   )
-    BaseToken(name, symbol, decimals, cap)
+    BaseToken(name, symbol, decimals, cap, initialSupply)
     public
   {}
 }
@@ -216,7 +217,7 @@ npm install -g truffle-flattener
 Usage 
 
 ```bash
-truffle-flattener contracts/token/BaseToken.sol > .dist/BaseToken.dist.sol
+truffle-flattener contracts/token/BaseToken.sol > dist/BaseToken.dist.sol
 ```
 
 ## License

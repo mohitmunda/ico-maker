@@ -22,6 +22,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
   const _symbol = 'ERC20';
   const _decimals = 18;
   const _cap = (new BigNumber(10000)).mul(Math.pow(10, _decimals));
+  const _initialSupply = 0;
 
   const rate = new BigNumber(1000);
   const cap = ether(1);
@@ -37,7 +38,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
     this.closingTime = this.openingTime + time.duration.weeks(1);
     this.afterClosingTime = this.closingTime + time.duration.seconds(1);
 
-    this.token = await BaseToken.new(_name, _symbol, _decimals, _cap);
+    this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, _initialSupply);
     this.contributions = await Contributions.new();
     this.crowdsale = await BaseCrowdsale.new(
       this.openingTime,

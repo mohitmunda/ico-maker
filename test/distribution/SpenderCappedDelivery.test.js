@@ -24,11 +24,12 @@ contract('SpenderCappedDelivery', function (accounts) {
   const symbol = 'ERC20';
   const decimals = 18;
   const tokenCap = new BigNumber(100000);
+  const initialSupply = 0;
 
   const cap = new BigNumber(20000);
 
   beforeEach(async function () {
-    this.token = await BaseToken.new(name, symbol, decimals, tokenCap, { from: tokenOwner });
+    this.token = await BaseToken.new(name, symbol, decimals, tokenCap, initialSupply, { from: tokenOwner });
   });
 
   const testingDelivery = function (allowMultipleSend) {
