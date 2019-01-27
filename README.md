@@ -187,12 +187,35 @@ contract MyAirdrop is SpenderCappedDelivery {
 }
 ```
 
+### BaseTimelock.sol
+
+[BaseTimelock](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/BaseTimelock.sol) is a TokenTimelock which is a token holder contract that will allow a beneficiary to extract the tokens after a given release time.
+
+```solidity
+pragma solidity ^0.4.25;
+
+import "ico-maker/contracts/token/BaseTimelock.sol";
+
+contract MyTimelock is BaseTimelock {
+  constructor(
+    IERC20 token,
+    address beneficiary,
+    uint256 releaseTime
+  )
+    BaseTimelock(token, beneficiary, releaseTime)
+    public
+  {}
+}
+```
+
 ## Development
 
-Install truffle
+Install Truffle if you want to run your own node
+
+Version 4.1.15 required
 
 ```bash
-npm install -g truffle      // Version 4.1.15+ required
+npm install -g truffle
 ```
 
 ### Install dependencies
@@ -221,24 +244,30 @@ Use both and fix
 npm run lint:fix
 ```
 
-### Compile and test the contracts
+## Usage
  
-Open the Truffle console
+### Compile
 
 ```bash
-truffle develop
+npm run compile
 ```
 
-Compile 
+### Test 
 
 ```bash
-compile 
+npm run test 
 ```
 
-Test
+### Code Coverage
 
 ```bash
-test
+npm run coverage
+```
+
+### Profiling
+
+```bash
+npm run profile
 ```
 
 ## Optional
