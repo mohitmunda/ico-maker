@@ -30,6 +30,7 @@ contract MintedBaseCrowdsale is MintedCrowdsale, BaseCrowdsale {
     address token,
     address contributions
   )
+    public
     BaseCrowdsale(
       openingTime,
       closingTime,
@@ -40,6 +41,5 @@ contract MintedBaseCrowdsale is MintedCrowdsale, BaseCrowdsale {
       token,
       contributions
     )
-    public
   {}
 }

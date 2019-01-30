@@ -20,7 +20,7 @@ contract BaseTimelock is TokenTimelock {
     address beneficiary,
     uint256 releaseTime
   )
-    TokenTimelock(token, beneficiary, releaseTime)
     public
+    TokenTimelock(token, beneficiary, releaseTime)
   {}
 }

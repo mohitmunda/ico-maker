@@ -53,9 +53,9 @@ contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, Operat
     uint256 cap,
     uint256 initialSupply
   )
+    public
     ERC20Detailed(name, symbol, decimals)
     ERC20Capped(cap)
-    public
   {
     if (initialSupply > 0) {
       _mint(owner(), initialSupply);

@@ -48,8 +48,8 @@ contract MyToken is BaseToken {
     uint256 cap,
     uint256 initialSupply,
   )
-    BaseToken(name, symbol, decimals, cap, initialSupply)
     public
+    BaseToken(name, symbol, decimals, cap, initialSupply)
   {}
 }
 ```
@@ -86,6 +86,7 @@ contract MyCrowdsale is BaseCrowdsale {
     address token,
     address contributions
   )
+    public
     BaseCrowdsale(
       openingTime,
       closingTime,
@@ -96,7 +97,6 @@ contract MyCrowdsale is BaseCrowdsale {
       token,
       contributions
     )
-    public
   {}
 }
 ```
@@ -121,6 +121,7 @@ contract MyCrowdsale is MintedBaseCrowdsale {
     address token,
     address contributions
   )
+    public
     MintedBaseCrowdsale(
       openingTime,
       closingTime,
@@ -131,7 +132,6 @@ contract MyCrowdsale is MintedBaseCrowdsale {
       token,
       contributions
     )
-    public
   {}
 }
 ```
@@ -147,8 +147,8 @@ import "ico-maker/contracts/distribution/CappedDelivery.sol";
 
 contract MyAirdrop is CappedDelivery {
   constructor(address token, uint256 cap, bool allowMultipleSend)
-    CappedDelivery(token, cap, allowMultipleSend)
     public
+    CappedDelivery(token, cap, allowMultipleSend)
   {}
 }
 ```
@@ -164,8 +164,8 @@ import "ico-maker/contracts/distribution/MintedCappedDelivery.sol";
 
 contract MyAirdrop is MintedCappedDelivery {
   constructor(address token, uint256 cap, bool allowMultipleSend)
-    MintedCappedDelivery(token, cap, allowMultipleSend)
     public
+    MintedCappedDelivery(token, cap, allowMultipleSend)
   {}
 }
 ```
@@ -181,8 +181,8 @@ import "ico-maker/contracts/distribution/SpenderCappedDelivery.sol";
 
 contract MyAirdrop is SpenderCappedDelivery {
   constructor(address token, uint256 cap, bool allowMultipleSend, address wallet)
-    SpenderCappedDelivery(token, cap, allowMultipleSend, wallet)
     public
+    SpenderCappedDelivery(token, cap, allowMultipleSend, wallet)
   {}
 }
 ```
@@ -202,8 +202,8 @@ contract MyTimelock is BaseTimelock {
     address beneficiary,
     uint256 releaseTime
   )
-    BaseTimelock(token, beneficiary, releaseTime)
     public
+    BaseTimelock(token, beneficiary, releaseTime)
   {}
 }
 ```
@@ -215,33 +215,13 @@ Install Truffle if you want to run your own node
 Version 4.1.15 required
 
 ```bash
-npm install -g truffle
+npm install -g truffle@4.1.15
 ```
 
 ### Install dependencies
 
 ```bash
 npm install
-```
-
-### Linter
-
-Use Ethlint
-
-```bash
-npm run lint:sol
-```
-
-Use ESLint
-
-```bash
-npm run lint:js
-```
-
-Use both and fix
-
-```bash
-npm run lint:fix
 ```
 
 ## Usage
@@ -264,21 +244,29 @@ npm run test
 npm run coverage
 ```
 
-### Profiling
+## Linter
+
+Use Solhint
 
 ```bash
-npm run profile
+npm run lint:sol
 ```
 
-## Optional
-
-Install the [truffle-flattener](https://github.com/alcuadrado/truffle-flattener)
+Use ESLint
 
 ```bash
-npm install -g truffle-flattener
+npm run lint:js
 ```
 
-Usage 
+Use ESLint and fix
+
+```bash
+npm run lint:fix
+```
+
+## Flattener
+
+This allow to flatten the code into a single file
 
 ```bash
 truffle-flattener contracts/token/BaseToken.sol > dist/BaseToken.dist.sol

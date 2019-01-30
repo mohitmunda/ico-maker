@@ -24,8 +24,8 @@ contract SpenderCappedDelivery is CappedDelivery {
     bool allowMultipleSend,
     address wallet
   )
-    CappedDelivery(token, cap, allowMultipleSend)
     public
+    CappedDelivery(token, cap, allowMultipleSend)
   {
     require(wallet != address(0));
     _wallet = wallet;

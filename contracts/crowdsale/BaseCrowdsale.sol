@@ -47,10 +47,10 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
     address token,
     address contributions
   )
+    public
     Crowdsale(rate, wallet, ERC20(token))
     TimedCrowdsale(openingTime, closingTime)
     CappedCrowdsale(cap)
-    public
   {
     require(contributions != address(0));
     _contributions = Contributions(contributions);
@@ -76,8 +76,7 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
    * @return bool
    */
   function started() public view returns(bool) {
-    // solium-disable-next-line security/no-block-members
-    return block.timestamp >= openingTime();
+    return block.timestamp >= openingTime(); // solhint-disable-line not-rely-on-time
   }
 
   /**

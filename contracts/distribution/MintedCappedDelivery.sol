@@ -15,8 +15,8 @@ contract MintedCappedDelivery is CappedDelivery {
    * @param allowMultipleSend Allow multiple send to same address
    */
   constructor(address token, uint256 cap, bool allowMultipleSend)
-    CappedDelivery(token, cap, allowMultipleSend)
     public
+    CappedDelivery(token, cap, allowMultipleSend)
   {}
 
   /**
