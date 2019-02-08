@@ -38,6 +38,11 @@ App = {
       App.contracts.BaseToken.setProvider(App.web3Provider);
     });
 
+    $.getJSON('BaseTimelock.json', function (data) {
+      App.contracts.BaseTimelock = TruffleContract(data);
+      App.contracts.BaseTimelock.setProvider(App.web3Provider);
+    });
+
     $.getJSON('Contributions.json', function (data) {
       App.contracts.Contributions = TruffleContract(data);
       App.contracts.Contributions.setProvider(App.web3Provider);
