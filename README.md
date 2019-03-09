@@ -36,12 +36,12 @@ npm install ico-maker
 
 ### BaseToken.sol
 
-[BaseToken](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/BaseToken.sol) is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable and ERC1363 Payable Token behaviours.
+[BaseToken](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC20/BaseToken.sol) is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable and ERC1363 Payable Token behaviours.
 
 ```solidity
 pragma solidity ^0.5.5;
 
-import "ico-maker/contracts/token/BaseToken.sol";
+import "ico-maker/contracts/token/ERC20/BaseToken.sol";
 
 contract MyToken is BaseToken {
   constructor(
@@ -192,12 +192,12 @@ contract MyAirdrop is SpenderCappedDelivery {
 
 ### BaseTimelock.sol
 
-[BaseTimelock](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/BaseTimelock.sol) is a TokenTimelock which is a token holder contract that will allow a beneficiary to extract the tokens after a given release time.
+[BaseTimelock](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC20/BaseTimelock.sol) is a TokenTimelock which is a token holder contract that will allow a beneficiary to extract the tokens after a given release time.
 
 ```solidity
 pragma solidity ^0.5.5;
 
-import "ico-maker/contracts/token/BaseTimelock.sol";
+import "ico-maker/contracts/token/ERC20/BaseTimelock.sol";
 
 contract MyTimelock is BaseTimelock {
   constructor(
