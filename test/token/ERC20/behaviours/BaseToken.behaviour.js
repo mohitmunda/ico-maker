@@ -8,8 +8,8 @@ const { shouldBehaveLikeERC20Detailed } = require('./ERC20Detailed.behaviour');
 const { shouldBehaveLikeERC20Mintable } = require('./ERC20Mintable.behaviour');
 const { shouldBehaveLikeERC20Capped } = require('./ERC20Capped.behaviour');
 const { shouldBehaveLikeERC20Burnable } = require('./ERC20Burnable.behaviour');
-const { shouldBehaveLikeOwnable } = require('../../ownership/Ownable.behavior');
-const { shouldBehaveLikeRemoveRole } = require('../../access/roles/RemoveRole.behavior');
+const { shouldBehaveLikeOwnable } = require('../../../ownership/Ownable.behavior');
+const { shouldBehaveLikeRemoveRole } = require('../../../access/roles/RemoveRole.behavior');
 
 function shouldBehaveLikeBaseToken (
   [owner, anotherAccount, minter, operator, recipient, thirdParty],

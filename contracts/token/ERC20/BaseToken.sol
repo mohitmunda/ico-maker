@@ -5,7 +5,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Burnable.sol";
 import "erc-payable-token/contracts/token/ERC1363/ERC1363.sol";
 import "eth-token-recover/contracts/TokenRecover.sol";
-import "../access/roles/OperatorRole.sol";
+import "../../access/roles/OperatorRole.sol";
 
 /**
  * @title BaseToken

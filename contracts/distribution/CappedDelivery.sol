@@ -1,6 +1,6 @@
 pragma solidity ^0.5.5;
 
-import "../token/BaseToken.sol";
+import "../token/ERC20/BaseToken.sol";
 
 /**
  * @title CappedDelivery
