@@ -111,7 +111,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
               const receiverBalance = await this.token.balanceOf(addresses[arrayIndex]);
 
               const expectedTokens = amounts[arrayIndex];
-              receiverBalance.should.be.bignumber.equal(expectedTokens.mul(new BN(2)));
+              receiverBalance.should.be.bignumber.equal(expectedTokens.muln(2));
             }
           });
 
@@ -128,7 +128,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
               const receivedTokens = await this.cappedDelivery.receivedTokens(addresses[arrayIndex]);
 
               const expectedTokens = amounts[arrayIndex];
-              receivedTokens.should.be.bignumber.equal(expectedTokens.mul(new BN(2)));
+              receivedTokens.should.be.bignumber.equal(expectedTokens.muln(2));
             }
           });
 
@@ -142,7 +142,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
               totalGivenTokens = totalGivenTokens.add(amounts[arrayIndex]);
             }
             const distributedTokens = await this.cappedDelivery.distributedTokens();
-            distributedTokens.should.be.bignumber.equal(totalGivenTokens.mul(new BN(2)));
+            distributedTokens.should.be.bignumber.equal(totalGivenTokens.muln(2));
           });
         } else {
           it('should not transfer tokens for given addresses', async function () {
@@ -196,7 +196,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
 
       describe('if sending more than the cap', function () {
         it('reverts', async function () {
-          const moreThanTheCap = cap.add(new BN(1));
+          const moreThanTheCap = cap.addn(1);
           await shouldFail.reverting(
             this.cappedDelivery.multiSend([addresses[1]], [moreThanTheCap], { from: cappedDeliveryOwner })
           );

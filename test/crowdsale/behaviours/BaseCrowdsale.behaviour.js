@@ -44,10 +44,10 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
         const postTwoTokenBalance = await this.contributions.tokenBalance(investor);
         (postTwoTokenBalance.sub(postOneTokenBalance)).should.be.bignumber.equal(value.mul(rate));
-        postTwoTokenBalance.should.be.bignumber.equal(value.mul(new BN(2)).mul(rate));
+        postTwoTokenBalance.should.be.bignumber.equal(value.muln(2).mul(rate));
         const postTwoWeiContribution = await this.contributions.weiContribution(investor);
         (postTwoWeiContribution.sub(postOneWeiContribution)).should.be.bignumber.equal(value);
-        postTwoWeiContribution.should.be.bignumber.equal(value.mul(new BN(2)));
+        postTwoWeiContribution.should.be.bignumber.equal(value.muln(2));
 
         contributorsLength = await this.contributions.getContributorsLength();
         assert.equal(contributorsLength, 1);
@@ -55,7 +55,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       it('should fail if less than minimum contribution', async function () {
         await shouldFail.reverting(
-          this.crowdsale.sendTransaction({ value: minimumContribution.sub(new BN(1)), from: investor })
+          this.crowdsale.sendTransaction({ value: minimumContribution.subn(1), from: investor })
         );
       });
     });
@@ -85,10 +85,10 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
         const postTwoTokenBalance = await this.contributions.tokenBalance(investor);
         (postTwoTokenBalance.sub(postOneTokenBalance)).should.be.bignumber.equal(value.mul(rate));
-        postTwoTokenBalance.should.be.bignumber.equal(value.mul(new BN(2)).mul(rate));
+        postTwoTokenBalance.should.be.bignumber.equal(value.muln(2).mul(rate));
         const postTwoWeiContribution = await this.contributions.weiContribution(investor);
         (postTwoWeiContribution.sub(postOneWeiContribution)).should.be.bignumber.equal(value);
-        postTwoWeiContribution.should.be.bignumber.equal(value.mul(new BN(2)));
+        postTwoWeiContribution.should.be.bignumber.equal(value.muln(2));
 
         contributorsLength = await this.contributions.getContributorsLength();
         assert.equal(contributorsLength, 1);
@@ -96,7 +96,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       it('should fail if less than minimum contribution', async function () {
         await shouldFail.reverting(
-          this.crowdsale.buyTokens(investor, { value: minimumContribution.sub(new BN(1)), from: purchaser })
+          this.crowdsale.buyTokens(investor, { value: minimumContribution.subn(1), from: purchaser })
         );
       });
     });

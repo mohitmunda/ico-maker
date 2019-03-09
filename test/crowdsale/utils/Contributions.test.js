@@ -33,15 +33,15 @@ contract('Contributions', function (
 
       await this.contributions.addBalance(
         thirdParty,
-        ethToAdd.mul(new BN(3)),
-        tokenToAdd.mul(new BN(3)),
+        ethToAdd.muln(3),
+        tokenToAdd.muln(3),
         { from: operator }
       );
 
       tokenBalance = await this.contributions.tokenBalance(thirdParty);
-      tokenBalance.should.be.bignumber.equal(tokenToAdd.mul(new BN(4)));
+      tokenBalance.should.be.bignumber.equal(tokenToAdd.muln(4));
       weiContribution = await this.contributions.weiContribution(thirdParty);
-      weiContribution.should.be.bignumber.equal(ethToAdd.mul(new BN(4)));
+      weiContribution.should.be.bignumber.equal(ethToAdd.muln(4));
     });
 
     it('should increase total sold tokens and total wei raised', async function () {
@@ -53,15 +53,15 @@ contract('Contributions', function (
       await this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: operator });
       await this.contributions.addBalance(
         thirdParty,
-        ethToAdd.mul(new BN(3)),
-        tokenToAdd.mul(new BN(3)),
+        ethToAdd.muln(3),
+        tokenToAdd.muln(3),
         { from: operator }
       );
 
       totalSoldTokens = await this.contributions.totalSoldTokens();
       totalWeiRaised = await this.contributions.totalWeiRaised();
-      totalSoldTokens.should.be.bignumber.equal(tokenToAdd.mul(new BN(4)));
-      totalWeiRaised.should.be.bignumber.equal(ethToAdd.mul(new BN(4)));
+      totalSoldTokens.should.be.bignumber.equal(tokenToAdd.muln(4));
+      totalWeiRaised.should.be.bignumber.equal(ethToAdd.muln(4));
     });
 
     it('should increase array length when different address are passed', async function () {
@@ -104,14 +104,14 @@ contract('Contributions', function (
 
       await this.contributions.addBalance(
         owner,
-        ethToAdd.mul(new BN(3)),
-        tokenToAdd.mul(new BN(3)),
+        ethToAdd.muln(3),
+        tokenToAdd.muln(3),
         { from: operator }
       );
       await this.contributions.addBalance(
         thirdParty,
-        ethToAdd.mul(new BN(4)),
-        tokenToAdd.mul(new BN(4)),
+        ethToAdd.muln(4),
+        tokenToAdd.muln(4),
         { from: operator }
       );
       await this.contributions.addBalance(anotherThirdParty, ethToAdd, tokenToAdd, { from: operator });

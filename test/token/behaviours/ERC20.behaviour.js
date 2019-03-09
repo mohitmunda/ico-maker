@@ -27,7 +27,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
       const to = recipient;
 
       describe('when the sender does not have enough balance', function () {
-        const amount = initialBalance.add(new BN(1));
+        const amount = initialBalance.addn(1);
 
         it('reverts', async function () {
           await shouldFail.reverting(this.token.transfer(to, amount, { from: owner }));
@@ -105,7 +105,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
       });
 
       describe('when the sender does not have enough balance', function () {
-        const amount = initialBalance.add(new BN(1));
+        const amount = initialBalance.addn(1);
 
         it('emits an approval event', async function () {
           const { logs } = await this.token.approve(spender, amount, { from: owner });
@@ -189,7 +189,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
         });
 
         describe('when the owner does not have enough balance', function () {
-          const amount = initialBalance.add(new BN(1));
+          const amount = initialBalance.addn(1);
 
           it('reverts', async function () {
             await shouldFail.reverting(this.token.transferFrom(owner, to, amount, { from: spender }));
@@ -211,7 +211,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
         });
 
         describe('when the owner does not have enough balance', function () {
-          const amount = initialBalance.add(new BN(1));
+          const amount = initialBalance.addn(1);
 
           it('reverts', async function () {
             await shouldFail.reverting(this.token.transferFrom(owner, to, amount, { from: spender }));
@@ -263,7 +263,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
           });
 
           it('decreases the spender allowance subtracting the requested amount', async function () {
-            await this.token.decreaseAllowance(spender, approvedAmount.sub(new BN(1)), { from: owner });
+            await this.token.decreaseAllowance(spender, approvedAmount.subn(1), { from: owner });
 
             (await this.token.allowance(owner, spender)).should.be.bignumber.equal(new BN(1));
           });
@@ -275,7 +275,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
 
           it('reverts when more than the full allowance is removed', async function () {
             await shouldFail.reverting(
-              this.token.decreaseAllowance(spender, approvedAmount.add(new BN(1)), { from: owner })
+              this.token.decreaseAllowance(spender, approvedAmount.addn(1), { from: owner })
             );
           });
         });
@@ -288,7 +288,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
       });
 
       describe('when the sender does not have enough balance', function () {
-        const amount = initialBalance.add(new BN(1));
+        const amount = initialBalance.addn(1);
 
         shouldDecreaseApproval(amount);
       });
@@ -337,13 +337,13 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
           it('increases the spender allowance adding the requested amount', async function () {
             await this.token.increaseAllowance(spender, amount, { from: owner });
 
-            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(amount.add(new BN(1)));
+            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(amount.addn(1));
           });
         });
       });
 
       describe('when the sender does not have enough balance', function () {
-        const amount = initialBalance.add(new BN(1));
+        const amount = initialBalance.addn(1);
 
         it('emits an approval event', async function () {
           const { logs } = await this.token.increaseAllowance(spender, amount, { from: owner });
@@ -371,7 +371,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
           it('increases the spender allowance adding the requested amount', async function () {
             await this.token.increaseAllowance(spender, amount, { from: owner });
 
-            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(amount.add(new BN(1)));
+            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(amount.addn(1));
           });
         });
       });
@@ -425,7 +425,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
 
     describe('for a non null account', function () {
       it('rejects burning more than balance', async function () {
-        await shouldFail.reverting(this.token.burn(initialSupply.add(new BN(1)), { from: owner }));
+        await shouldFail.reverting(this.token.burn(initialSupply.addn(1), { from: owner }));
       });
 
       const describeBurn = function (description, amount) {
@@ -457,13 +457,13 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
       };
 
       describeBurn('for entire balance', initialSupply);
-      describeBurn('for less amount than balance', initialSupply.sub(new BN(1)));
+      describeBurn('for less amount than balance', initialSupply.subn(1));
     });
   });
 
   describe('_burnFrom', function () {
     const initialSupply = new BN(initialBalance);
-    const allowance = new BN(initialBalance.div(new BN(2)));
+    const allowance = new BN(initialBalance.divn(2));
 
     const spender = anotherAccount;
 
@@ -477,11 +477,11 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
 
     describe('for a non null account', function () {
       it('rejects burning more than allowance', async function () {
-        await shouldFail.reverting(this.token.burnFrom(owner, allowance.add(new BN(1))));
+        await shouldFail.reverting(this.token.burnFrom(owner, allowance.addn(1)));
       });
 
       it('rejects burning more than balance', async function () {
-        await shouldFail.reverting(this.token.burnFrom(owner, initialSupply.add(new BN(1))));
+        await shouldFail.reverting(this.token.burnFrom(owner, initialSupply.addn(1)));
       });
 
       const describeBurnFrom = function (description, amount) {
@@ -518,7 +518,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
       };
 
       describeBurnFrom('for entire allowance', allowance);
-      describeBurnFrom('for less amount than allowance', allowance.sub(new BN(1)));
+      describeBurnFrom('for less amount than allowance', allowance.subn(1));
     });
   });
 }

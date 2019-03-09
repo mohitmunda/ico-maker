@@ -32,7 +32,7 @@ function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
     });
 
     describe('when the given amount is greater than the balance of the sender', function () {
-      const amount = initialBalance.add(new BN(1));
+      const amount = initialBalance.addn(1);
 
       it('reverts', async function () {
         await shouldFail.reverting(this.token.burn(amount, { from: owner }));
@@ -51,7 +51,7 @@ function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
       });
 
       function shouldBurnFrom (amount) {
-        const originalAllowance = amount.mul(new BN(3));
+        const originalAllowance = amount.muln(3);
 
         beforeEach(async function () {
           await this.token.approve(burner, originalAllowance, { from: owner });
@@ -78,7 +78,7 @@ function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
     });
 
     describe('when the given amount is greater than the balance of the sender', function () {
-      const amount = initialBalance.add(new BN(1));
+      const amount = initialBalance.addn(1);
 
       it('reverts', async function () {
         await this.token.approve(burner, amount, { from: owner });
@@ -91,7 +91,7 @@ function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
 
       it('reverts', async function () {
         await this.token.approve(burner, allowance, { from: owner });
-        await shouldFail.reverting(this.token.burnFrom(owner, allowance.add(new BN(1)), { from: burner }));
+        await shouldFail.reverting(this.token.burnFrom(owner, allowance.addn(1), { from: burner }));
       });
     });
   });

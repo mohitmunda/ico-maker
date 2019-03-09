@@ -1,4 +1,4 @@
-const { BN, shouldFail } = require('openzeppelin-test-helpers');
+const { shouldFail } = require('openzeppelin-test-helpers');
 
 function shouldBehaveLikeCappedCrowdsale ([investor]) {
   let cap;
@@ -6,7 +6,7 @@ function shouldBehaveLikeCappedCrowdsale ([investor]) {
 
   beforeEach(async function () {
     cap = await this.crowdsale.cap();
-    lessThanCap = cap.div(new BN(2));
+    lessThanCap = cap.divn(2);
   });
 
   describe('accepting payments', function () {
@@ -21,7 +21,7 @@ function shouldBehaveLikeCappedCrowdsale ([investor]) {
     });
 
     it('should reject payments that exceed cap', async function () {
-      await shouldFail.reverting(this.crowdsale.send(cap.add(new BN(1)), { from: investor }));
+      await shouldFail.reverting(this.crowdsale.send(cap.addn(1), { from: investor }));
     });
   });
 
@@ -32,7 +32,7 @@ function shouldBehaveLikeCappedCrowdsale ([investor]) {
     });
 
     it('should not reach cap if sent just under cap', async function () {
-      await this.crowdsale.send(cap.sub(new BN(1)), { from: investor });
+      await this.crowdsale.send(cap.subn(1), { from: investor });
       (await this.crowdsale.capReached()).should.equal(false);
     });
 
