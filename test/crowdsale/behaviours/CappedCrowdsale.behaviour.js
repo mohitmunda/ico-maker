@@ -1,4 +1,4 @@
-const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, shouldFail } = require('openzeppelin-test-helpers');
 
 function shouldBehaveLikeCappedCrowdsale ([investor]) {
   let cap;

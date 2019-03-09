@@ -1,4 +1,4 @@
-const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, ether, shouldFail } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
@@ -31,7 +31,12 @@ contract('Contributions', function (
       weiContribution = await this.contributions.weiContribution(thirdParty);
       weiContribution.should.be.bignumber.equal(ethToAdd);
 
-      await this.contributions.addBalance(thirdParty, ethToAdd.mul(new BN(3)), tokenToAdd.mul(3), { from: operator });
+      await this.contributions.addBalance(
+        thirdParty,
+        ethToAdd.mul(new BN(3)),
+        tokenToAdd.mul(new BN(3)),
+        { from: operator }
+      );
 
       tokenBalance = await this.contributions.tokenBalance(thirdParty);
       tokenBalance.should.be.bignumber.equal(tokenToAdd.mul(new BN(4)));

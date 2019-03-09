@@ -1,4 +1,4 @@
-const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, constants, shouldFail } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');

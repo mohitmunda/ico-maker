@@ -92,7 +92,7 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
      * @param beneficiary Token purchaser
      * @param weiAmount Amount of wei contributed
      */
-    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyGreaterThanMinimum(weiAmount) view { // solhint-disable-line  max-line-length
+    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyGreaterThanMinimum(weiAmount) view { // solhint-disable-line max-line-length
         super._preValidatePurchase(beneficiary, weiAmount);
     }
 

@@ -1,4 +1,4 @@
-const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, shouldFail, time } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 const { shouldBehaveLikeTimedCrowdsale } = require('./TimedCrowdsale.behaviour');
@@ -55,7 +55,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       it('should fail if less than minimum contribution', async function () {
         await shouldFail.reverting(
-          this.crowdsale.sendTransaction({ value: minimumContribution.sub(1), from: investor })
+          this.crowdsale.sendTransaction({ value: minimumContribution.sub(new BN(1)), from: investor })
         );
       });
     });
@@ -96,7 +96,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       it('should fail if less than minimum contribution', async function () {
         await shouldFail.reverting(
-          this.crowdsale.buyTokens(investor, { value: minimumContribution.sub(1), from: purchaser })
+          this.crowdsale.buyTokens(investor, { value: minimumContribution.sub(new BN(1)), from: purchaser })
         );
       });
     });

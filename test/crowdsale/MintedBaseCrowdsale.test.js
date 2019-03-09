@@ -1,4 +1,4 @@
-const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, constants, ether, shouldFail, time } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeMintedBaseCrowdsale } = require('./behaviours/MintedBaseCrowdsale.behaviour');
@@ -11,7 +11,7 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
   const _name = 'BaseToken';
   const _symbol = 'ERC20';
   const _decimals = new BN(18);
-  const _cap = new BN(100000000000);
+  const _cap = ether('1000');
   const _initialSupply = new BN(0);
 
   const rate = new BN(1000);
@@ -24,9 +24,9 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
   });
 
   beforeEach(async function () {
-    this.openingTime = (await time.latest()) + time.duration.weeks(1);
-    this.closingTime = this.openingTime + time.duration.weeks(1);
-    this.afterClosingTime = this.closingTime + time.duration.seconds(1);
+    this.openingTime = (await time.latest()).add(time.duration.weeks(1));
+    this.closingTime = this.openingTime.add(time.duration.weeks(1));
+    this.afterClosingTime = this.closingTime.add(time.duration.seconds(1));
 
     this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, _initialSupply);
     this.contributions = await Contributions.new();
@@ -115,7 +115,7 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
       it('should fail if opening time is in the past', async function () {
         await shouldFail.reverting(
           MintedBaseCrowdsale.new(
-            (await time.latest()) - time.duration.seconds(1),
+            (await time.latest()).sub(time.duration.seconds(1)),
             this.closingTime,
             rate,
             wallet,

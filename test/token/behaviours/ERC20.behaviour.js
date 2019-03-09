@@ -1,4 +1,4 @@
-const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, constants, expectEvent, shouldFail } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalance) {
@@ -258,14 +258,14 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
             expectEvent.inLogs(logs, 'Approval', {
               owner: owner,
               spender: spender,
-              value: 0,
+              value: new BN(0),
             });
           });
 
           it('decreases the spender allowance subtracting the requested amount', async function () {
-            await this.token.decreaseAllowance(spender, approvedAmount - 1, { from: owner });
+            await this.token.decreaseAllowance(spender, approvedAmount.sub(new BN(1)), { from: owner });
 
-            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(1);
+            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(new BN(1));
           });
 
           it('sets the allowance to zero when all allowance is removed', async function () {
@@ -274,7 +274,9 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
           });
 
           it('reverts when more than the full allowance is removed', async function () {
-            await shouldFail.reverting(this.token.decreaseAllowance(spender, approvedAmount + 1, { from: owner }));
+            await shouldFail.reverting(
+              this.token.decreaseAllowance(spender, approvedAmount.add(new BN(1)), { from: owner })
+            );
           });
         });
       }

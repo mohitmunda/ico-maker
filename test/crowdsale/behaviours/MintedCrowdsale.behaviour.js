@@ -1,4 +1,4 @@
-const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { balance, expectEvent } = require('openzeppelin-test-helpers');
 
 function shouldBehaveLikeMintedCrowdsale ([owner, investor, wallet, purchaser], rate, value) {
   const expectedTokenAmount = rate.mul(value);
