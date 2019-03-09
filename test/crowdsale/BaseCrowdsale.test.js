@@ -1,38 +1,28 @@
-const time = require('openzeppelin-solidity/test/helpers/time');
-const { advanceBlock } = require('openzeppelin-solidity/test/helpers/advanceToBlock');
-const { ether } = require('openzeppelin-solidity/test/helpers/ether');
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeBaseCrowdsale } = require('./behaviours/BaseCrowdsale.behaviour');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
 
 const BaseCrowdsale = artifacts.require('BaseCrowdsale');
 const BaseToken = artifacts.require('BaseToken');
 const Contributions = artifacts.require('Contributions');
 
-const { ZERO_ADDRESS } = require('openzeppelin-solidity/test/helpers/constants');
-
 contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdParty]) {
   const _name = 'BaseToken';
   const _symbol = 'ERC20';
-  const _decimals = 18;
-  const _cap = (new BigNumber(1000000000)).mul(Math.pow(10, _decimals));
-  const _initialSupply = 0;
+  const _decimals = new BN(18);
+  const _cap = new BN(100000000000);
+  const _initialSupply = new BN(0);
 
-  const rate = new BigNumber(1000);
-  const cap = ether(1);
-  const minimumContribution = ether(0.2);
+  const rate = new BN(1000);
+  const cap = ether('1');
+  const minimumContribution = ether('0.2');
 
   const totalSupply = cap.mul(rate);
 
   before(async function () {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
-    await advanceBlock();
+    await time.advanceBlock();
   });
 
   beforeEach(async function () {
@@ -63,7 +53,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
     describe('creating a valid crowdsale', function () {
       it('contributions should be right set', async function () {
         const contributions = await this.crowdsale.contributions();
-        contributions.should.be.bignumber.equal(this.contributions.address);
+        contributions.should.be.equal(this.contributions.address);
       });
 
       it('cap should be right set', async function () {

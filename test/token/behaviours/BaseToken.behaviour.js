@@ -1,21 +1,15 @@
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
 
-const { shouldBehaveLikeERC20Mintable } = require('openzeppelin-solidity/test/token/ERC20/behaviors/ERC20Mintable.behavior'); // eslint-disable-line max-len
-const { shouldBehaveLikeERC20Capped } = require('openzeppelin-solidity/test/token/ERC20/behaviors/ERC20Capped.behavior'); // eslint-disable-line max-len
-const { shouldBehaveLikeERC20Burnable } = require('openzeppelin-solidity/test/token/ERC20/behaviors/ERC20Burnable.behavior'); // eslint-disable-line max-len
-const { shouldBehaveLikeOwnable } = require('openzeppelin-solidity/test/ownership/Ownable.behavior');
 const { shouldBehaveLikeERC1363 } = require('erc-payable-token/test/token/ERC1363/ERC1363.behaviour');
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
-const { shouldBehaveLikeERC20Detailed } = require('./ERC20Detailed.behaviour');
 const { shouldBehaveLikeERC20 } = require('./ERC20.behaviour');
+const { shouldBehaveLikeERC20Detailed } = require('./ERC20Detailed.behaviour');
+const { shouldBehaveLikeERC20Mintable } = require('./ERC20Mintable.behaviour');
+const { shouldBehaveLikeERC20Capped } = require('./ERC20Capped.behaviour');
+const { shouldBehaveLikeERC20Burnable } = require('./ERC20Burnable.behaviour');
+const { shouldBehaveLikeOwnable } = require('../../ownership/Ownable.behavior');
 const { shouldBehaveLikeRemoveRole } = require('../../access/roles/RemoveRole.behavior');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
 
 function shouldBehaveLikeBaseToken (
   [owner, anotherAccount, minter, operator, recipient, thirdParty],

@@ -1,17 +1,15 @@
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeBaseToken } = require('./behaviours/BaseToken.behaviour');
-
-const BigNumber = web3.BigNumber;
 
 const BaseToken = artifacts.require('BaseToken');
 
 contract('BaseToken', function ([owner, anotherAccount, minter, operator, recipient, thirdParty]) {
   const _name = 'BaseToken';
   const _symbol = 'ERC20';
-  const _decimals = 18;
-  const _cap = new BigNumber(200000000);
-  const _initialSupply = 100000000;
+  const _decimals = new BN(18);
+  const _cap = new BN(200000000);
+  const _initialSupply = new BN(100000000);
 
   context('creating valid token', function () {
     describe('as a ERC20Capped', function () {
@@ -30,11 +28,11 @@ contract('BaseToken', function ([owner, anotherAccount, minter, operator, recipi
 
         describe('once deployed', function () {
           it('total supply should be equal to zero', async function () {
-            (await this.token.totalSupply()).should.be.bignumber.equal(0);
+            (await this.token.totalSupply()).should.be.bignumber.equal(new BN(0));
           });
 
           it('owner balance should be equal to zero', async function () {
-            (await this.token.balanceOf(owner)).should.be.bignumber.equal(0);
+            (await this.token.balanceOf(owner)).should.be.bignumber.equal(new BN(0));
           });
         });
       });

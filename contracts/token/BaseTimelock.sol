@@ -1,4 +1,4 @@
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "openzeppelin-solidity/contracts/token/ERC20/TokenTimelock.sol";
 
@@ -10,17 +10,17 @@ import "openzeppelin-solidity/contracts/token/ERC20/TokenTimelock.sol";
  */
 contract BaseTimelock is TokenTimelock {
 
-  /**
-   * @param token Address of the token being distributed
-   * @param beneficiary Who will receive the tokens after they are released
-   * @param releaseTime Timestamp when token release is enabled
-   */
-  constructor(
-    IERC20 token,
-    address beneficiary,
-    uint256 releaseTime
-  )
-    public
-    TokenTimelock(token, beneficiary, releaseTime)
-  {}
+    /**
+     * @param token Address of the token being distributed
+     * @param beneficiary Who will receive the tokens after they are released
+     * @param releaseTime Timestamp when token release is enabled
+     */
+    constructor(
+        IERC20 token,
+        address beneficiary,
+        uint256 releaseTime
+    )
+        public
+        TokenTimelock(token, beneficiary, releaseTime)
+    {} // solhint-disable-line no-empty-blocks
 }

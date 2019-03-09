@@ -1,17 +1,10 @@
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
+const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');
 
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
-
 const CappedDelivery = artifacts.require('MintedCappedDelivery');
 const BaseToken = artifacts.require('BaseToken');
-
-const { ZERO_ADDRESS } = require('openzeppelin-solidity/test/helpers/constants');
 
 contract('MintedCappedDelivery', function (accounts) {
   const [
@@ -22,11 +15,11 @@ contract('MintedCappedDelivery', function (accounts) {
 
   const name = 'BaseToken';
   const symbol = 'ERC20';
-  const decimals = 18;
-  const tokenCap = new BigNumber(100000);
-  const initialSupply = 0;
+  const decimals = new BN(18);
+  const tokenCap = new BN(100000);
+  const initialSupply = new BN(0);
 
-  const cap = new BigNumber(20000);
+  const cap = new BN(20000);
 
   beforeEach(async function () {
     this.token = await BaseToken.new(name, symbol, decimals, tokenCap, initialSupply, { from: tokenOwner });

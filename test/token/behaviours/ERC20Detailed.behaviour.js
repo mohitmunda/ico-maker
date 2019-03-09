@@ -1,9 +1,3 @@
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
-
 function shouldBehaveLikeERC20Detailed (_name, _symbol, _decimals) {
   it('has a name', async function () {
     (await this.token.name()).should.be.equal(_name);

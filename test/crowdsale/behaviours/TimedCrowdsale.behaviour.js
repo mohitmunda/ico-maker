@@ -1,11 +1,4 @@
-const time = require('openzeppelin-solidity/test/helpers/time');
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
 
 function shouldBehaveLikeTimedCrowdsale ([owner, investor, wallet, purchaser], rate, value) {
   it('should be ended only after end', async function () {

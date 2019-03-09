@@ -53,6 +53,11 @@ App = {
       App.contracts.BaseCrowdsale.setProvider(App.web3Provider);
     });
 
+    $.getJSON('MintedBaseCrowdsale.json', function (data) {
+      App.contracts.MintedBaseCrowdsale = TruffleContract(data);
+      App.contracts.MintedBaseCrowdsale.setProvider(App.web3Provider);
+    });
+
     $.getJSON('CappedDelivery.json', function (data) {
       App.contracts.CappedDelivery = TruffleContract(data);
       App.contracts.CappedDelivery.setProvider(App.web3Provider);

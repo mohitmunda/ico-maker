@@ -3,15 +3,18 @@
 [![NPM Package](https://img.shields.io/npm/v/ico-maker.svg?style=flat-square)](https://www.npmjs.org/package/ico-maker)
 [![Build Status](https://travis-ci.org/vittominacori/ico-maker.svg?branch=master)](https://travis-ci.org/vittominacori/ico-maker) 
 [![Coverage Status](https://coveralls.io/repos/github/vittominacori/ico-maker/badge.svg?branch=master)](https://coveralls.io/github/vittominacori/ico-maker?branch=master)
+[![MIT licensed](https://img.shields.io/github/license/vittominacori/ico-maker.svg)](https://github.com/vittominacori/ico-maker/blob/master/LICENSE)
 
 Smart Contracts to build your ICO solution and issue your ERC20 Token
 
 ## Prerequisites
 
-Install truffle
+Install Truffle if you want to run your own node
+
+Version 5.0.7+ required
 
 ```bash
-npm install -g truffle      // Version 4.1.15+ required
+npm install -g truffle
 ```
 
 Create your Smart Contracts folder and init truffle
@@ -36,7 +39,7 @@ npm install ico-maker
 [BaseToken](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/BaseToken.sol) is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable and ERC1363 Payable Token behaviours.
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/token/BaseToken.sol";
 
@@ -46,7 +49,7 @@ contract MyToken is BaseToken {
     string symbol,
     uint8 decimals,
     uint256 cap,
-    uint256 initialSupply,
+    uint256 initialSupply
   )
     public
     BaseToken(name, symbol, decimals, cap, initialSupply)
@@ -59,7 +62,7 @@ contract MyToken is BaseToken {
 [Contributions](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/utils/Contributions.sol) is an utility Smart Contract where to store additional data about crowdsale like the wei contributed or the token balance of each address.
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/crowdsale/utils/Contributions.sol";
 
@@ -71,7 +74,7 @@ contract MyContributions is Contributions {}
 [BaseCrowdsale](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/BaseCrowdsale.sol) is an extensible Crowdsale contract with Timed and Capped behaviours.
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/crowdsale/BaseCrowdsale.sol";
 
@@ -80,7 +83,7 @@ contract MyCrowdsale is BaseCrowdsale {
     uint256 openingTime,
     uint256 closingTime,
     uint256 rate,
-    address wallet,
+    address payable wallet,
     uint256 cap,
     uint256 minimumContribution,
     address token,
@@ -106,7 +109,7 @@ contract MyCrowdsale is BaseCrowdsale {
 [MintedBaseCrowdsale](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/MintedBaseCrowdsale.sol) is an extensible BaseCrowdsale contract with Minted behaviours.
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/crowdsale/MintedBaseCrowdsale.sol";
 
@@ -115,7 +118,7 @@ contract MyCrowdsale is MintedBaseCrowdsale {
     uint256 openingTime,
     uint256 closingTime,
     uint256 rate,
-    address wallet,
+    address payable wallet,
     uint256 cap,
     uint256 minimumContribution,
     address token,
@@ -141,7 +144,7 @@ contract MyCrowdsale is MintedBaseCrowdsale {
 [CappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/CappedDelivery.sol) is a Capped Smart Contract to transfer tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/distribution/CappedDelivery.sol";
 
@@ -158,7 +161,7 @@ contract MyAirdrop is CappedDelivery {
 [MintedCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/MintedCappedDelivery.sol) is a Capped Smart Contract to mint tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/distribution/MintedCappedDelivery.sol";
 
@@ -175,7 +178,7 @@ contract MyAirdrop is MintedCappedDelivery {
 [SpenderCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/SpenderCappedDelivery.sol) is a Capped Smart Contract to transferFrom tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/distribution/SpenderCappedDelivery.sol";
 
@@ -192,7 +195,7 @@ contract MyAirdrop is SpenderCappedDelivery {
 [BaseTimelock](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/BaseTimelock.sol) is a TokenTimelock which is a token holder contract that will allow a beneficiary to extract the tokens after a given release time.
 
 ```solidity
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "ico-maker/contracts/token/BaseTimelock.sol";
 
@@ -210,14 +213,6 @@ contract MyTimelock is BaseTimelock {
 
 ## Development
 
-Install Truffle if you want to run your own node
-
-Version 4.1.15 required
-
-```bash
-npm install -g truffle@4.1.15
-```
-
 ### Install dependencies
 
 ```bash
@@ -225,7 +220,13 @@ npm install
 ```
 
 ## Usage
- 
+
+Open the Truffle console
+
+```bash
+npm run console
+```
+
 ### Compile
 
 ```bash
@@ -262,14 +263,6 @@ Use ESLint and fix
 
 ```bash
 npm run lint:fix
-```
-
-## Flattener
-
-This allow to flatten the code into a single file
-
-```bash
-truffle-flattener contracts/token/BaseToken.sol > dist/BaseToken.dist.sol
 ```
 
 ## License

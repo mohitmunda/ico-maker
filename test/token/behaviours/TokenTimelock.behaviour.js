@@ -1,11 +1,4 @@
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
-const time = require('openzeppelin-solidity/test/helpers/time');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
 
 function shouldBehaveLikeTokenTimelock ([_, minter, beneficiary], amount) {
   context('with token', function () {

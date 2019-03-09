@@ -1,15 +1,12 @@
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
-const time = require('openzeppelin-solidity/test/helpers/time');
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenTimelock } = require('./behaviours/TokenTimelock.behaviour');
-
-const BigNumber = web3.BigNumber;
 
 const ERC20Mintable = artifacts.require('ERC20Mintable');
 const BaseTimelock = artifacts.require('BaseTimelock');
 
 contract('BaseTimelock', function ([_, minter, beneficiary]) {
-  const amount = new BigNumber(100);
+  const amount = new BN(100);
 
   beforeEach(async function () {
     this.token = await ERC20Mintable.new({ from: minter });

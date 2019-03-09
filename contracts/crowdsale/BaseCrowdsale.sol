@@ -1,4 +1,4 @@
-pragma solidity ^0.4.25;
+pragma solidity ^0.5.5;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
@@ -13,112 +13,100 @@ import "./utils/Contributions.sol";
  */
 contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
 
-  // reference to Contributions contract
-  Contributions private _contributions;
+    // reference to Contributions contract
+    Contributions private _contributions;
 
-  // the minimum value of contribution in wei
-  uint256 private _minimumContribution;
+    // the minimum value of contribution in wei
+    uint256 private _minimumContribution;
 
-  /**
-   * @dev Reverts if less than minimum contribution
-   */
-  modifier onlyGreaterThanMinimum(uint256 weiAmount) {
-    require(weiAmount >= _minimumContribution);
-    _;
-  }
+    /**
+     * @dev Reverts if less than minimum contribution
+     */
+    modifier onlyGreaterThanMinimum(uint256 weiAmount) {
+        require(weiAmount >= _minimumContribution);
+        _;
+    }
 
-  /**
-   * @param openingTime Crowdsale opening time
-   * @param closingTime Crowdsale closing time
-   * @param rate Number of token units a buyer gets per wei
-   * @param wallet Address where collected funds will be forwarded to
-   * @param cap Max amount of wei to be contributed
-   * @param minimumContribution Min amount of wei to be contributed
-   * @param token Address of the token being sold
-   * @param contributions Address of the contributions contract
-   */
-  constructor(
-    uint256 openingTime,
-    uint256 closingTime,
-    uint256 rate,
-    address wallet,
-    uint256 cap,
-    uint256 minimumContribution,
-    address token,
-    address contributions
-  )
-    public
-    Crowdsale(rate, wallet, ERC20(token))
-    TimedCrowdsale(openingTime, closingTime)
-    CappedCrowdsale(cap)
-  {
-    require(contributions != address(0));
-    _contributions = Contributions(contributions);
-    _minimumContribution = minimumContribution;
-  }
+    /**
+     * @param openingTime Crowdsale opening time
+     * @param closingTime Crowdsale closing time
+     * @param rate Number of token units a buyer gets per wei
+     * @param wallet Address where collected funds will be forwarded to
+     * @param cap Max amount of wei to be contributed
+     * @param minimumContribution Min amount of wei to be contributed
+     * @param token Address of the token being sold
+     * @param contributions Address of the contributions contract
+     */
+    constructor(
+        uint256 openingTime,
+        uint256 closingTime,
+        uint256 rate,
+        address payable wallet,
+        uint256 cap,
+        uint256 minimumContribution,
+        address token,
+        address contributions
+    )
+        public
+        Crowdsale(rate, wallet, ERC20(token))
+        TimedCrowdsale(openingTime, closingTime)
+        CappedCrowdsale(cap)
+    {
+        require(contributions != address(0));
+        _contributions = Contributions(contributions);
+        _minimumContribution = minimumContribution;
+    }
 
-  /**
-   * @return the crowdsale contributions contract
-   */
-  function contributions() public view returns(Contributions) {
-    return _contributions;
-  }
+    /**
+     * @return the crowdsale contributions contract
+     */
+    function contributions() public view returns (Contributions) {
+        return _contributions;
+    }
 
-  /**
-   * @return the minimum value of contribution in wei
-   */
-  function minimumContribution() public view returns(uint256) {
-    return _minimumContribution;
-  }
+    /**
+     * @return the minimum value of contribution in wei
+     */
+    function minimumContribution() public view returns (uint256) {
+        return _minimumContribution;
+    }
 
-  /**
-   * @dev false if the ico is not started, true if the ico is started and running, true if the ico is completed
-   * @return bool
-   */
-  function started() public view returns(bool) {
-    return block.timestamp >= openingTime(); // solhint-disable-line not-rely-on-time
-  }
+    /**
+     * @dev false if the ico is not started, true if the ico is started and running, true if the ico is completed
+     * @return bool
+     */
+    function started() public view returns (bool) {
+        return block.timestamp >= openingTime(); // solhint-disable-line not-rely-on-time
+    }
 
-  /**
-   * @dev false if the ico is not started, false if the ico is started and running, true if the ico is completed
-   * @return bool
-   */
-  function ended() public view returns(bool) {
-    return hasClosed() || capReached();
-  }
+    /**
+     * @dev false if the ico is not started, false if the ico is started and running, true if the ico is completed
+     * @return bool
+     */
+    function ended() public view returns (bool) {
+        return hasClosed() || capReached();
+    }
 
-  /**
-   * @dev Extend parent behavior requiring purchase to respect the minimumContribution.
-   * @param beneficiary Token purchaser
-   * @param weiAmount Amount of wei contributed
-   */
-  function _preValidatePurchase(
-    address beneficiary,
-    uint256 weiAmount
-  )
-    internal
-    onlyGreaterThanMinimum(weiAmount)
-    view
-  {
-    super._preValidatePurchase(beneficiary, weiAmount);
-  }
+    /**
+     * @dev Extend parent behavior requiring purchase to respect the minimumContribution.
+     * @param beneficiary Token purchaser
+     * @param weiAmount Amount of wei contributed
+     */
+    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyGreaterThanMinimum(weiAmount) view { // solhint-disable-line  max-line-length
+        super._preValidatePurchase(beneficiary, weiAmount);
+    }
 
-  /**
-   * @dev Update the contributions contract states
-   * @param beneficiary Address receiving the tokens
-   * @param weiAmount Value in wei involved in the purchase
-   */
-  function _updatePurchasingState(
-    address beneficiary,
-    uint256 weiAmount
-  )
-    internal
-  {
-    super._updatePurchasingState(beneficiary, weiAmount);
-    _contributions.addBalance(
-      beneficiary,
-      weiAmount,
-      _getTokenAmount(weiAmount)
-    );
-  }
+    /**
+     * @dev Update the contributions contract states
+     * @param beneficiary Address receiving the tokens
+     * @param weiAmount Value in wei involved in the purchase
+     */
+    function _updatePurchasingState(address beneficiary, uint256 weiAmount) internal {
+        super._updatePurchasingState(beneficiary, weiAmount);
+        _contributions.addBalance(
+            beneficiary,
+            weiAmount,
+            _getTokenAmount(weiAmount)
+        );
+    }
 }

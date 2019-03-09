@@ -1,23 +1,16 @@
-const { ether } = require('openzeppelin-solidity/test/helpers/ether');
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
 const { shouldBehaveLikeRemoveRole } = require('../../access/roles/RemoveRole.behavior');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
 
 const Contributions = artifacts.require('Contributions');
 
 contract('Contributions', function (
   [_, owner, operator, futureOperator, anotherFutureOperator, thirdParty, anotherThirdParty]
 ) {
-  const tokenToAdd = new BigNumber(100);
-  const ethToAdd = ether(1);
+  const tokenToAdd = new BN(100);
+  const ethToAdd = ether('1');
 
   beforeEach(async function () {
     this.contributions = await Contributions.new({ from: owner });
@@ -27,9 +20,9 @@ contract('Contributions', function (
   describe('if operator is calling', function () {
     it('should success to add amounts to the address balances', async function () {
       let tokenBalance = await this.contributions.tokenBalance(thirdParty);
-      tokenBalance.should.be.bignumber.equal(0);
+      tokenBalance.should.be.bignumber.equal(new BN(0));
       let weiContribution = await this.contributions.weiContribution(thirdParty);
-      weiContribution.should.be.bignumber.equal(0);
+      weiContribution.should.be.bignumber.equal(new BN(0));
 
       await this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: operator });
 
@@ -38,27 +31,32 @@ contract('Contributions', function (
       weiContribution = await this.contributions.weiContribution(thirdParty);
       weiContribution.should.be.bignumber.equal(ethToAdd);
 
-      await this.contributions.addBalance(thirdParty, ethToAdd.mul(3), tokenToAdd.mul(3), { from: operator });
+      await this.contributions.addBalance(thirdParty, ethToAdd.mul(new BN(3)), tokenToAdd.mul(3), { from: operator });
 
       tokenBalance = await this.contributions.tokenBalance(thirdParty);
-      tokenBalance.should.be.bignumber.equal(tokenToAdd.mul(4));
+      tokenBalance.should.be.bignumber.equal(tokenToAdd.mul(new BN(4)));
       weiContribution = await this.contributions.weiContribution(thirdParty);
-      weiContribution.should.be.bignumber.equal(ethToAdd.mul(4));
+      weiContribution.should.be.bignumber.equal(ethToAdd.mul(new BN(4)));
     });
 
     it('should increase total sold tokens and total wei raised', async function () {
       let totalSoldTokens = await this.contributions.totalSoldTokens();
       let totalWeiRaised = await this.contributions.totalWeiRaised();
-      totalSoldTokens.should.be.bignumber.equal(0);
-      totalWeiRaised.should.be.bignumber.equal(0);
+      totalSoldTokens.should.be.bignumber.equal(new BN(0));
+      totalWeiRaised.should.be.bignumber.equal(new BN(0));
 
       await this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: operator });
-      await this.contributions.addBalance(thirdParty, ethToAdd.mul(3), tokenToAdd.mul(3), { from: operator });
+      await this.contributions.addBalance(
+        thirdParty,
+        ethToAdd.mul(new BN(3)),
+        tokenToAdd.mul(new BN(3)),
+        { from: operator }
+      );
 
       totalSoldTokens = await this.contributions.totalSoldTokens();
       totalWeiRaised = await this.contributions.totalWeiRaised();
-      totalSoldTokens.should.be.bignumber.equal(tokenToAdd.mul(4));
-      totalWeiRaised.should.be.bignumber.equal(ethToAdd.mul(4));
+      totalSoldTokens.should.be.bignumber.equal(tokenToAdd.mul(new BN(4)));
+      totalWeiRaised.should.be.bignumber.equal(ethToAdd.mul(new BN(4)));
     });
 
     it('should increase array length when different address are passed', async function () {
@@ -93,14 +91,24 @@ contract('Contributions', function (
 
     it('should cycle addresses and have the right value set', async function () {
       let contributorsLength = (await this.contributions.getContributorsLength()).valueOf();
-      contributorsLength.should.be.bignumber.equal(0);
+      contributorsLength.should.be.bignumber.equal(new BN(0));
 
       (await this.contributions.contributorExists(owner)).should.be.equal(false);
       (await this.contributions.contributorExists(thirdParty)).should.be.equal(false);
       (await this.contributions.contributorExists(anotherThirdParty)).should.be.equal(false);
 
-      await this.contributions.addBalance(owner, ethToAdd.mul(3), tokenToAdd.mul(3), { from: operator });
-      await this.contributions.addBalance(thirdParty, ethToAdd.mul(4), tokenToAdd.mul(4), { from: operator });
+      await this.contributions.addBalance(
+        owner,
+        ethToAdd.mul(new BN(3)),
+        tokenToAdd.mul(new BN(3)),
+        { from: operator }
+      );
+      await this.contributions.addBalance(
+        thirdParty,
+        ethToAdd.mul(new BN(4)),
+        tokenToAdd.mul(new BN(4)),
+        { from: operator }
+      );
       await this.contributions.addBalance(anotherThirdParty, ethToAdd, tokenToAdd, { from: operator });
       await this.contributions.addBalance(anotherThirdParty, ethToAdd, tokenToAdd, { from: operator });
 

@@ -1,16 +1,9 @@
-const time = require('openzeppelin-solidity/test/helpers/time');
-const shouldFail = require('openzeppelin-solidity/test/helpers/shouldFail');
+const { balance, BN, constants, ether, expectEvent, shouldFail, time } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 const { shouldBehaveLikeMintedCrowdsale } = require('./MintedCrowdsale.behaviour');
 const { shouldBehaveLikeTimedCrowdsale } = require('./TimedCrowdsale.behaviour');
 const { shouldBehaveLikeCappedCrowdsale } = require('./CappedCrowdsale.behaviour');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
 
 function shouldBehaveLikeMintedBaseCrowdsale (
   [owner, investor, wallet, purchaser, thirdParty],
@@ -48,9 +41,9 @@ function shouldBehaveLikeMintedBaseCrowdsale (
         assert.equal(contributorsLength, 0);
 
         const preTokenBalance = await this.contributions.tokenBalance(investor);
-        preTokenBalance.should.be.bignumber.equal(0);
+        preTokenBalance.should.be.bignumber.equal(new BN(0));
         const preWeiContribution = await this.contributions.weiContribution(investor);
-        preWeiContribution.should.be.bignumber.equal(0);
+        preWeiContribution.should.be.bignumber.equal(new BN(0));
 
         await this.crowdsale.sendTransaction({ value: value, from: investor });
 
@@ -63,10 +56,10 @@ function shouldBehaveLikeMintedBaseCrowdsale (
 
         const postTwoTokenBalance = await this.contributions.tokenBalance(investor);
         (postTwoTokenBalance.sub(postOneTokenBalance)).should.be.bignumber.equal(value.mul(rate));
-        postTwoTokenBalance.should.be.bignumber.equal(value.mul(2).mul(rate));
+        postTwoTokenBalance.should.be.bignumber.equal(value.mul(new BN(2)).mul(rate));
         const postTwoWeiContribution = await this.contributions.weiContribution(investor);
         (postTwoWeiContribution.sub(postOneWeiContribution)).should.be.bignumber.equal(value);
-        postTwoWeiContribution.should.be.bignumber.equal(value.mul(2));
+        postTwoWeiContribution.should.be.bignumber.equal(value.mul(new BN(2)));
 
         contributorsLength = await this.contributions.getContributorsLength();
         assert.equal(contributorsLength, 1);
@@ -89,9 +82,9 @@ function shouldBehaveLikeMintedBaseCrowdsale (
         assert.equal(contributorsLength, 0);
 
         const preTokenBalance = await this.contributions.tokenBalance(investor);
-        preTokenBalance.should.be.bignumber.equal(0);
+        preTokenBalance.should.be.bignumber.equal(new BN(0));
         const preWeiContribution = await this.contributions.weiContribution(investor);
-        preWeiContribution.should.be.bignumber.equal(0);
+        preWeiContribution.should.be.bignumber.equal(new BN(0));
 
         await this.crowdsale.buyTokens(investor, { value, from: purchaser });
 
