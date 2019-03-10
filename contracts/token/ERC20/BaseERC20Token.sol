@@ -3,16 +3,15 @@ pragma solidity ^0.5.5;
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Burnable.sol";
-import "erc-payable-token/contracts/token/ERC1363/ERC1363.sol";
 import "eth-token-recover/contracts/TokenRecover.sol";
 import "../../access/roles/OperatorRole.sol";
 
 /**
- * @title BaseToken
+ * @title BaseERC20Token
  * @author Vittorio Minacori (https://github.com/vittominacori)
- * @dev Implementation of the BaseToken
+ * @dev Implementation of the BaseERC20Token
  */
-contract BaseToken is ERC20Detailed, ERC20Capped, ERC20Burnable, ERC1363, OperatorRole, TokenRecover {
+contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, OperatorRole, TokenRecover {
 
     event MintFinished();
     event TransferEnabled();

@@ -1,10 +1,12 @@
 const { BN, shouldFail } = require('openzeppelin-test-helpers');
 
-const { shouldBehaveLikeBaseToken } = require('./behaviours/BaseToken.behaviour');
+const { shouldBehaveLikeERC1363 } = require('erc-payable-token/test/token/ERC1363/ERC1363.behaviour');
 
-const BaseToken = artifacts.require('BaseToken');
+const { shouldBehaveLikeBaseERC20Token } = require('../ERC20/behaviours/BaseERC20Token.behaviour');
 
-contract('BaseToken', function ([owner, anotherAccount, minter, operator, recipient, thirdParty]) {
+const BaseToken = artifacts.require('BaseERC1363Token');
+
+contract('BaseERC1363Token', function ([owner, anotherAccount, minter, operator, recipient, thirdParty]) {
   const _name = 'BaseToken';
   const _symbol = 'ERC20';
   const _decimals = new BN(18);
@@ -20,7 +22,7 @@ contract('BaseToken', function ([owner, anotherAccount, minter, operator, recipi
       });
     });
 
-    describe('as a BaseToken', function () {
+    describe('as a BaseERC20Token', function () {
       describe('without initial supply', function () {
         beforeEach(async function () {
           this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, 0, { from: owner });
@@ -55,14 +57,22 @@ contract('BaseToken', function ([owner, anotherAccount, minter, operator, recipi
     });
   });
 
-  context('like a BaseToken', function () {
+  context('like a BaseERC20Token', function () {
     beforeEach(async function () {
       this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, _initialSupply, { from: owner });
     });
 
-    shouldBehaveLikeBaseToken(
+    shouldBehaveLikeBaseERC20Token(
       [owner, anotherAccount, minter, operator, recipient, thirdParty],
       [_name, _symbol, _decimals, _cap, _initialSupply]
     );
+  });
+
+  context('like a ERC1363', function () {
+    beforeEach(async function () {
+      this.token = await BaseToken.new(_name, _symbol, _decimals, _cap, _initialSupply, { from: owner });
+    });
+
+    shouldBehaveLikeERC1363([owner, anotherAccount, recipient], _initialSupply);
   });
 });

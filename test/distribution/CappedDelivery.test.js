@@ -4,7 +4,7 @@ const { ZERO_ADDRESS } = constants;
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');
 
 const CappedDelivery = artifacts.require('CappedDelivery');
-const BaseToken = artifacts.require('BaseToken');
+const BaseToken = artifacts.require('BaseERC20Token');
 
 contract('CappedDelivery', function (accounts) {
   const [

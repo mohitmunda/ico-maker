@@ -4,7 +4,7 @@ const { ZERO_ADDRESS } = constants;
 const { shouldBehaveLikeBaseCrowdsale } = require('./behaviours/BaseCrowdsale.behaviour');
 
 const BaseCrowdsale = artifacts.require('BaseCrowdsale');
-const BaseToken = artifacts.require('BaseToken');
+const BaseToken = artifacts.require('BaseERC20Token');
 const Contributions = artifacts.require('Contributions');
 
 contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdParty]) {

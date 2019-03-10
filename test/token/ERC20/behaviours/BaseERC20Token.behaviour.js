@@ -1,6 +1,5 @@
 const { shouldFail } = require('openzeppelin-test-helpers');
 
-const { shouldBehaveLikeERC1363 } = require('erc-payable-token/test/token/ERC1363/ERC1363.behaviour');
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
 const { shouldBehaveLikeERC20 } = require('./ERC20.behaviour');
@@ -10,7 +9,7 @@ const { shouldBehaveLikeERC20Capped } = require('./ERC20Capped.behaviour');
 const { shouldBehaveLikeERC20Burnable } = require('./ERC20Burnable.behaviour');
 const { shouldBehaveLikeRemoveRole } = require('../../../access/roles/RemoveRole.behavior');
 
-function shouldBehaveLikeBaseToken (
+function shouldBehaveLikeBaseERC20Token (
   [owner, anotherAccount, minter, operator, recipient, thirdParty],
   [_name, _symbol, _decimals, _cap, _initialSupply]
 ) {
@@ -46,11 +45,7 @@ function shouldBehaveLikeBaseToken (
     shouldBehaveLikeERC20([owner, anotherAccount, recipient], _initialSupply);
   });
 
-  context('like a ERC1363', function () {
-    shouldBehaveLikeERC1363([owner, anotherAccount, recipient], _initialSupply);
-  });
-
-  context('BaseToken token behaviours', function () {
+  context('BaseERC20Token token behaviours', function () {
     beforeEach(async function () {
       await this.token.addMinter(minter, { from: owner });
       await this.token.addOperator(operator, { from: owner });
@@ -177,5 +172,5 @@ function shouldBehaveLikeBaseToken (
 }
 
 module.exports = {
-  shouldBehaveLikeBaseToken,
+  shouldBehaveLikeBaseERC20Token,
 };

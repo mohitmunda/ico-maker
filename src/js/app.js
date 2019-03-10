@@ -33,9 +33,14 @@ App = {
       App.web3Provider.enable();
     }
 
-    $.getJSON('BaseToken.json', function (data) {
-      App.contracts.BaseToken = TruffleContract(data);
-      App.contracts.BaseToken.setProvider(App.web3Provider);
+    $.getJSON('BaseERC20Token.json', function (data) {
+      App.contracts.BaseERC20Token = TruffleContract(data);
+      App.contracts.BaseERC20Token.setProvider(App.web3Provider);
+    });
+
+    $.getJSON('BaseERC1363Token.json', function (data) {
+      App.contracts.BaseERC1363Token = TruffleContract(data);
+      App.contracts.BaseERC1363Token.setProvider(App.web3Provider);
     });
 
     $.getJSON('BaseTimelock.json', function (data) {

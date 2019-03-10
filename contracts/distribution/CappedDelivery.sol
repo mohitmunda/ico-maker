@@ -1,6 +1,6 @@
 pragma solidity ^0.5.5;
 
-import "../token/ERC20/BaseToken.sol";
+import "../token/ERC20/BaseERC20Token.sol";
 
 /**
  * @title CappedDelivery
@@ -12,7 +12,7 @@ contract CappedDelivery is TokenRecover {
     using SafeMath for uint256;
 
     // the token to distribute
-    BaseToken internal _token;
+    BaseERC20Token internal _token;
 
     // the max token cap to distribute
     uint256 private _cap;
@@ -35,7 +35,7 @@ contract CappedDelivery is TokenRecover {
         require(token != address(0));
         require(cap > 0);
 
-        _token = BaseToken(token);
+        _token = BaseERC20Token(token);
         _cap = cap;
         _allowMultipleSend = allowMultipleSend;
     }
@@ -43,7 +43,7 @@ contract CappedDelivery is TokenRecover {
     /**
      * @return the token to distribute
      */
-    function token() public view returns (BaseToken) {
+    function token() public view returns (BaseERC20Token) {
         return _token;
     }
 

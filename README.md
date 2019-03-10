@@ -34,25 +34,48 @@ npm install ico-maker
 
 ## Usage
 
-### BaseToken.sol
+### BaseERC20Token.sol
 
-[BaseToken](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC20/BaseToken.sol) is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable and ERC1363 Payable Token behaviours.
+[BaseERC20Token](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC20/BaseERC20Token.sol) is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable behaviours.
 
 ```solidity
 pragma solidity ^0.5.5;
 
-import "ico-maker/contracts/token/ERC20/BaseToken.sol";
+import "ico-maker/contracts/token/ERC20/BaseERC20Token.sol";
 
-contract MyToken is BaseToken {
+contract MyToken is BaseERC20Token {
   constructor(
-    string name,
-    string symbol,
+    string memory name,
+    string memory symbol,
     uint8 decimals,
     uint256 cap,
     uint256 initialSupply
   )
     public
-    BaseToken(name, symbol, decimals, cap, initialSupply)
+    BaseERC20Token(name, symbol, decimals, cap, initialSupply)
+  {}
+}
+```
+
+### BaseERC1363Token.sol
+
+[BaseERC1363Token](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC1363/BaseERC1363Token.sol) is a BaseERC20Token token with a ERC1363 Payable Token behaviours.
+
+```solidity
+pragma solidity ^0.5.5;
+
+import "ico-maker/contracts/token/ERC1363/BaseERC1363Token.sol";
+
+contract MyToken is BaseERC1363Token {
+  constructor(
+    string memory name,
+    string memory symbol,
+    uint8 decimals,
+    uint256 cap,
+    uint256 initialSupply
+  )
+    public
+    BaseERC1363Token(name, symbol, decimals, cap, initialSupply)
   {}
 }
 ```
