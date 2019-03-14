@@ -1,6 +1,6 @@
 {
   "name": "ico-maker",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Smart Contracts to build your ICO solution and issue your ERC20 Token",
   "main": "truffle-config.js",
   "files": [
@@ -72,8 +72,8 @@
     "vuepress": "^0.14.10"
   },
   "dependencies": {
-    "erc-payable-token": "2.1.0",
-    "eth-token-recover": "2.1.1",
+    "erc-payable-token": "2.1.2",
+    "eth-token-recover": "2.1.2",
     "openzeppelin-solidity": "2.1.3"
   }
 }
