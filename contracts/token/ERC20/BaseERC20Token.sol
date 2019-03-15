@@ -23,7 +23,7 @@ contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, OperatorRo
     bool private _transferEnabled = false;
 
     /**
-     * @dev Tokens can be minted only before minting finished
+     * @dev Tokens can be minted only before minting finished.
      */
     modifier canMint() {
         require(!_mintingFinished);
@@ -31,7 +31,7 @@ contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, OperatorRo
     }
 
     /**
-     * @dev Tokens can be moved only after if transfer enabled or if you are an approved operator
+     * @dev Tokens can be moved only after if transfer enabled or if you are an approved operator.
      */
     modifier canTransfer(address from) {
         require(_transferEnabled || isOperator(from));
@@ -62,33 +62,52 @@ contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, OperatorRo
     }
 
     /**
-     * @return if minting is finished or not
+     * @return if minting is finished or not.
      */
     function mintingFinished() public view returns (bool) {
         return _mintingFinished;
     }
 
     /**
-     * @return if transfer is enabled or not
+     * @return if transfer is enabled or not.
      */
     function transferEnabled() public view returns (bool) {
         return _transferEnabled;
     }
 
+    /**
+     * @dev Function to mint tokens
+     * @param to The address that will receive the minted tokens.
+     * @param value The amount of tokens to mint.
+     * @return A boolean that indicates if the operation was successful.
+     */
     function mint(address to, uint256 value) public canMint returns (bool) {
         return super.mint(to, value);
     }
 
+    /**
+     * @dev Transfer token to a specified address
+     * @param to The address to transfer to.
+     * @param value The amount to be transferred.
+     * @return A boolean that indicates if the operation was successful.
+     */
     function transfer(address to, uint256 value) public canTransfer(msg.sender) returns (bool) {
         return super.transfer(to, value);
     }
 
+    /**
+     * @dev Transfer tokens from one address to another.
+     * @param from address The address which you want to send tokens from
+     * @param to address The address which you want to transfer to
+     * @param value uint256 the amount of tokens to be transferred
+     * @return A boolean that indicates if the operation was successful.
+     */
     function transferFrom(address from, address to, uint256 value) public canTransfer(from) returns (bool) {
         return super.transferFrom(from, to, value);
     }
 
     /**
-     * @dev Function to stop minting new tokens
+     * @dev Function to stop minting new tokens and enable transfer.
      */
     function finishMinting() public onlyOwner canMint {
         _mintingFinished = true;

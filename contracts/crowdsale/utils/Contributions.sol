@@ -56,7 +56,7 @@ contract Contributions is OperatorRole, TokenRecover {
 
     /**
      * @dev return the contributions length
-     * @return uint
+     * @return uint representing contributors number
      */
     function getContributorsLength() public view returns (uint) {
         return _addresses.length;

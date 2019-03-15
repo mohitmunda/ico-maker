@@ -58,7 +58,7 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
     }
 
     /**
-     * @return the crowdsale contributions contract
+     * @return the crowdsale contributions contract address
      */
     function contributions() public view returns (Contributions) {
         return _contributions;
@@ -72,19 +72,25 @@ contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
     }
 
     /**
-     * @dev false if the ico is not started, true if the ico is started and running, true if the ico is completed
-     * @return bool
+     * @return false if the ico is not started, true if the ico is started and running, true if the ico is completed
      */
     function started() public view returns (bool) {
         return block.timestamp >= openingTime(); // solhint-disable-line not-rely-on-time
     }
 
     /**
-     * @dev false if the ico is not started, false if the ico is started and running, true if the ico is completed
-     * @return bool
+     * @return false if the ico is not started, false if the ico is started and running, true if the ico is completed
      */
     function ended() public view returns (bool) {
         return hasClosed() || capReached();
+    }
+
+    /**
+     * @dev Extend crowdsale closing date
+     * @param closingTime Crowdsale closing time
+     */
+    function extendTime(uint256 closingTime) public onlyOwner {
+        _extendTime(closingTime);
     }
 
     /**

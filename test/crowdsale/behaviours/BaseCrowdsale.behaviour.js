@@ -19,6 +19,37 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
   });
 
   context('like a BaseCrowdsale', function () {
+    describe('extending closing time', function () {
+      context('before crowdsale start', function () {
+        beforeEach(async function () {
+          (await this.crowdsale.isOpen()).should.equal(false);
+          await shouldFail.reverting(this.crowdsale.send(value));
+        });
+
+        describe('if another account is calling', function () {
+          it('it reverts', async function () {
+            const newClosingTime = this.closingTime.add(time.duration.days(1));
+            await shouldFail.reverting(this.crowdsale.extendTime(newClosingTime, { from: thirdParty }));
+          });
+        });
+      });
+
+      context('after crowdsale start', function () {
+        beforeEach(async function () {
+          await time.increaseTo(this.openingTime);
+          (await this.crowdsale.isOpen()).should.equal(true);
+          await this.crowdsale.send(value);
+        });
+
+        describe('if another account is calling', function () {
+          it('it reverts', async function () {
+            const newClosingTime = this.closingTime.add(time.duration.days(1));
+            await shouldFail.reverting(this.crowdsale.extendTime(newClosingTime, { from: thirdParty }));
+          });
+        });
+      });
+    });
+
     describe('high-level purchase', function () {
       beforeEach(async function () {
         await time.increaseTo(this.openingTime);
