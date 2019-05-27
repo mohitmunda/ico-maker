@@ -1,4 +1,4 @@
-const { constants, expectEvent, shouldFail } = require('openzeppelin-test-helpers');
+const { constants, expectEvent, expectRevert } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 function capitalize (str) {
@@ -28,11 +28,11 @@ function shouldBehaveLikeRemoveRole (authorized, otherAuthorized, [anyone], role
       });
 
       it('reverts when removing from an unassigned account', async function () {
-        await shouldFail.reverting(this.contract[`remove${rolename}`](anyone, { from: authorized }));
+        await expectRevert.unspecified(this.contract[`remove${rolename}`](anyone, { from: authorized }));
       });
 
       it('reverts when removing role from the null account', async function () {
-        await shouldFail.reverting(this.contract[`remove${rolename}`](ZERO_ADDRESS, { from: authorized }));
+        await expectRevert.unspecified(this.contract[`remove${rolename}`](ZERO_ADDRESS, { from: authorized }));
       });
     });
   });

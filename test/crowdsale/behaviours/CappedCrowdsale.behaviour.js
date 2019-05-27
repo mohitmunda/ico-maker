@@ -1,4 +1,4 @@
-const { shouldFail } = require('openzeppelin-test-helpers');
+const { expectRevert } = require('openzeppelin-test-helpers');
 
 function shouldBehaveLikeCappedCrowdsale ([investor]) {
   let cap;
@@ -17,11 +17,11 @@ function shouldBehaveLikeCappedCrowdsale ([investor]) {
 
     it('should reject payments outside cap', async function () {
       await this.crowdsale.send(cap, { from: investor });
-      await shouldFail.reverting(this.crowdsale.send(1, { from: investor }));
+      await expectRevert.unspecified(this.crowdsale.send(1, { from: investor }));
     });
 
     it('should reject payments that exceed cap', async function () {
-      await shouldFail.reverting(this.crowdsale.send(cap.addn(1), { from: investor }));
+      await expectRevert.unspecified(this.crowdsale.send(cap.addn(1), { from: investor }));
     });
   });
 

@@ -1,4 +1,4 @@
-const { BN, constants, shouldFail } = require('openzeppelin-test-helpers');
+const { BN, constants, expectRevert } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');
@@ -29,7 +29,7 @@ contract('MintedCappedDelivery', function (accounts) {
     context('creating a valid delivery', function () {
       describe('if token address is the zero address', function () {
         it('reverts', async function () {
-          await shouldFail.reverting(
+          await expectRevert.unspecified(
             CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, { from: cappedDeliveryOwner })
           );
         });
@@ -37,7 +37,7 @@ contract('MintedCappedDelivery', function (accounts) {
 
       describe('if cap is zero', function () {
         it('reverts', async function () {
-          await shouldFail.reverting(
+          await expectRevert.unspecified(
             CappedDelivery.new(this.token.address, 0, allowMultipleSend, { from: cappedDeliveryOwner })
           );
         });
@@ -58,7 +58,7 @@ contract('MintedCappedDelivery', function (accounts) {
         describe('sending tokens if minting is finished', function () {
           it('reverts', async function () {
             await this.token.finishMinting({ from: tokenOwner });
-            await shouldFail.reverting(
+            await expectRevert.unspecified(
               this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
             );
           });

@@ -1,4 +1,4 @@
-const { BN, constants, ether, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, constants, ether, expectRevert, time } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeBaseCrowdsale } = require('./behaviours/BaseCrowdsale.behaviour');
@@ -67,7 +67,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail with zero rate', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -82,7 +82,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if wallet is the zero address', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -97,7 +97,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if token is the zero address', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -112,7 +112,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if opening time is in the past', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseCrowdsale.new(
             (await time.latest()).sub(time.duration.seconds(1)),
             this.closingTime,
@@ -127,7 +127,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if opening time is after closing time in the past', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseCrowdsale.new(
             this.closingTime,
             this.openingTime,
@@ -142,7 +142,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail if contributions is the zero address', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,
@@ -157,7 +157,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       });
 
       it('should fail with zero cap', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseCrowdsale.new(
             this.openingTime,
             this.closingTime,

@@ -1,4 +1,4 @@
-const { BN, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, expectRevert, time } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 const { shouldBehaveLikeTimedCrowdsale } = require('./TimedCrowdsale.behaviour');
@@ -23,13 +23,13 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
       context('before crowdsale start', function () {
         beforeEach(async function () {
           (await this.crowdsale.isOpen()).should.equal(false);
-          await shouldFail.reverting(this.crowdsale.send(value));
+          await expectRevert.unspecified(this.crowdsale.send(value));
         });
 
         describe('if another account is calling', function () {
           it('it reverts', async function () {
             const newClosingTime = this.closingTime.add(time.duration.days(1));
-            await shouldFail.reverting(this.crowdsale.extendTime(newClosingTime, { from: thirdParty }));
+            await expectRevert.unspecified(this.crowdsale.extendTime(newClosingTime, { from: thirdParty }));
           });
         });
       });
@@ -44,7 +44,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
         describe('if another account is calling', function () {
           it('it reverts', async function () {
             const newClosingTime = this.closingTime.add(time.duration.days(1));
-            await shouldFail.reverting(this.crowdsale.extendTime(newClosingTime, { from: thirdParty }));
+            await expectRevert.unspecified(this.crowdsale.extendTime(newClosingTime, { from: thirdParty }));
           });
         });
       });
@@ -85,7 +85,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
       });
 
       it('should fail if less than minimum contribution', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           this.crowdsale.sendTransaction({ value: minimumContribution.subn(1), from: investor })
         );
       });
@@ -126,7 +126,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
       });
 
       it('should fail if less than minimum contribution', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           this.crowdsale.buyTokens(investor, { value: minimumContribution.subn(1), from: purchaser })
         );
       });

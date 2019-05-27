@@ -1,4 +1,4 @@
-const { BN, constants, expectEvent, shouldFail } = require('openzeppelin-test-helpers');
+const { BN, constants, expectEvent, expectRevert } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
@@ -35,7 +35,7 @@ function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
       const amount = initialBalance.addn(1);
 
       it('reverts', async function () {
-        await shouldFail.reverting(this.token.burn(amount, { from: owner }));
+        await expectRevert.unspecified(this.token.burn(amount, { from: owner }));
       });
     });
   });
@@ -82,7 +82,7 @@ function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
 
       it('reverts', async function () {
         await this.token.approve(burner, amount, { from: owner });
-        await shouldFail.reverting(this.token.burnFrom(owner, amount, { from: burner }));
+        await expectRevert.unspecified(this.token.burnFrom(owner, amount, { from: burner }));
       });
     });
 
@@ -91,7 +91,7 @@ function shouldBehaveLikeERC20Burnable (owner, initialBalance, [burner]) {
 
       it('reverts', async function () {
         await this.token.approve(burner, allowance, { from: owner });
-        await shouldFail.reverting(this.token.burnFrom(owner, allowance.addn(1), { from: burner }));
+        await expectRevert.unspecified(this.token.burnFrom(owner, allowance.addn(1), { from: burner }));
       });
     });
   });

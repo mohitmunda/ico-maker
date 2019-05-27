@@ -1,4 +1,4 @@
-const { BN, shouldFail } = require('openzeppelin-test-helpers');
+const { BN, expectRevert } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
@@ -197,7 +197,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
       describe('if sending more than the cap', function () {
         it('reverts', async function () {
           const moreThanTheCap = cap.addn(1);
-          await shouldFail.reverting(
+          await expectRevert.unspecified(
             this.cappedDelivery.multiSend([addresses[1]], [moreThanTheCap], { from: cappedDeliveryOwner })
           );
         });
@@ -205,7 +205,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
 
       describe('if addresses are empty', function () {
         it('reverts', async function () {
-          await shouldFail.reverting(
+          await expectRevert.unspecified(
             this.cappedDelivery.multiSend([], amounts, { from: cappedDeliveryOwner })
           );
         });
@@ -213,7 +213,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
 
       describe('if amounts are empty', function () {
         it('reverts', async function () {
-          await shouldFail.reverting(
+          await expectRevert.unspecified(
             this.cappedDelivery.multiSend(addresses, [], { from: cappedDeliveryOwner })
           );
         });
@@ -221,7 +221,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
 
       describe('if amounts length is not equal to addresses length', function () {
         it('reverts', async function () {
-          await shouldFail.reverting(
+          await expectRevert.unspecified(
             this.cappedDelivery.multiSend([addresses[0]], [amounts[0], amounts[1]], { from: cappedDeliveryOwner })
           );
         });
@@ -230,7 +230,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
 
     describe('if token owner is calling', function () {
       it('reverts', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           this.cappedDelivery.multiSend(addresses, amounts, { from: tokenOwner })
         );
       });
@@ -238,7 +238,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
 
     describe('if another account is calling', function () {
       it('reverts', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           this.cappedDelivery.multiSend(addresses, amounts, { from: anotherAccount })
         );
       });

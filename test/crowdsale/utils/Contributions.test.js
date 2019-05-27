@@ -1,4 +1,4 @@
-const { BN, ether, shouldFail } = require('openzeppelin-test-helpers');
+const { BN, ether, expectRevert } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
@@ -150,7 +150,7 @@ contract('Contributions', function (
       assert.equal(tokenBalance, 0);
       assert.equal(weiContribution, 0);
 
-      await shouldFail.reverting(
+      await expectRevert.unspecified(
         this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: thirdParty })
       );
 

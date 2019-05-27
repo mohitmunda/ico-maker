@@ -1,4 +1,4 @@
-const { BN, constants, expectEvent, shouldFail } = require('openzeppelin-test-helpers');
+const { BN, constants, expectEvent, expectRevert } = require('openzeppelin-test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 function shouldBehaveLikeERC20Mintable (minter, [anyone]) {
@@ -40,7 +40,7 @@ function shouldBehaveLikeERC20Mintable (minter, [anyone]) {
         const from = anyone;
 
         it('reverts', async function () {
-          await shouldFail.reverting(this.token.mint(anyone, amount, { from }));
+          await expectRevert.unspecified(this.token.mint(anyone, amount, { from }));
         });
       });
     });

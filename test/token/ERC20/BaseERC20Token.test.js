@@ -1,4 +1,4 @@
-const { BN, shouldFail } = require('openzeppelin-test-helpers');
+const { BN, expectRevert } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeBaseERC20Token } = require('./behaviours/BaseERC20Token.behaviour');
 
@@ -14,7 +14,7 @@ contract('BaseERC20Token', function ([owner, anotherAccount, minter, operator, r
   context('creating valid token', function () {
     describe('as a ERC20Capped', function () {
       it('requires a non-zero cap', async function () {
-        await shouldFail.reverting(
+        await expectRevert.unspecified(
           BaseToken.new(_name, _symbol, _decimals, 0, _initialSupply, { from: owner })
         );
       });

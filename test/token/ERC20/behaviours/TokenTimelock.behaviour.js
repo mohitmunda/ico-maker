@@ -1,4 +1,4 @@
-const { shouldFail, time } = require('openzeppelin-test-helpers');
+const { expectRevert, time } = require('openzeppelin-test-helpers');
 
 function shouldBehaveLikeTokenTimelock ([_, minter, beneficiary], amount) {
   context('once deployed', function () {
@@ -9,12 +9,12 @@ function shouldBehaveLikeTokenTimelock ([_, minter, beneficiary], amount) {
     });
 
     it('cannot be released before time limit', async function () {
-      await shouldFail.reverting(this.timelock.release());
+      await expectRevert.unspecified(this.timelock.release());
     });
 
     it('cannot be released just before time limit', async function () {
       await time.increaseTo(this.releaseTime.sub(time.duration.seconds(3)));
-      await shouldFail.reverting(this.timelock.release());
+      await expectRevert.unspecified(this.timelock.release());
     });
 
     it('can be released just after limit', async function () {
@@ -32,7 +32,7 @@ function shouldBehaveLikeTokenTimelock ([_, minter, beneficiary], amount) {
     it('cannot be released twice', async function () {
       await time.increaseTo(this.releaseTime.add(time.duration.years(1)));
       await this.timelock.release();
-      await shouldFail.reverting(this.timelock.release());
+      await expectRevert.unspecified(this.timelock.release());
       (await this.token.balanceOf(beneficiary)).should.be.bignumber.equal(amount);
     });
   });

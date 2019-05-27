@@ -1,4 +1,4 @@
-const { BN, shouldFail, time } = require('openzeppelin-test-helpers');
+const { BN, expectRevert, time } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenTimelock } = require('./behaviours/TokenTimelock.behaviour');
 
@@ -15,7 +15,7 @@ contract('BaseTimelock', function ([_, minter, beneficiary]) {
   context('creating a valid timelock', function () {
     it('rejects a release time in the past', async function () {
       const pastReleaseTime = (await time.latest()).sub(time.duration.years(1));
-      await shouldFail.reverting(
+      await expectRevert.unspecified(
         BaseTimelock.new(this.token.address, beneficiary, pastReleaseTime)
       );
     });

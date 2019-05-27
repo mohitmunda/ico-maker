@@ -1,4 +1,4 @@
-const { shouldFail } = require('openzeppelin-test-helpers');
+const { expectRevert } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
@@ -65,12 +65,12 @@ function shouldBehaveLikeBaseERC20Token (
 
         describe('if it is not an operator', function () {
           it('should fail transfer', async function () {
-            await shouldFail.reverting(this.token.transfer(recipient, _initialSupply, { from: thirdParty }));
+            await expectRevert.unspecified(this.token.transfer(recipient, _initialSupply, { from: thirdParty }));
           });
 
           it('should fail transferFrom', async function () {
             await this.token.approve(anotherAccount, _initialSupply, { from: thirdParty });
-            await shouldFail.reverting(
+            await expectRevert.unspecified(
               this.token.transferFrom(thirdParty, recipient, _initialSupply, { from: anotherAccount })
             );
           });
@@ -143,7 +143,7 @@ function shouldBehaveLikeBaseERC20Token (
       });
 
       it('shouldn\'t mint more tokens', async function () {
-        await shouldFail.reverting(this.token.mint(thirdParty, 1, { from: minter }));
+        await expectRevert.unspecified(this.token.mint(thirdParty, 1, { from: minter }));
       });
     });
 
