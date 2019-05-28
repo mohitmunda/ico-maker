@@ -1,4 +1,4 @@
-const { expectRevert } = require('openzeppelin-test-helpers');
+const { expectRevert, expectEvent } = require('openzeppelin-test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
@@ -94,7 +94,11 @@ function shouldBehaveLikeBaseERC20Token (
 
       describe('if transfer are enabled', function () {
         beforeEach(async function () {
-          await this.token.enableTransfer({ from: owner });
+          ({ logs: this.logs } = await this.token.enableTransfer({ from: owner }));
+        });
+
+        it('should emit TransferEnabled', async function () {
+          expectEvent.inLogs(this.logs, 'TransferEnabled');
         });
 
         it('transferEnabled should be true', async function () {
@@ -131,11 +135,11 @@ function shouldBehaveLikeBaseERC20Token (
 
     context('after finish minting', function () {
       beforeEach(async function () {
-        await this.token.finishMinting({ from: owner });
+        ({ logs: this.logs } = await this.token.finishMinting({ from: owner }));
       });
 
-      it('transferEnabled should be true', async function () {
-        (await this.token.transferEnabled()).should.be.equal(true);
+      it('should emit MintFinished', async function () {
+        expectEvent.inLogs(this.logs, 'MintFinished');
       });
 
       it('mintingFinished should be true', async function () {

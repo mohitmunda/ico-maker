@@ -80,6 +80,7 @@ contract('SpenderCappedDelivery', function (accounts) {
         describe('sending tokens if spender has not allowance', function () {
           it('reverts', async function () {
             await this.token.finishMinting({ from: tokenOwner });
+            await this.token.enableTransfer({ from: tokenOwner });
             await expectRevert.unspecified(
               this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
             );
@@ -90,6 +91,7 @@ contract('SpenderCappedDelivery', function (accounts) {
           beforeEach(async function () {
             await this.token.approve(this.cappedDelivery.address, tokenCap, { from: tokenOwner });
             await this.token.finishMinting({ from: tokenOwner });
+            await this.token.enableTransfer({ from: tokenOwner });
           });
 
           shouldBehaveLikeCappedDelivery(accounts, cap, allowMultipleSend);

@@ -111,10 +111,8 @@ contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, OperatorRo
      */
     function finishMinting() public onlyOwner canMint {
         _mintingFinished = true;
-        _transferEnabled = true;
 
         emit MintFinished();
-        emit TransferEnabled();
     }
 
     /**

@@ -66,6 +66,7 @@ contract('CappedDelivery', function (accounts) {
         context('like a CappedDelivery', function () {
           beforeEach(async function () {
             await this.token.finishMinting({ from: tokenOwner });
+            await this.token.enableTransfer({ from: tokenOwner });
           });
 
           shouldBehaveLikeCappedDelivery(accounts, cap, allowMultipleSend);
