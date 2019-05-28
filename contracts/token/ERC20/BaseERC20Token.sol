@@ -107,7 +107,7 @@ contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, OperatorRo
     }
 
     /**
-     * @dev Function to stop minting new tokens and enable transfer.
+     * @dev Function to stop minting new tokens.
      */
     function finishMinting() public onlyOwner canMint {
         _mintingFinished = true;
