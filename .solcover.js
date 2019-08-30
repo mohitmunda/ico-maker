@@ -5,7 +5,7 @@ module.exports = {
     copyPackages: [
         'erc-payable-token',
         'eth-token-recover',
-        'openzeppelin-solidity',
+        '@openzeppelin/contracts',
     ],
     skipFiles: [
         'mocks'
