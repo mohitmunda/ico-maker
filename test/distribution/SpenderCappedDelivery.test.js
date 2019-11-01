@@ -30,7 +30,7 @@ contract('SpenderCappedDelivery', function (accounts) {
       describe('if token address is the zero address', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner })
+            CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -38,7 +38,7 @@ contract('SpenderCappedDelivery', function (accounts) {
       describe('if cap is zero', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(this.token.address, 0, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner })
+            CappedDelivery.new(this.token.address, 0, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -46,7 +46,7 @@ contract('SpenderCappedDelivery', function (accounts) {
       describe('if wallet address is the zero address', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(this.token.address, cap, allowMultipleSend, ZERO_ADDRESS, { from: cappedDeliveryOwner })
+            CappedDelivery.new(this.token.address, cap, allowMultipleSend, ZERO_ADDRESS, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -58,7 +58,7 @@ contract('SpenderCappedDelivery', function (accounts) {
             cap,
             allowMultipleSend,
             tokenOwner,
-            { from: cappedDeliveryOwner }
+            { from: cappedDeliveryOwner },
           );
 
           await this.token.mint(tokenOwner, tokenCap, { from: tokenOwner });
@@ -72,7 +72,7 @@ contract('SpenderCappedDelivery', function (accounts) {
         describe('sending tokens if minting is not finished', function () {
           it('reverts', async function () {
             await expectRevert.unspecified(
-              this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
+              this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner }),
             );
           });
         });
@@ -82,7 +82,7 @@ contract('SpenderCappedDelivery', function (accounts) {
             await this.token.finishMinting({ from: tokenOwner });
             await this.token.enableTransfer({ from: tokenOwner });
             await expectRevert.unspecified(
-              this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
+              this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner }),
             );
           });
         });

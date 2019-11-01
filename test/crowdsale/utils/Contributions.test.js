@@ -7,7 +7,7 @@ const { shouldBehaveLikeRemoveRole } = require('../../access/roles/RemoveRole.be
 const Contributions = artifacts.require('Contributions');
 
 contract('Contributions', function (
-  [_, owner, operator, futureOperator, anotherFutureOperator, thirdParty, anotherThirdParty]
+  [_, owner, operator, futureOperator, anotherFutureOperator, thirdParty, anotherThirdParty],
 ) {
   const tokenToAdd = new BN(100);
   const ethToAdd = ether('1');
@@ -35,7 +35,7 @@ contract('Contributions', function (
         thirdParty,
         ethToAdd.muln(3),
         tokenToAdd.muln(3),
-        { from: operator }
+        { from: operator },
       );
 
       tokenBalance = await this.contributions.tokenBalance(thirdParty);
@@ -55,7 +55,7 @@ contract('Contributions', function (
         thirdParty,
         ethToAdd.muln(3),
         tokenToAdd.muln(3),
-        { from: operator }
+        { from: operator },
       );
 
       totalSoldTokens = await this.contributions.totalSoldTokens();
@@ -106,13 +106,13 @@ contract('Contributions', function (
         owner,
         ethToAdd.muln(3),
         tokenToAdd.muln(3),
-        { from: operator }
+        { from: operator },
       );
       await this.contributions.addBalance(
         thirdParty,
         ethToAdd.muln(4),
         tokenToAdd.muln(4),
-        { from: operator }
+        { from: operator },
       );
       await this.contributions.addBalance(anotherThirdParty, ethToAdd, tokenToAdd, { from: operator });
       await this.contributions.addBalance(anotherThirdParty, ethToAdd, tokenToAdd, { from: operator });
@@ -151,7 +151,7 @@ contract('Contributions', function (
       assert.equal(weiContribution, 0);
 
       await expectRevert.unspecified(
-        this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: thirdParty })
+        this.contributions.addBalance(thirdParty, ethToAdd, tokenToAdd, { from: thirdParty }),
       );
 
       (await this.contributions.contributorExists(thirdParty)).should.be.equal(false);

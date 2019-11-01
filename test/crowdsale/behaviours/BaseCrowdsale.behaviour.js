@@ -86,7 +86,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       it('should fail if less than minimum contribution', async function () {
         await expectRevert.unspecified(
-          this.crowdsale.sendTransaction({ value: minimumContribution.subn(1), from: investor })
+          this.crowdsale.sendTransaction({ value: minimumContribution.subn(1), from: investor }),
         );
       });
     });
@@ -127,7 +127,7 @@ function shouldBehaveLikeBaseCrowdsale ([owner, investor, wallet, purchaser, thi
 
       it('should fail if less than minimum contribution', async function () {
         await expectRevert.unspecified(
-          this.crowdsale.buyTokens(investor, { value: minimumContribution.subn(1), from: purchaser })
+          this.crowdsale.buyTokens(investor, { value: minimumContribution.subn(1), from: purchaser }),
         );
       });
     });

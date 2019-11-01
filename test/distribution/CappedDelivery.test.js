@@ -30,7 +30,7 @@ contract('CappedDelivery', function (accounts) {
       describe('if token address is the zero address', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, { from: cappedDeliveryOwner })
+            CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -38,7 +38,7 @@ contract('CappedDelivery', function (accounts) {
       describe('if cap is zero', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(this.token.address, 0, allowMultipleSend, { from: cappedDeliveryOwner })
+            CappedDelivery.new(this.token.address, 0, allowMultipleSend, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -49,7 +49,7 @@ contract('CappedDelivery', function (accounts) {
             this.token.address,
             cap,
             allowMultipleSend,
-            { from: cappedDeliveryOwner }
+            { from: cappedDeliveryOwner },
           );
 
           await this.token.mint(this.cappedDelivery.address, tokenCap, { from: tokenOwner });
@@ -58,7 +58,7 @@ contract('CappedDelivery', function (accounts) {
         describe('sending tokens if minting is not finished', function () {
           it('reverts', async function () {
             await expectRevert.unspecified(
-              this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner })
+              this.cappedDelivery.multiSend([receiver], [100], { from: cappedDeliveryOwner }),
             );
           });
         });

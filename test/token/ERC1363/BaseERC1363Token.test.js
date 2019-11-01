@@ -17,7 +17,7 @@ contract('BaseERC1363Token', function ([owner, anotherAccount, minter, operator,
     describe('as a ERC20Capped', function () {
       it('requires a non-zero cap', async function () {
         await expectRevert.unspecified(
-          BaseToken.new(_name, _symbol, _decimals, 0, _initialSupply, { from: owner })
+          BaseToken.new(_name, _symbol, _decimals, 0, _initialSupply, { from: owner }),
         );
       });
     });
@@ -64,7 +64,7 @@ contract('BaseERC1363Token', function ([owner, anotherAccount, minter, operator,
 
     shouldBehaveLikeBaseERC20Token(
       [owner, anotherAccount, minter, operator, recipient, thirdParty],
-      [_name, _symbol, _decimals, _cap, _initialSupply]
+      [_name, _symbol, _decimals, _cap, _initialSupply],
     );
   });
 

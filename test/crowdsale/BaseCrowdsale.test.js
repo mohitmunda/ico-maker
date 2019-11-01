@@ -40,7 +40,7 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
       cap,
       minimumContribution,
       this.token.address,
-      this.contributions.address
+      this.contributions.address,
     );
 
     await this.token.mint(this.crowdsale.address, totalSupply);
@@ -76,8 +76,8 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -91,8 +91,8 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -106,8 +106,8 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
             cap,
             minimumContribution,
             ZERO_ADDRESS,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -121,8 +121,8 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -136,8 +136,8 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -151,8 +151,8 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
             cap,
             minimumContribution,
             this.token.address,
-            ZERO_ADDRESS
-          )
+            ZERO_ADDRESS,
+          ),
         );
       });
 
@@ -166,8 +166,8 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
             0,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
     });

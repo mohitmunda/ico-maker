@@ -275,7 +275,7 @@ function shouldBehaveLikeERC20 ([owner, recipient, anotherAccount], initialBalan
 
           it('reverts when more than the full allowance is removed', async function () {
             await expectRevert.unspecified(
-              this.token.decreaseAllowance(spender, approvedAmount.addn(1), { from: owner })
+              this.token.decreaseAllowance(spender, approvedAmount.addn(1), { from: owner }),
             );
           });
         });

@@ -16,7 +16,7 @@ contract('BaseTimelock', function ([_, minter, beneficiary]) {
     it('rejects a release time in the past', async function () {
       const pastReleaseTime = (await time.latest()).sub(time.duration.years(1));
       await expectRevert.unspecified(
-        BaseTimelock.new(this.token.address, beneficiary, pastReleaseTime)
+        BaseTimelock.new(this.token.address, beneficiary, pastReleaseTime),
       );
     });
   });

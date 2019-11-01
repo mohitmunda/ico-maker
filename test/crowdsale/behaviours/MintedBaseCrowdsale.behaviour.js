@@ -6,7 +6,7 @@ const { shouldBehaveLikeMintedCrowdsale } = require('./MintedCrowdsale.behaviour
 function shouldBehaveLikeMintedBaseCrowdsale (
   [owner, investor, wallet, purchaser, thirdParty],
   rate,
-  minimumContribution
+  minimumContribution,
 ) {
   const value = minimumContribution;
 

@@ -38,7 +38,7 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
       cap,
       minimumContribution,
       this.token.address,
-      this.contributions.address
+      this.contributions.address,
     );
 
     await this.token.addMinter(this.crowdsale.address);
@@ -77,8 +77,8 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -92,8 +92,8 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -107,8 +107,8 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
             cap,
             minimumContribution,
             ZERO_ADDRESS,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -122,8 +122,8 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -137,8 +137,8 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
             cap,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
 
@@ -152,8 +152,8 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
             cap,
             minimumContribution,
             this.token.address,
-            ZERO_ADDRESS
-          )
+            ZERO_ADDRESS,
+          ),
         );
       });
 
@@ -167,8 +167,8 @@ contract('MintedBaseCrowdsale', function ([owner, investor, wallet, purchaser, t
             0,
             minimumContribution,
             this.token.address,
-            this.contributions.address
-          )
+            this.contributions.address,
+          ),
         );
       });
     });

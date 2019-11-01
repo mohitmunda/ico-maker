@@ -11,7 +11,7 @@ const { shouldBehaveLikeRemoveRole } = require('../../../access/roles/RemoveRole
 
 function shouldBehaveLikeBaseERC20Token (
   [owner, anotherAccount, minter, operator, recipient, thirdParty],
-  [_name, _symbol, _decimals, _cap, _initialSupply]
+  [_name, _symbol, _decimals, _cap, _initialSupply],
 ) {
   context('like a ERC20Detailed', function () {
     shouldBehaveLikeERC20Detailed(_name, _symbol, _decimals);
@@ -71,7 +71,7 @@ function shouldBehaveLikeBaseERC20Token (
           it('should fail transferFrom', async function () {
             await this.token.approve(anotherAccount, _initialSupply, { from: thirdParty });
             await expectRevert.unspecified(
-              this.token.transferFrom(thirdParty, recipient, _initialSupply, { from: anotherAccount })
+              this.token.transferFrom(thirdParty, recipient, _initialSupply, { from: anotherAccount }),
             );
           });
         });

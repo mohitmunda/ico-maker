@@ -92,7 +92,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
         }
         const remainingTokens = await this.cappedDelivery.remainingTokens();
         remainingTokens.should.be.bignumber.equal(
-          cap.sub(totalGivenTokens)
+          cap.sub(totalGivenTokens),
         );
       });
 
@@ -198,7 +198,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
         it('reverts', async function () {
           const moreThanTheCap = cap.addn(1);
           await expectRevert.unspecified(
-            this.cappedDelivery.multiSend([addresses[1]], [moreThanTheCap], { from: cappedDeliveryOwner })
+            this.cappedDelivery.multiSend([addresses[1]], [moreThanTheCap], { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -206,7 +206,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
       describe('if addresses are empty', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            this.cappedDelivery.multiSend([], amounts, { from: cappedDeliveryOwner })
+            this.cappedDelivery.multiSend([], amounts, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -214,7 +214,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
       describe('if amounts are empty', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            this.cappedDelivery.multiSend(addresses, [], { from: cappedDeliveryOwner })
+            this.cappedDelivery.multiSend(addresses, [], { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -222,7 +222,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
       describe('if amounts length is not equal to addresses length', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            this.cappedDelivery.multiSend([addresses[0]], [amounts[0], amounts[1]], { from: cappedDeliveryOwner })
+            this.cappedDelivery.multiSend([addresses[0]], [amounts[0], amounts[1]], { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -231,7 +231,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
     describe('if token owner is calling', function () {
       it('reverts', async function () {
         await expectRevert.unspecified(
-          this.cappedDelivery.multiSend(addresses, amounts, { from: tokenOwner })
+          this.cappedDelivery.multiSend(addresses, amounts, { from: tokenOwner }),
         );
       });
     });
@@ -239,7 +239,7 @@ function shouldBehaveLikeCappedDelivery (accounts, cap, allowMultipleSend) {
     describe('if another account is calling', function () {
       it('reverts', async function () {
         await expectRevert.unspecified(
-          this.cappedDelivery.multiSend(addresses, amounts, { from: anotherAccount })
+          this.cappedDelivery.multiSend(addresses, amounts, { from: anotherAccount }),
         );
       });
     });
