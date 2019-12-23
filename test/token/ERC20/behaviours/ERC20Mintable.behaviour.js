@@ -1,4 +1,4 @@
-const { BN, constants, expectEvent, expectRevert } = require('openzeppelin-test-helpers');
+const { BN, constants, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 function shouldBehaveLikeERC20Mintable (minter, [anyone]) {

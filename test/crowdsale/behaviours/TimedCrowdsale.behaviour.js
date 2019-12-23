@@ -1,4 +1,4 @@
-const { expectEvent, expectRevert, time } = require('openzeppelin-test-helpers');
+const { expectEvent, expectRevert, time } = require('@openzeppelin/test-helpers');
 
 function shouldBehaveLikeTimedCrowdsale ([owner, investor, wallet, purchaser], rate, value) {
   it('should be ended only after end', async function () {

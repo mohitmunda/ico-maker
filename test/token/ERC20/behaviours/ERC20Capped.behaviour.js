@@ -1,4 +1,4 @@
-const { expectRevert } = require('openzeppelin-test-helpers');
+const { expectRevert } = require('@openzeppelin/test-helpers');
 
 function shouldBehaveLikeERC20Capped (minter, [anyone], cap) {
   describe('capped token', function () {

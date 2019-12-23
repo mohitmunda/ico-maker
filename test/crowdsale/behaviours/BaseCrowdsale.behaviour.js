@@ -1,4 +1,4 @@
-const { BN, expectRevert, time } = require('openzeppelin-test-helpers');
+const { BN, expectRevert, time } = require('@openzeppelin/test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 const { shouldBehaveLikeTimedCrowdsale } = require('./TimedCrowdsale.behaviour');

@@ -1,4 +1,4 @@
-const { expectRevert, expectEvent } = require('openzeppelin-test-helpers');
+const { expectRevert, expectEvent } = require('@openzeppelin/test-helpers');
 
 const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 

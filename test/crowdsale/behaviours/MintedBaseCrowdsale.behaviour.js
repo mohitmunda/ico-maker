@@ -1,4 +1,4 @@
-const { time } = require('openzeppelin-test-helpers');
+const { time } = require('@openzeppelin/test-helpers');
 
 const { shouldBehaveLikeBaseCrowdsale } = require('./BaseCrowdsale.behaviour');
 const { shouldBehaveLikeMintedCrowdsale } = require('./MintedCrowdsale.behaviour');

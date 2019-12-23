@@ -1,4 +1,4 @@
-const { BN, constants, expectRevert } = require('openzeppelin-test-helpers');
+const { BN, constants, expectRevert } = require('@openzeppelin/test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');
@@ -19,8 +19,6 @@ contract('MintedCappedDelivery', function (accounts) {
   const tokenCap = new BN(100000);
   const initialSupply = new BN(0);
 
-  const cap = new BN(20000);
-
   beforeEach(async function () {
     this.token = await BaseToken.new(name, symbol, decimals, tokenCap, initialSupply, { from: tokenOwner });
   });
@@ -30,7 +28,7 @@ contract('MintedCappedDelivery', function (accounts) {
       describe('if token address is the zero address', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, { from: cappedDeliveryOwner }),
+            CappedDelivery.new(ZERO_ADDRESS, tokenCap, allowMultipleSend, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -47,7 +45,7 @@ contract('MintedCappedDelivery', function (accounts) {
         beforeEach(async function () {
           this.cappedDelivery = await CappedDelivery.new(
             this.token.address,
-            cap,
+            tokenCap,
             allowMultipleSend,
             { from: cappedDeliveryOwner },
           );
@@ -65,7 +63,7 @@ contract('MintedCappedDelivery', function (accounts) {
         });
 
         context('like a CappedDelivery', function () {
-          shouldBehaveLikeCappedDelivery(accounts, cap, allowMultipleSend);
+          shouldBehaveLikeCappedDelivery(accounts, tokenCap, allowMultipleSend);
         });
       });
     });

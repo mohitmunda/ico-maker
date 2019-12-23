@@ -1,4 +1,4 @@
-pragma solidity ^0.5.12;
+pragma solidity ^0.5.15;
 
 import "@openzeppelin/contracts/crowdsale/emission/MintedCrowdsale.sol";
 import "./BaseCrowdsale.sol";

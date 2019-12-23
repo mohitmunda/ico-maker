@@ -1,4 +1,4 @@
-const { expectRevert, time } = require('openzeppelin-test-helpers');
+const { expectRevert, time } = require('@openzeppelin/test-helpers');
 
 function shouldBehaveLikeTokenTimelock ([_, minter, beneficiary], amount) {
   context('once deployed', function () {

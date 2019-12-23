@@ -1,4 +1,4 @@
-const { BN, constants, ether, expectRevert, time } = require('openzeppelin-test-helpers');
+const { BN, constants, ether, expectRevert, time } = require('@openzeppelin/test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeMintedBaseCrowdsale } = require('./behaviours/MintedBaseCrowdsale.behaviour');

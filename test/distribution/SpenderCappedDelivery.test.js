@@ -1,4 +1,4 @@
-const { BN, constants, expectRevert } = require('openzeppelin-test-helpers');
+const { BN, constants, expectRevert } = require('@openzeppelin/test-helpers');
 const { ZERO_ADDRESS } = constants;
 
 const { shouldBehaveLikeCappedDelivery } = require('./CappedDelivery.behaviour');
@@ -19,8 +19,6 @@ contract('SpenderCappedDelivery', function (accounts) {
   const tokenCap = new BN(100000);
   const initialSupply = new BN(0);
 
-  const cap = new BN(20000);
-
   beforeEach(async function () {
     this.token = await BaseToken.new(name, symbol, decimals, tokenCap, initialSupply, { from: tokenOwner });
   });
@@ -30,7 +28,7 @@ contract('SpenderCappedDelivery', function (accounts) {
       describe('if token address is the zero address', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(ZERO_ADDRESS, cap, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner }),
+            CappedDelivery.new(ZERO_ADDRESS, tokenCap, allowMultipleSend, tokenOwner, { from: cappedDeliveryOwner }),
           );
         });
       });
@@ -46,7 +44,9 @@ contract('SpenderCappedDelivery', function (accounts) {
       describe('if wallet address is the zero address', function () {
         it('reverts', async function () {
           await expectRevert.unspecified(
-            CappedDelivery.new(this.token.address, cap, allowMultipleSend, ZERO_ADDRESS, { from: cappedDeliveryOwner }),
+            CappedDelivery.new(
+              this.token.address, tokenCap, allowMultipleSend, ZERO_ADDRESS, { from: cappedDeliveryOwner },
+            ),
           );
         });
       });
@@ -55,7 +55,7 @@ contract('SpenderCappedDelivery', function (accounts) {
         beforeEach(async function () {
           this.cappedDelivery = await CappedDelivery.new(
             this.token.address,
-            cap,
+            tokenCap,
             allowMultipleSend,
             tokenOwner,
             { from: cappedDeliveryOwner },
@@ -94,7 +94,7 @@ contract('SpenderCappedDelivery', function (accounts) {
             await this.token.enableTransfer({ from: tokenOwner });
           });
 
-          shouldBehaveLikeCappedDelivery(accounts, cap, allowMultipleSend);
+          shouldBehaveLikeCappedDelivery(accounts, tokenCap, allowMultipleSend);
         });
       });
     });

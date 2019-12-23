@@ -1,4 +1,4 @@
-const { BN, expectRevert } = require('openzeppelin-test-helpers');
+const { BN, expectRevert } = require('@openzeppelin/test-helpers');
 
 const { shouldBehaveLikeERC1363 } = require('erc-payable-token/test/token/ERC1363/ERC1363.behaviour');
 
