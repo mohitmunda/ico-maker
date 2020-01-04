@@ -1,4 +1,4 @@
-pragma solidity ^0.5.15;
+pragma solidity ^0.5.16;
 
 import "erc-payable-token/contracts/token/ERC1363/ERC1363.sol";
 import "../ERC20/BaseERC20Token.sol";
