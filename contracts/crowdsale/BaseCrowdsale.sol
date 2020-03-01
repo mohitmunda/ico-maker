@@ -1,8 +1,9 @@
 pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/crowdsale/validation/TimedCrowdsale.sol";
-import "@openzeppelin/contracts/crowdsale/validation/CappedCrowdsale.sol";
+
+import "./src//validation/TimedCrowdsale.sol";
+import "./src//validation/CappedCrowdsale.sol";
 import "./utils/Contributions.sol";
 
 /**

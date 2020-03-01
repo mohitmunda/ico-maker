@@ -4,6 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Capped.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "eth-token-recover/contracts/TokenRecover.sol";
+import "../../access/roles/MinterRole.sol";
 import "../../access/roles/OperatorRole.sol";
 
 /**
@@ -11,7 +12,7 @@ import "../../access/roles/OperatorRole.sol";
  * @author Vittorio Minacori (https://github.com/vittominacori)
  * @dev Implementation of the BaseERC20Token
  */
-contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, OperatorRole, TokenRecover {
+contract BaseERC20Token is ERC20Detailed, ERC20Capped, ERC20Burnable, MinterRole, OperatorRole, TokenRecover {
 
     event MintFinished();
     event TransferEnabled();

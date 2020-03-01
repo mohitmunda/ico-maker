@@ -1,8 +1,9 @@
 pragma solidity ^0.6.0;
 
+import "@openzeppelin/contracts/GSN/Context.sol";
 import "@openzeppelin/contracts/access/Roles.sol";
 
-contract OperatorRole {
+contract OperatorRole is Context {
     using Roles for Roles.Role;
 
     event OperatorAdded(address indexed account);
@@ -11,11 +12,11 @@ contract OperatorRole {
     Roles.Role private _operators;
 
     constructor() internal {
-        _addOperator(msg.sender);
+        _addOperator(_msgSender());
     }
 
     modifier onlyOperator() {
-        require(isOperator(msg.sender));
+        require(isOperator(_msgSender()));
         _;
     }
 
@@ -28,7 +29,7 @@ contract OperatorRole {
     }
 
     function renounceOperator() public {
-        _removeOperator(msg.sender);
+        _removeOperator(_msgSender());
     }
 
     function _addOperator(address account) internal {
