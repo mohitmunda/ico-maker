@@ -37,7 +37,7 @@ npm install ico-maker
 [BaseERC20Token](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC20/BaseERC20Token.sol) is an ERC20 token with a lot of stuffs like Capped, Mintable, Burnable behaviours.
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/token/ERC20/BaseERC20Token.sol";
 
@@ -60,7 +60,7 @@ contract MyToken is BaseERC20Token {
 [BaseERC1363Token](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC1363/BaseERC1363Token.sol) is a BaseERC20Token token with a ERC1363 Payable Token behaviours.
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/token/ERC1363/BaseERC1363Token.sol";
 
@@ -83,7 +83,7 @@ contract MyToken is BaseERC1363Token {
 [Contributions](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/utils/Contributions.sol) is an utility Smart Contract where to store additional data about crowdsale like the wei contributed or the token balance of each address.
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/crowdsale/utils/Contributions.sol";
 
@@ -95,7 +95,7 @@ contract MyContributions is Contributions {}
 [BaseCrowdsale](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/BaseCrowdsale.sol) is an extensible Crowdsale contract with Timed and Capped behaviours.
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/crowdsale/BaseCrowdsale.sol";
 
@@ -130,7 +130,7 @@ contract MyCrowdsale is BaseCrowdsale {
 [MintedBaseCrowdsale](https://github.com/vittominacori/ico-maker/blob/master/contracts/crowdsale/MintedBaseCrowdsale.sol) is an extensible BaseCrowdsale contract with Minted behaviours.
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/crowdsale/MintedBaseCrowdsale.sol";
 
@@ -165,7 +165,7 @@ contract MyCrowdsale is MintedBaseCrowdsale {
 [CappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/CappedDelivery.sol) is a Capped Smart Contract to transfer tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/distribution/CappedDelivery.sol";
 
@@ -182,7 +182,7 @@ contract MyAirdrop is CappedDelivery {
 [MintedCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/MintedCappedDelivery.sol) is a Capped Smart Contract to mint tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/distribution/MintedCappedDelivery.sol";
 
@@ -199,7 +199,7 @@ contract MyAirdrop is MintedCappedDelivery {
 [SpenderCappedDelivery](https://github.com/vittominacori/ico-maker/blob/master/contracts/distribution/SpenderCappedDelivery.sol) is a Capped Smart Contract to transferFrom tokens (i.e. for Airdrop or Bounty Program).
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/distribution/SpenderCappedDelivery.sol";
 
@@ -216,7 +216,7 @@ contract MyAirdrop is SpenderCappedDelivery {
 [BaseTimelock](https://github.com/vittominacori/ico-maker/blob/master/contracts/token/ERC20/BaseTimelock.sol) is a TokenTimelock which is a token holder contract that will allow a beneficiary to extract the tokens after a given release time.
 
 ```solidity
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.0;
 
 import "ico-maker/contracts/token/ERC20/BaseTimelock.sol";
 

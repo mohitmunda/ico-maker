@@ -1,6 +1,6 @@
 {
   "name": "ico-maker",
-  "version": "2.5.0",
+  "version": "3.0.0-beta",
   "description": "Smart Contracts to build your ICO solution and issue your ERC20 Token",
   "main": "truffle-config.js",
   "files": [
@@ -56,10 +56,10 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@nomiclabs/buidler": "^1.1.2",
-    "@nomiclabs/buidler-ganache": "^1.1.2",
-    "@nomiclabs/buidler-truffle5": "^1.1.2",
-    "@nomiclabs/buidler-web3": "^1.1.2",
+    "@nomiclabs/buidler": "^1.2.0",
+    "@nomiclabs/buidler-ganache": "^1.2.0",
+    "@nomiclabs/buidler-truffle5": "^1.2.0",
+    "@nomiclabs/buidler-web3": "^1.2.0",
     "@openzeppelin/test-helpers": "^0.5.4",
     "chai": "^4.2.0",
     "coveralls": "^3.0.9",
@@ -72,16 +72,16 @@
     "eslint-plugin-standard": "^4.0.1",
     "ethereumjs-util": "^6.2.0",
     "ethjs-abi": "^0.2.1",
-    "ganache-cli": "^6.9.0",
-    "pify": "^4.0.1",
+    "ganache-cli": "^6.9.1",
+    "pify": "^5.0.0",
     "solhint": "^2.3.0",
-    "solidity-coverage": "^0.7.1",
-    "truffle": "^5.1.11",
+    "solidity-coverage": "^0.7.2",
+    "truffle": "^5.1.15",
     "vuepress": "^0.14.11",
     "web3": "^1.2.6"
   },
   "dependencies": {
-    "erc-payable-token": "2.5.0",
-    "eth-token-recover": "2.5.0"
+    "erc-payable-token": "vittominacori/erc1363-payable-token#next",
+    "eth-token-recover": "vittominacori/eth-token-recover#next"
   }
 }
