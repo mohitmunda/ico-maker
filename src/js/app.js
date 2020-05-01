@@ -33,49 +33,9 @@ App = {
       App.web3Provider.enable();
     }
 
-    $.getJSON('BaseERC20Token.json', function (data) {
-      App.contracts.BaseERC20Token = TruffleContract(data);
-      App.contracts.BaseERC20Token.setProvider(App.web3Provider);
-    });
-
-    $.getJSON('BaseERC1363Token.json', function (data) {
-      App.contracts.BaseERC1363Token = TruffleContract(data);
-      App.contracts.BaseERC1363Token.setProvider(App.web3Provider);
-    });
-
-    $.getJSON('BaseTimelock.json', function (data) {
-      App.contracts.BaseTimelock = TruffleContract(data);
-      App.contracts.BaseTimelock.setProvider(App.web3Provider);
-    });
-
-    $.getJSON('Contributions.json', function (data) {
-      App.contracts.Contributions = TruffleContract(data);
-      App.contracts.Contributions.setProvider(App.web3Provider);
-    });
-
     $.getJSON('BaseCrowdsale.json', function (data) {
       App.contracts.BaseCrowdsale = TruffleContract(data);
       App.contracts.BaseCrowdsale.setProvider(App.web3Provider);
-    });
-
-    $.getJSON('MintedBaseCrowdsale.json', function (data) {
-      App.contracts.MintedBaseCrowdsale = TruffleContract(data);
-      App.contracts.MintedBaseCrowdsale.setProvider(App.web3Provider);
-    });
-
-    $.getJSON('CappedDelivery.json', function (data) {
-      App.contracts.CappedDelivery = TruffleContract(data);
-      App.contracts.CappedDelivery.setProvider(App.web3Provider);
-    });
-
-    $.getJSON('MintedCappedDelivery.json', function (data) {
-      App.contracts.MintedCappedDelivery = TruffleContract(data);
-      App.contracts.MintedCappedDelivery.setProvider(App.web3Provider);
-    });
-
-    $.getJSON('SpenderCappedDelivery.json', function (data) {
-      App.contracts.SpenderCappedDelivery = TruffleContract(data);
-      App.contracts.SpenderCappedDelivery.setProvider(App.web3Provider);
     });
   },
 };

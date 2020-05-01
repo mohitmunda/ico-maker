@@ -13,9 +13,9 @@ allFiredEvents
 scTopics
 
 # Coverage directory used by tools like istanbul
-coverage
+/coverage
+/coverageEnv
 coverage.json
-coverageEnv
 
 # node-waf configuration
 .lock-wscript
@@ -32,10 +32,6 @@ npm-debug.log
 # truffle build directory
 /build
 
-# Buidler files
-/artifacts
-/cache
-
 # macOS
 .DS_Store
 
@@ -48,5 +44,9 @@ package-lock.json
 # IntelliJ IDE
 .idea
 
+# Buidler files
+/artifacts
+/cache
+
 # vuepress
-docs/.vuepress/dist/
+/docs/.vuepress/dist/

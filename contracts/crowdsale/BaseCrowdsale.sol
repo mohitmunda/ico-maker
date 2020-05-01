@@ -1,119 +1,198 @@
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
-import "./src//validation/TimedCrowdsale.sol";
-import "./src//validation/CappedCrowdsale.sol";
-import "./utils/Contributions.sol";
+import "@openzeppelin/contracts/GSN/Context.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title BaseCrowdsale
- * @author Vittorio Minacori (https://github.com/vittominacori)
- * @dev Extends from Crowdsale with more stuffs like TimedCrowdsale, CappedCrowdsale.
- *  Base for any other Crowdsale contract
+ * @dev BaseCrowdsale is a base contract for managing a token crowdsale,
+ * allowing investors to purchase tokens with ether. This contract implements
+ * such functionality in its most fundamental form and can be extended to provide additional
+ * functionality and/or custom behavior.
+ * The external interface represents the basic interface for purchasing tokens, and conforms
+ * the base architecture for crowdsales. It is *not* intended to be modified / overridden.
+ * The internal interface conforms the extensible and modifiable surface of crowdsales. Override
+ * the methods to add functionality. Consider using 'super' where appropriate to concatenate
+ * behavior.
  */
-contract BaseCrowdsale is TimedCrowdsale, CappedCrowdsale, TokenRecover {
+contract BaseCrowdsale is Context, ReentrancyGuard {
+    using SafeMath for uint256;
+    using SafeERC20 for IERC20;
 
-    // reference to Contributions contract
-    Contributions private _contributions;
+    // The token being sold
+    IERC20 private _token;
 
-    // the minimum value of contribution in wei
-    uint256 private _minimumContribution;
+    // Address where funds are collected
+    address payable private _wallet;
+
+    // How many token units a buyer gets per wei.
+    // The rate is the conversion between wei and the smallest and indivisible token unit.
+    // So, if you are using a rate of 1 with a ERC20Detailed token with 3 decimals called TOK
+    // 1 wei will give you 1 unit, or 0.001 TOK.
+    uint256 private _rate;
+
+    // Amount of wei raised
+    uint256 private _weiRaised;
 
     /**
-     * @dev Reverts if less than minimum contribution
+     * Event for token purchase logging
+     * @param purchaser who paid for the tokens
+     * @param beneficiary who got the tokens
+     * @param value weis paid for purchase
+     * @param amount amount of tokens purchased
      */
-    modifier onlyGreaterThanMinimum(uint256 weiAmount) {
-        require(weiAmount >= _minimumContribution);
-        _;
-    }
+    event TokensPurchased(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
 
     /**
-     * @param openingTime Crowdsale opening time
-     * @param closingTime Crowdsale closing time
      * @param rate Number of token units a buyer gets per wei
+     * @dev The rate is the conversion between wei and the smallest and indivisible
+     * token unit. So, if you are using a rate of 1 with a ERC20Detailed token
+     * with 3 decimals called TOK, 1 wei will give you 1 unit, or 0.001 TOK.
      * @param wallet Address where collected funds will be forwarded to
-     * @param cap Max amount of wei to be contributed
-     * @param minimumContribution Min amount of wei to be contributed
      * @param token Address of the token being sold
-     * @param contributions Address of the contributions contract
      */
-    constructor(
-        uint256 openingTime,
-        uint256 closingTime,
-        uint256 rate,
-        address payable wallet,
-        uint256 cap,
-        uint256 minimumContribution,
-        address token,
-        address contributions
-    )
-        public
-        Crowdsale(rate, wallet, ERC20(token))
-        TimedCrowdsale(openingTime, closingTime)
-        CappedCrowdsale(cap)
-    {
-        require(contributions != address(0));
-        _contributions = Contributions(contributions);
-        _minimumContribution = minimumContribution;
+    constructor (uint256 rate, address payable wallet, IERC20 token) public {
+        require(rate > 0, "Crowdsale: rate is 0");
+        require(wallet != address(0), "Crowdsale: wallet is the zero address");
+        require(address(token) != address(0), "Crowdsale: token is the zero address");
+
+        _rate = rate;
+        _wallet = wallet;
+        _token = token;
     }
 
     /**
-     * @return the crowdsale contributions contract address
+     * @dev fallback function ***DO NOT OVERRIDE***
+     * Note that other contracts will transfer funds with a base gas stipend
+     * of 2300, which is not enough to call buyTokens. Consider calling
+     * buyTokens directly when purchasing tokens from a contract.
      */
-    function contributions() public view returns (Contributions) {
-        return _contributions;
+    receive() external payable {
+        buyTokens(_msgSender());
     }
 
     /**
-     * @return the minimum value of contribution in wei
+     * @return the token being sold.
      */
-    function minimumContribution() public view returns (uint256) {
-        return _minimumContribution;
+    function token() public view returns (IERC20) {
+        return _token;
     }
 
     /**
-     * @return false if the ico is not started, true if the ico is started and running, true if the ico is completed
+     * @return the address where funds are collected.
      */
-    function started() public view returns (bool) {
-        return block.timestamp >= openingTime(); // solhint-disable-line not-rely-on-time
+    function wallet() public view returns (address payable) {
+        return _wallet;
     }
 
     /**
-     * @return false if the ico is not started, false if the ico is started and running, true if the ico is completed
+     * @return the number of token units a buyer gets per wei.
      */
-    function ended() public view returns (bool) {
-        return hasClosed() || capReached();
+    function rate() public view returns (uint256) {
+        return _rate;
     }
 
     /**
-     * @dev Extend crowdsale closing date
-     * @param closingTime Crowdsale closing time
+     * @return the amount of wei raised.
      */
-    function extendTime(uint256 closingTime) public onlyOwner {
-        _extendTime(closingTime);
+    function weiRaised() public view returns (uint256) {
+        return _weiRaised;
     }
 
     /**
-     * @dev Extend parent behavior requiring purchase to respect the minimumContribution.
-     * @param beneficiary Token purchaser
-     * @param weiAmount Amount of wei contributed
+     * @dev low level token purchase ***DO NOT OVERRIDE***
+     * This function has a non-reentrancy guard, so it shouldn't be called by
+     * another `nonReentrant` function.
+     * @param beneficiary Recipient of the token purchase
      */
-    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyGreaterThanMinimum(weiAmount) view { // solhint-disable-line max-line-length
-        super._preValidatePurchase(beneficiary, weiAmount);
+    function buyTokens(address beneficiary) public nonReentrant payable {
+        uint256 weiAmount = msg.value;
+        _preValidatePurchase(beneficiary, weiAmount);
+
+        // calculate token amount to be created
+        uint256 tokens = _getTokenAmount(weiAmount);
+
+        // update state
+        _weiRaised = _weiRaised.add(weiAmount);
+
+        _processPurchase(beneficiary, tokens);
+        emit TokensPurchased(_msgSender(), beneficiary, weiAmount, tokens);
+
+        _updatePurchasingState(beneficiary, weiAmount);
+
+        _forwardFunds();
+        _postValidatePurchase(beneficiary, weiAmount);
     }
 
     /**
-     * @dev Update the contributions contract states
+     * @dev Validation of an incoming purchase. Use require statements to revert state when conditions are not met.
+     * Use `super` in contracts that inherit from BaseCrowdsale to extend their validations.
+     * @param beneficiary Address performing the token purchase
+     * @param weiAmount Value in wei involved in the purchase
+     */
+    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal virtual view {
+        require(beneficiary != address(0), "Crowdsale: beneficiary is the zero address");
+        require(weiAmount != 0, "Crowdsale: weiAmount is 0");
+        this;
+        // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
+    }
+
+    /**
+     * @dev Validation of an executed purchase. Observe state and use revert statements
+     * to undo rollback when valid conditions are not met.
+     * @param beneficiary Address performing the token purchase
+     * @param weiAmount Value in wei involved in the purchase
+     */
+    function _postValidatePurchase(address beneficiary, uint256 weiAmount) internal virtual view {
+        // solhint-disable-previous-line no-empty-blocks
+    }
+
+    /**
+     * @dev Source of tokens. Override this method to modify the way in which the crowdsale
+     * ultimately gets and sends its tokens.
+     * @param beneficiary Address performing the token purchase
+     * @param tokenAmount Number of tokens to be emitted
+     */
+    function _deliverTokens(address beneficiary, uint256 tokenAmount) internal virtual {
+        _token.safeTransfer(beneficiary, tokenAmount);
+    }
+
+    /**
+     * @dev Executed when a purchase has been validated and is ready to be executed.
+     * Doesn't necessarily emit/send tokens.
+     * @param beneficiary Address receiving the tokens
+     * @param tokenAmount Number of tokens to be purchased
+     */
+    function _processPurchase(address beneficiary, uint256 tokenAmount) internal virtual {
+        _deliverTokens(beneficiary, tokenAmount);
+    }
+
+    /**
+     * @dev Override for extensions that require an internal state to check for validity
+     * (current user contributions, etc.)
      * @param beneficiary Address receiving the tokens
      * @param weiAmount Value in wei involved in the purchase
      */
-    function _updatePurchasingState(address beneficiary, uint256 weiAmount) internal {
-        super._updatePurchasingState(beneficiary, weiAmount);
-        _contributions.addBalance(
-            beneficiary,
-            weiAmount,
-            _getTokenAmount(weiAmount)
-        );
+    function _updatePurchasingState(address beneficiary, uint256 weiAmount) internal virtual {
+        // solhint-disable-previous-line no-empty-blocks
+    }
+
+    /**
+     * @dev Override to extend the way in which ether is converted to tokens.
+     * @param weiAmount Value in wei to be converted into tokens
+     * @return Number of tokens that can be purchased with the specified _weiAmount
+     */
+    function _getTokenAmount(uint256 weiAmount) internal virtual view returns (uint256) {
+        return weiAmount.mul(_rate);
+    }
+
+    /**
+     * @dev Determines how ETH is stored/forwarded on purchases.
+     */
+    function _forwardFunds() internal virtual {
+        _wallet.transfer(msg.value);
     }
 }
