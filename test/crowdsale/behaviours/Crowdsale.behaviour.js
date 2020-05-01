@@ -1,6 +1,8 @@
 const { balance, BN, constants, ether, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 const { ZERO_ADDRESS } = constants;
 
+const { expect } = require('chai');
+
 function shouldBehaveLikeCrowdsale (
   [owner, investor, wallet, purchaser, thirdParty],
   { rate },
