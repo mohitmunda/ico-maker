@@ -1,4 +1,4 @@
-const { BN, ether } = require('@openzeppelin/test-helpers');
+const { BN, ether, expectRevert } = require('@openzeppelin/test-helpers');
 
 const { expect } = require('chai');
 
@@ -27,14 +27,29 @@ function shouldBehaveLikeBaseCrowdsale (
         expect(await this.crowdsale.investorExists(investor)).to.be.equal(false);
       });
 
-      it('weiContribution should be zero', async function () {
+      it('should not get investor by index', async function () {
+        await expectRevert(
+          this.crowdsale.getInvestorAddress(0),
+          'EnumerableSet: index out of bounds',
+        );
+      });
+
+      it('weiContribution for investor should be zero', async function () {
         expect(await this.crowdsale.weiContribution(investor)).to.be.bignumber.equal(new BN(0));
       });
     });
 
     describe('accepting payments', function () {
-      function checkPaymentBehaviours () {
+      function checkAfterPaymentBehaviours () {
         it('should increase investorsNumber', async function () {
+          expect(await this.crowdsale.investorsNumber()).to.be.bignumber.equal(new BN(1));
+
+          await this.crowdsale.sendTransaction({ value, from: purchaser });
+          expect(await this.crowdsale.investorsNumber()).to.be.bignumber.equal(new BN(2));
+        });
+
+        it('should not increase investorsNumber twice', async function () {
+          await this.crowdsale.sendTransaction({ value, from: investor });
           expect(await this.crowdsale.investorsNumber()).to.be.bignumber.equal(new BN(1));
         });
 
@@ -42,7 +57,11 @@ function shouldBehaveLikeBaseCrowdsale (
           expect(await this.crowdsale.investorExists(investor)).to.be.equal(true);
         });
 
-        it('weiContribution should be right set', async function () {
+        it('should get investor by index', async function () {
+          expect(await this.crowdsale.getInvestorAddress(0)).to.be.equal(investor);
+        });
+
+        it('weiContribution for investor should be right set', async function () {
           expect(await this.crowdsale.weiContribution(investor)).to.be.bignumber.equal(value);
         });
       }
@@ -52,7 +71,7 @@ function shouldBehaveLikeBaseCrowdsale (
           await this.crowdsale.sendTransaction({ value, from: investor });
         });
 
-        checkPaymentBehaviours();
+        checkAfterPaymentBehaviours();
       });
 
       describe('low-level purchase', function () {
@@ -60,7 +79,7 @@ function shouldBehaveLikeBaseCrowdsale (
           await this.crowdsale.buyTokens(investor, { value, from: purchaser });
         });
 
-        checkPaymentBehaviours();
+        checkAfterPaymentBehaviours();
       });
     });
   });
