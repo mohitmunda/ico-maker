@@ -3,6 +3,7 @@ const { BN, ether, expectRevert } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
 
 const { shouldBehaveLikeCrowdsale } = require('./Crowdsale.behaviour');
+const { shouldBehaveLikeTokenRecover } = require('eth-token-recover/test/TokenRecover.behaviour');
 
 function shouldBehaveLikeBaseCrowdsale (
   [owner, investor, wallet, purchaser, thirdParty],
@@ -82,6 +83,14 @@ function shouldBehaveLikeBaseCrowdsale (
         checkAfterPaymentBehaviours();
       });
     });
+  });
+
+  context('like a TokenRecover', function () {
+    beforeEach(async function () {
+      this.instance = this.crowdsale;
+    });
+
+    shouldBehaveLikeTokenRecover([owner, thirdParty]);
   });
 }
 

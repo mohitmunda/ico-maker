@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "@openzeppelin/contracts/GSN/Context.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "eth-token-recover/contracts/TokenRecover.sol";
 
 /**
  * @title BaseCrowdsale
@@ -21,7 +22,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  * the methods to add functionality. Consider using 'super' where appropriate to concatenate
  * behavior.
  */
-contract BaseCrowdsale is Context, ReentrancyGuard {
+contract BaseCrowdsale is Context, ReentrancyGuard, TokenRecover {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
     using EnumerableSet for EnumerableSet.AddressSet;
