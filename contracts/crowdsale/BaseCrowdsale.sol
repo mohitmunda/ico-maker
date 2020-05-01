@@ -1,9 +1,12 @@
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts/GSN/Context.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/EnumerableSet.sol";
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+import "@openzeppelin/contracts/GSN/Context.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
@@ -21,6 +24,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 contract BaseCrowdsale is Context, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
+    using EnumerableSet for EnumerableSet.AddressSet;
 
     // The token being sold
     IERC20 private _token;
@@ -36,6 +40,12 @@ contract BaseCrowdsale is Context, ReentrancyGuard {
 
     // Amount of wei raised
     uint256 private _weiRaised;
+
+    // List of addresses who contributed in crowdsales
+    EnumerableSet.AddressSet private _investors;
+
+    // Map of investors deposit
+    mapping(address => uint256) private _deposits;
 
     /**
      * Event for token purchase logging
@@ -100,6 +110,41 @@ contract BaseCrowdsale is Context, ReentrancyGuard {
      */
     function weiRaised() public view returns (uint256) {
         return _weiRaised;
+    }
+
+    /**
+     * @dev Return the investors length.
+     * @return uint representing investors number
+     */
+    function investorsNumber() public view returns (uint) {
+        return _investors.length();
+    }
+
+    /**
+     * @dev Check if a investor exists.
+     * @param account The address to check
+     * @return bool
+     */
+    function investorExists(address account) public view returns (bool) {
+        return _investors.contains(account);
+    }
+
+    /**
+     * @dev Return the investors address by index.
+     * @param index A progressive index of investor addresses
+     * @return address of an investor by list index
+     */
+    function getInvestorAddress(uint index) public view returns (address) {
+        return _investors.at(index);
+    }
+
+    /**
+     * @dev get wei contribution for the given address
+     * @param account Address has contributed
+     * @return uint256
+     */
+    function weiContribution(address account) public view returns (uint256) {
+        return _deposits[account];
     }
 
     /**
@@ -177,7 +222,11 @@ contract BaseCrowdsale is Context, ReentrancyGuard {
      * @param weiAmount Value in wei involved in the purchase
      */
     function _updatePurchasingState(address beneficiary, uint256 weiAmount) internal virtual {
-        // solhint-disable-previous-line no-empty-blocks
+        if (!investorExists(beneficiary)) {
+        _investors.add(beneficiary);
+        }
+
+        _deposits[beneficiary] = _deposits[beneficiary].add(weiAmount);
     }
 
     /**

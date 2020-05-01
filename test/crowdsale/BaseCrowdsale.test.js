@@ -1,7 +1,7 @@
 const { BN, constants, expectRevert, time } = require('@openzeppelin/test-helpers');
 const { ZERO_ADDRESS } = constants;
 
-const { shouldBehaveLikeCrowdsale } = require('./behaviours/Crowdsale.behaviour');
+const { shouldBehaveLikeBaseCrowdsale } = require('./behaviours/BaseCrowdsale.behaviour');
 
 const BaseCrowdsale = artifacts.require('BaseCrowdsale');
 const ERC20Mock = artifacts.require('ERC20Mock');
@@ -15,46 +15,44 @@ contract('BaseCrowdsale', function ([owner, investor, wallet, purchaser, thirdPa
     await time.advanceBlock();
   });
 
-  context('like a BaseCrowdsale', function () {
-    describe('creating a valid crowdsale', function () {
-      it('requires a non-null token', async function () {
+  describe('creating a valid crowdsale', function () {
+    it('requires a non-null token', async function () {
+      await expectRevert(
+        BaseCrowdsale.new(rate, wallet, ZERO_ADDRESS),
+        'Crowdsale: token is the zero address',
+      );
+    });
+
+    context('with token', async function () {
+      beforeEach(async function () {
+        this.token = await ERC20Mock.new('TEST', 'TEST', owner, tokenSupply);
+      });
+
+      it('requires a non-zero rate', async function () {
         await expectRevert(
-          BaseCrowdsale.new(rate, wallet, ZERO_ADDRESS),
-          'Crowdsale: token is the zero address',
+          BaseCrowdsale.new(0, wallet, this.token.address),
+          'Crowdsale: rate is 0',
         );
       });
 
-      context('with token', async function () {
+      it('requires a non-null wallet', async function () {
+        await expectRevert(
+          BaseCrowdsale.new(rate, ZERO_ADDRESS, this.token.address),
+          'Crowdsale: wallet is the zero address',
+        );
+      });
+
+      context('once deployed', async function () {
         beforeEach(async function () {
-          this.token = await ERC20Mock.new('TEST', 'TEST', owner, tokenSupply);
+          this.crowdsale = await BaseCrowdsale.new(rate, wallet, this.token.address);
+          await this.token.transfer(this.crowdsale.address, tokenSupply);
         });
 
-        it('requires a non-zero rate', async function () {
-          await expectRevert(
-            BaseCrowdsale.new(0, wallet, this.token.address),
-            'Crowdsale: rate is 0',
+        context('testing behaviours', async function () {
+          shouldBehaveLikeBaseCrowdsale(
+            [owner, investor, wallet, purchaser, thirdParty],
+            { rate },
           );
-        });
-
-        it('requires a non-null wallet', async function () {
-          await expectRevert(
-            BaseCrowdsale.new(rate, ZERO_ADDRESS, this.token.address),
-            'Crowdsale: wallet is the zero address',
-          );
-        });
-
-        context('once deployed', async function () {
-          beforeEach(async function () {
-            this.crowdsale = await BaseCrowdsale.new(rate, wallet, this.token.address);
-            await this.token.transfer(this.crowdsale.address, tokenSupply);
-          });
-
-          context('like a Crowdsale', async function () {
-            shouldBehaveLikeCrowdsale(
-              [owner, investor, wallet, purchaser, thirdParty],
-              { rate },
-            );
-          });
         });
       });
     });

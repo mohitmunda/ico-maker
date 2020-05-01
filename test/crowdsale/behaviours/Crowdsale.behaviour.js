@@ -12,23 +12,19 @@ function shouldBehaveLikeCrowdsale (
 
   describe('checking properties', function () {
     it('rate should be right set', async function () {
-      const expectedRate = await this.crowdsale.rate();
-      expectedRate.should.be.bignumber.equal(rate);
+      expect(await this.crowdsale.rate()).to.be.bignumber.equal(rate);
     });
 
     it('token should be right set', async function () {
-      const expectedToken = await this.crowdsale.token();
-      expectedToken.should.be.equal(this.token.address);
+      expect(await this.crowdsale.token()).to.be.equal(this.token.address);
     });
 
     it('wallet should be right set', async function () {
-      const expectedWallet = await this.crowdsale.wallet();
-      expectedWallet.should.be.equal(wallet);
+      expect(await this.crowdsale.wallet()).to.be.equal(wallet);
     });
 
     it('weiRaised should be zero', async function () {
-      const expectedWeiRaised = await this.crowdsale.weiRaised();
-      expectedWeiRaised.should.be.bignumber.equal(new BN(0));
+      expect(await this.crowdsale.weiRaised()).to.be.bignumber.equal(new BN(0));
     });
   });
 
@@ -62,13 +58,6 @@ function shouldBehaveLikeCrowdsale (
           'Crowdsale: beneficiary is the zero address',
         );
       });
-
-      it('should increase weiRaised', async function () {
-        await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
-
-        const expectedWeiRaised = await this.crowdsale.weiRaised();
-        expectedWeiRaised.should.be.bignumber.equal(value);
-      });
     });
   });
 
@@ -93,11 +82,16 @@ function shouldBehaveLikeCrowdsale (
       await this.crowdsale.sendTransaction({ value, from: investor });
       expect(await balanceTracker.delta()).to.be.bignumber.equal(value);
     });
+
+    it('should increase weiRaised', async function () {
+      await this.crowdsale.sendTransaction({ value, from: investor });
+      expect(await this.crowdsale.weiRaised()).to.be.bignumber.equal(value);
+    });
   });
 
   describe('low-level purchase', function () {
     it('should log purchase', async function () {
-      const { logs } = await this.crowdsale.buyTokens(investor, { value: value, from: purchaser });
+      const { logs } = await this.crowdsale.buyTokens(investor, { value, from: purchaser });
       expectEvent.inLogs(logs, 'TokensPurchased', {
         purchaser: purchaser,
         beneficiary: investor,
@@ -115,6 +109,11 @@ function shouldBehaveLikeCrowdsale (
       const balanceTracker = await balance.tracker(wallet);
       await this.crowdsale.buyTokens(investor, { value, from: purchaser });
       expect(await balanceTracker.delta()).to.be.bignumber.equal(value);
+    });
+
+    it('should increase weiRaised', async function () {
+      await this.crowdsale.buyTokens(investor, { value, from: purchaser });
+      expect(await this.crowdsale.weiRaised()).to.be.bignumber.equal(value);
     });
   });
 }
