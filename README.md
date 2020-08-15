@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/vittominacori/ico-maker/badge.svg?branch=master)](https://coveralls.io/github/vittominacori/ico-maker?branch=master)
 [![MIT licensed](https://img.shields.io/github/license/vittominacori/ico-maker.svg)](https://github.com/vittominacori/ico-maker/blob/master/LICENSE)
 
-Smart Contracts to build your ICO solution and issue your ERC20 Token
+Smart Contracts to build your ICO solution and issue your ERC20 Token on Ethereum
 
 ## Prerequisites
 
